@@ -8,14 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.android.airmart.ui.ProductPostListAdapter
 
-import com.android.airmart.R
-import com.android.airmart.data.entity.Product
+import com.android.airmart.adapter.ProductPostListAdapter
+import com.android.airmart.databinding.FragmentDisplayProductPostsBinding
+
 import com.android.airmart.utilities.InjectorUtils
 import com.android.airmart.viewmodel.ProductViewModel
-import kotlinx.android.synthetic.main.fragment_display_product_posts.*
+
 
 
 class DisplayProductPostsFragment : Fragment() {
@@ -25,25 +24,26 @@ class DisplayProductPostsFragment : Fragment() {
         InjectorUtils.provideProductListViewModelFactory(requireContext())
     }
 
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        var productPostListAdapter = ProductPostListAdapter(requireContext())
-        recycler_view.adapter = productPostListAdapter
-        recycler_view.layoutManager = LinearLayoutManager(requireContext())
-
-        productViewModel.allProducts.observe(this, Observer{
-                products-> products?.let{productPostListAdapter.setProducts(products as List<Product>)}
-        })
-    }
-
     override fun onCreateView(
 
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_display_product_posts, container, false)
+        val binding = FragmentDisplayProductPostsBinding.inflate(inflater, container, false)
+        context ?: return binding.root
+
+        val adapter = ProductPostListAdapter()
+        binding.recyclerView.adapter = adapter
+        subscribeUi(adapter)
+
+        setHasOptionsMenu(true)
+        return binding.root
+    }
+
+    private fun subscribeUi(adapter: ProductPostListAdapter) {
+        productViewModel.allProducts.observe(viewLifecycleOwner, Observer { products ->
+            if (products != null) adapter.submitList(products)
+        })
     }
 
 

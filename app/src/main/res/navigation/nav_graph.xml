@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/nav_graph" app:startDestination="@id/displayProductPostsFragment">
+
+    <fragment android:id="@+id/displayProductPostsFragment"
+              android:name="com.android.airmart.ui.fragments.DisplayProductPostsFragment"
+              android:label="DisplayProductPostsFragment">
+        <action android:id="@+id/action_displayProductPostsFragment_to_postProductFragment2"
+                app:destination="@id/postProductFragment"/>
+    </fragment>
+    <fragment android:id="@+id/postProductFragment" android:name="com.android.airmart.ui.fragments.PostProductFragment"
+              android:label="PostProductFragment">
+        <action android:id="@+id/action_postProductFragment_to_displayProductPostsFragment"
+                app:destination="@id/displayProductPostsFragment"/>
+    </fragment>
+</navigation>

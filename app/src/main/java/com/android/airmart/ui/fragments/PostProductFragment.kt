@@ -14,6 +14,7 @@ import com.android.airmart.R
 import com.android.airmart.data.entity.Product
 import com.android.airmart.utilities.InjectorUtils
 import com.android.airmart.viewmodel.ProductViewModel
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_post_product.*
 
 class PostProductFragment : Fragment() {
@@ -31,10 +32,11 @@ class PostProductFragment : Fragment() {
         priceEditText = price_editText
         descriptionEditText = description_editText
         postButton = post_button
-        postButton.setOnClickListener {
+        postButton.setOnClickListener {view ->
             val product = readFields()
             productViewModel.insertProduct(product)
             clearFields()
+            Snackbar.make(view, "Product Posted Successfully!", Snackbar.LENGTH_LONG).show()
         }
     }
 
