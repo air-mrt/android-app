@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.android.airmart.data.dao.ProductDao
 import com.android.airmart.data.entity.Product
 
-@Database(entities = arrayOf(Product::class), version = 1)
+@Database(entities = arrayOf(Product::class), version = 2)
 abstract class AppDatabase : RoomDatabase(){
     abstract fun productDao(): ProductDao
 
@@ -23,7 +23,7 @@ abstract class AppDatabase : RoomDatabase(){
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java, "airmart_database"
-                ).build()
+                ).fallbackToDestructiveMigration().build()
                 INSTANCE = instance
                 return instance
             }

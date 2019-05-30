@@ -8,14 +8,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 
-import com.android.airmart.R
+
 import com.android.airmart.data.entity.Product
 import com.android.airmart.utilities.InjectorUtils
 import com.android.airmart.viewmodel.ProductViewModel
-import com.google.android.material.snackbar.Snackbar
+
 import kotlinx.android.synthetic.main.fragment_post_product.*
+import com.muddzdev.styleabletoast.StyleableToast
+import com.android.airmart.R
+
+
 
 class PostProductFragment : Fragment() {
     private lateinit var titleEditText: EditText
@@ -36,7 +41,8 @@ class PostProductFragment : Fragment() {
             val product = readFields()
             productViewModel.insertProduct(product)
             clearFields()
-            Snackbar.make(view, "Product Posted Successfully!", Snackbar.LENGTH_LONG).show()
+            StyleableToast.makeText(requireContext(), "Product Successfully Posted!", Toast.LENGTH_LONG, R.style.mytoast).show()
+
         }
     }
 
@@ -45,14 +51,15 @@ class PostProductFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_post_product, container, false)
+        return inflater.inflate(com.android.airmart.R.layout.fragment_post_product, container, false)
+
     }
 
     fun readFields(): Product {
         return Product(0,
             titleEditText.text.toString(),
             descriptionEditText.text.toString(),
-            priceEditText.text.toString().toInt(),
+            priceEditText.text.toString(),
             "username"
         )
     }

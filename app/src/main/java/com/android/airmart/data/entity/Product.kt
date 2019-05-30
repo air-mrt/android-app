@@ -9,7 +9,7 @@ data class Product(
     @PrimaryKey(autoGenerate = true) val id:Int,
     val title:String,
     val description:String,
-    val price:Int,
+    val price:String,
     val username:String
 
 ):Serializable

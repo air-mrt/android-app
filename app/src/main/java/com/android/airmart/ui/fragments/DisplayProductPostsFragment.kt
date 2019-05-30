@@ -30,13 +30,9 @@ class DisplayProductPostsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentDisplayProductPostsBinding.inflate(inflater, container, false)
-        context ?: return binding.root
-
         val adapter = ProductPostListAdapter()
         binding.recyclerView.adapter = adapter
         subscribeUi(adapter)
-
-        setHasOptionsMenu(true)
         return binding.root
     }
 

@@ -27,14 +27,11 @@ class ProductPostListAdapter: ListAdapter<Product,ProductPostListAdapter.ViewHol
         return ViewHolder(RecyclerProductPostItemBinding.inflate(
             LayoutInflater.from(parent.context), parent, false))
     }
-//    internal fun setProducts(products: List<Product>){
-//        this.products = products
-//        notifyDataSetChanged()
-//    }
+
 
     private fun createOnClickListener(productId: Int): View.OnClickListener {
         return View.OnClickListener {
-            //val direction = PlantListFragmentDirections.actionPlantListFragmentToPlantDetailFragment(plantId)
+            //val direction = ProductPostListFragmentDirections.actionPlantListFragmentToPlantDetailFragment(plantId)
             //it.findNavController().navigate(direction)
         }
     }
