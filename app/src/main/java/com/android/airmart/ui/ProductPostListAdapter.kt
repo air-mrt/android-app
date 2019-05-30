@@ -1,11 +1,12 @@
-package com.android.airmart
+package com.android.airmart.ui
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.android.airmartversion1.data.entity.Product
+import com.android.airmart.R
+import com.android.airmart.data.entity.Product
 import kotlinx.android.synthetic.main.recycler_product_post_item.view.*
 
 class ProductPostListAdapter (context: Context):

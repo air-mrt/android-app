@@ -1,17 +1,15 @@
-package com.android.airmartversion1.viewmodel
+package com.android.airmart.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.android.airmartversion1.data.AirmartDatabase
-import com.android.airmartversion1.data.entity.Product
-import com.android.airmartversion1.repository.ProductRepository
+import com.android.airmart.data.entity.Product
+import com.android.airmart.repository.ProductRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ProductViewModel(application: Application): AndroidViewModel(application){
-    private val productRepository: ProductRepository = ProductRepository(application)
+class ProductViewModel (private val productRepository: ProductRepository) : ViewModel(){
     val allProducts: LiveData<List<Product>>
 
     init {

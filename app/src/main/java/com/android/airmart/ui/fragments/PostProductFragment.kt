@@ -1,4 +1,4 @@
-package com.android.airmart.fragments
+package com.android.airmart.ui.fragments
 
 
 import android.os.Bundle
@@ -8,11 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
 
 import com.android.airmart.R
-import com.android.airmartversion1.data.entity.Product
-import com.android.airmartversion1.viewmodel.ProductViewModel
+import com.android.airmart.data.entity.Product
+import com.android.airmart.utilities.InjectorUtils
+import com.android.airmart.viewmodel.ProductViewModel
 import kotlinx.android.synthetic.main.fragment_post_product.*
 
 class PostProductFragment : Fragment() {
@@ -20,7 +21,9 @@ class PostProductFragment : Fragment() {
     private lateinit var priceEditText: EditText
     private lateinit var descriptionEditText: EditText
     private lateinit var postButton: Button
-    private lateinit var productViewModel: ProductViewModel
+    private val productViewModel: ProductViewModel by viewModels {
+        InjectorUtils.provideProductListViewModelFactory(requireContext())
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -28,7 +31,6 @@ class PostProductFragment : Fragment() {
         priceEditText = price_editText
         descriptionEditText = description_editText
         postButton = post_button
-        productViewModel = ViewModelProviders.of(this).get(ProductViewModel::class.java)
         postButton.setOnClickListener {
             val product = readFields()
             productViewModel.insertProduct(product)

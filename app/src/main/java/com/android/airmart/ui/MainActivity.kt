@@ -1,12 +1,12 @@
-package com.android.airmart
+package com.android.airmart.ui
 
 import android.content.res.Configuration
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
-import android.widget.TextView
-import com.android.airmart.fragments.DisplayProductPostsFragment
-import com.android.airmart.fragments.PostProductFragment
+import com.android.airmart.R
+import com.android.airmart.ui.fragments.DisplayProductPostsFragment
+import com.android.airmart.ui.fragments.PostProductFragment
 
 class MainActivity : AppCompatActivity() {
 
