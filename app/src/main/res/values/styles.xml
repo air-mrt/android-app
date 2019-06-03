@@ -4,9 +4,9 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorPrimary_dark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorButtonNormal">@color/button_normal</item>
+        <item name="colorButtonNormal">@color/button</item>
     </style>
 
     <style name="mytoast">
@@ -15,7 +15,7 @@
         <item name="stTextSize">14sp</item>
         <item name="stColorBackground">#367418</item>
         <item name="stSolidBackground">true</item>
-        <item name="stStrokeWidth">3dp</item>
+        <item name="stStrokeWidth">5dp</item>
         <item name="stStrokeColor">#fff</item>
         <item name="stIconStart">@drawable/ic_check_circle_black_24dp</item>
         <item name="stLength">LONG</item> LONG or SHORT

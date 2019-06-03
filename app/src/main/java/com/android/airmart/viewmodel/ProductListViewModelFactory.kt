@@ -21,9 +21,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.android.airmart.repository.ProductRepository
 
 
-/**
- * Factory for creating a [PlantListViewModel] with a constructor that takes a [PlantRepository].
- */
+
 class ProductListViewModelFactory(
     private val repository: ProductRepository
 ) : ViewModelProvider.NewInstanceFactory() {

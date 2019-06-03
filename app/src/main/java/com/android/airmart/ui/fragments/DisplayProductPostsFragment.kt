@@ -13,8 +13,9 @@ import com.android.airmart.adapter.ProductPostListAdapter
 import com.android.airmart.databinding.FragmentDisplayProductPostsBinding
 
 import com.android.airmart.utilities.InjectorUtils
+import com.android.airmart.viewmodel.ProductListViewModelFactory
 import com.android.airmart.viewmodel.ProductViewModel
-
+import javax.inject.Inject
 
 
 class DisplayProductPostsFragment : Fragment() {

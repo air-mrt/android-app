@@ -4,8 +4,10 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import com.android.airmart.data.dao.ProductDao
 import com.android.airmart.data.entity.Product
+import javax.inject.Singleton
 
-class ProductRepository private constructor(private val productDao: ProductDao){
+@Singleton
+class ProductRepository constructor(private val productDao: ProductDao){
 
     fun allProducts(): LiveData<List<Product>> = productDao.getAllProducts()
     fun insertProduct(product:Product) = productDao.insertProduct(product)
@@ -15,14 +17,14 @@ class ProductRepository private constructor(private val productDao: ProductDao){
     fun getProductById(productId:Int):LiveData<Product> = productDao.getProductById(productId)
 
 
-companion object {
-
-    // For Singleton instantiation
-    @Volatile private var instance: ProductRepository? = null
-
-    fun getInstance(productDao: ProductDao) =
-        instance ?: synchronized(this) {
-            instance ?: ProductRepository(productDao).also { instance = it }
-        }
-}
+//companion object {
+//
+//    // For Singleton instantiation
+//    @Volatile private var instance: ProductRepository? = null
+//
+//    fun getInstance(productDao: ProductDao) =
+//        instance ?: synchronized(this) {
+//            instance ?: ProductRepository(productDao).also { instance = it }
+//        }
+//}
 }

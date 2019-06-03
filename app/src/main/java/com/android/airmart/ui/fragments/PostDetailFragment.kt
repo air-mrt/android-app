@@ -14,7 +14,7 @@ import com.android.airmart.utilities.InjectorUtils
 import com.android.airmart.viewmodel.ProductViewModel
 
 class PostDetailFragment : Fragment() {
-    private val args: PostDetailFragmentArgs by navArgs()
+    //private val args: PostDetailFragmentArgs by navArgs()
     private val productViewModel: ProductViewModel by viewModels {
         InjectorUtils.provideProductListViewModelFactory(requireContext())
     }

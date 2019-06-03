@@ -27,7 +27,7 @@ import com.android.airmart.viewmodel.ProductListViewModelFactory
 object InjectorUtils {
 
     private fun getProductRepository(context: Context): ProductRepository {
-        return ProductRepository.getInstance(
+        return ProductRepository(
                 AppDatabase.getInstance(context.applicationContext).productDao())
     }
 
