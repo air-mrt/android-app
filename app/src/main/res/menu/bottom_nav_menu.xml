@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_home"
+        android:id="@+id/displayProductPostsFragment"
         android:icon="@drawable/ic_home_black_24dp"
         android:title="@string/title_home" />
 
@@ -12,9 +12,9 @@
         android:title="@string/title_search" />
 
     <item
-        android:id="@+id/navigation_post"
-        android:icon="@drawable/ic_post_black_24dp"
-        android:title="@string/title_post" />
+        android:id="@+id/postProductFragment"
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="@string/dashboard" />
     <item
             android:id="@+id/navigation_profile"
             android:icon="@drawable/ic_profile_black_24dp"

@@ -52,8 +52,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutinesVersion"
 
-    //implementation "android.arch.navigation:navigation-fragment-ktx:1.0.0"
-    //implementation "android.arch.navigation:navigation-ui-ktx:1.0.0"
+    implementation 'com.google.android.material:material:1.1.0-alpha06'
     //Toast Customization
     implementation 'com.muddzdev:styleabletoast:2.2.2'
 
