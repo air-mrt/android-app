@@ -32,5 +32,4 @@ class PostDetailFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_post_detail, container, false)
     }
 
-
 }
