@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.ui.AppBarConfiguration
 import com.android.airmart.R
 import com.android.airmart.ui.fragments.DisplayProductPostsFragment
 import com.android.airmart.ui.fragments.PostProductFragment
@@ -14,6 +15,7 @@ import com.android.airmart.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -44,6 +46,8 @@ class MainActivity : AppCompatActivity() {
             R.layout.activity_main)
         navController = Navigation.findNavController(this, R.id.nav_fragment)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
+
+
 
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
     }
