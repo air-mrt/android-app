@@ -12,7 +12,7 @@
         android:title="@string/title_search" />
 
     <item
-        android:id="@+id/postProductFragment"
+        android:id="@+id/dashboardFragment"
         android:icon="@drawable/ic_dashboard_black_24dp"
         android:title="@string/dashboard" />
     <item

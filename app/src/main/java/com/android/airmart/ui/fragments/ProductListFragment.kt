@@ -10,18 +10,16 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 
 import com.android.airmart.adapter.ProductPostListAdapter
-import com.android.airmart.databinding.FragmentDisplayProductPostsBinding
+import com.android.airmart.databinding.FragmentProductListBinding
 
 import com.android.airmart.utilities.InjectorUtils
-import com.android.airmart.viewmodel.ProductListViewModelFactory
-import com.android.airmart.viewmodel.ProductViewModel
-import javax.inject.Inject
+import com.android.airmart.viewmodel.ProductListViewModel
 
 
-class DisplayProductPostsFragment : Fragment() {
+class ProductListFragment : Fragment() {
 
 
-    private val productViewModel: ProductViewModel by viewModels {
+    private val productListViewModel: ProductListViewModel by viewModels {
         InjectorUtils.provideProductListViewModelFactory(requireContext())
     }
 
@@ -30,7 +28,7 @@ class DisplayProductPostsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentDisplayProductPostsBinding.inflate(inflater, container, false)
+        val binding = FragmentProductListBinding.inflate(inflater, container, false)
         val adapter = ProductPostListAdapter()
         binding.recyclerView.adapter = adapter
         subscribeUi(adapter)
@@ -38,7 +36,7 @@ class DisplayProductPostsFragment : Fragment() {
     }
 
     private fun subscribeUi(adapter: ProductPostListAdapter) {
-        productViewModel.allProducts.observe(viewLifecycleOwner, Observer { products ->
+        productListViewModel.allProducts.observe(viewLifecycleOwner, Observer { products ->
             if (products != null) adapter.submitList(products)
         })
     }

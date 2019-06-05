@@ -9,7 +9,7 @@ import com.android.airmart.repository.ProductRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ProductViewModel (private val productRepository: ProductRepository) : ViewModel(){
+class ProductListViewModel (private val productRepository: ProductRepository) : ViewModel(){
     val allProducts: LiveData<List<Product>>
 
     init {

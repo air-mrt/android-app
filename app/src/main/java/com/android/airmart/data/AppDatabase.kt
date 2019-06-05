@@ -5,8 +5,9 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.android.airmart.data.dao.ProductDao
+import com.android.airmart.data.entity.Comment
 import com.android.airmart.data.entity.Product
-@Database(entities = arrayOf(Product::class), version = 2)
+@Database(entities = arrayOf(Product::class, Comment::class), version = 3)
 abstract class AppDatabase : RoomDatabase(){
     abstract fun productDao(): ProductDao
 

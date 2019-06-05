@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical" android:id="@+id/linearLayout3">
+
+
+        <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Title for product"
+                android:id="@+id/title_editTextLayout"
+                tools:layout_conversion_absoluteHeight="59dp" tools:layout_editor_absoluteY="0dp"
+                tools:layout_editor_absoluteX="0dp" tools:layout_conversion_absoluteWidth="190dp">
+            <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:id="@+id/title_editText"
+                    android:ems="10" tools:layout_conversion_absoluteHeight="53dp" tools:layout_editor_absoluteY="6dp"
+                    tools:layout_editor_absoluteX="0dp" tools:layout_conversion_absoluteWidth="190dp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Price"
+                android:id="@+id/price_editTextLayout"
+                tools:layout_conversion_absoluteHeight="59dp" tools:layout_editor_absoluteY="59dp"
+                tools:layout_editor_absoluteX="0dp" tools:layout_conversion_absoluteWidth="190dp">
+            <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:id="@+id/price_editText"
+                    android:ems="10" tools:layout_conversion_absoluteHeight="53dp" tools:layout_editor_absoluteY="65dp"
+                    tools:layout_editor_absoluteX="0dp" tools:layout_conversion_absoluteWidth="190dp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Description"
+            android:id="@+id/description_editTextLayout"
+            tools:layout_conversion_absoluteHeight="59dp" tools:layout_editor_absoluteY="118dp"
+            tools:layout_editor_absoluteX="0dp" tools:layout_conversion_absoluteWidth="190dp">
+        <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:id="@+id/description_editText"
+                android:ems="10" tools:layout_conversion_absoluteHeight="53dp" tools:layout_editor_absoluteY="124dp"
+                tools:layout_editor_absoluteX="0dp" tools:layout_conversion_absoluteWidth="190dp"/>
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.button.MaterialButton
+            android:insetLeft="4dp"
+            android:insetRight="4dp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+            app:icon="@drawable/ic_post_black_24dp"
+            android:text="Post Product"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/post_button"
+            tools:layout_conversion_absoluteHeight="48dp" tools:layout_editor_absoluteY="177dp"
+            tools:layout_editor_absoluteX="0dp" tools:layout_conversion_absoluteWidth="167dp"/>
+</LinearLayout>

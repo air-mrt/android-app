@@ -14,7 +14,7 @@ import androidx.fragment.app.viewModels
 
 import com.android.airmart.data.entity.Product
 import com.android.airmart.utilities.InjectorUtils
-import com.android.airmart.viewmodel.ProductViewModel
+import com.android.airmart.viewmodel.ProductListViewModel
 
 import kotlinx.android.synthetic.main.fragment_post_product.*
 import com.muddzdev.styleabletoast.StyleableToast
@@ -27,7 +27,7 @@ class PostProductFragment : Fragment() {
     private lateinit var priceEditText: EditText
     private lateinit var descriptionEditText: EditText
     private lateinit var postButton: Button
-    private val productViewModel: ProductViewModel by viewModels {
+    private val productListViewModel: ProductListViewModel by viewModels {
         InjectorUtils.provideProductListViewModelFactory(requireContext())
     }
 
@@ -39,7 +39,7 @@ class PostProductFragment : Fragment() {
         postButton = post_button
         postButton.setOnClickListener {view ->
             val product = readFields()
-            productViewModel.insertProduct(product)
+            productListViewModel.insertProduct(product)
             clearFields()
             StyleableToast.makeText(requireContext(), "Product Successfully Posted!", Toast.LENGTH_LONG, R.style.mytoast).show()
 
@@ -51,7 +51,7 @@ class PostProductFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(com.android.airmart.R.layout.fragment_post_product, container, false)
+        return inflater.inflate(R.layout.fragment_post_product, container, false)
 
     }
 

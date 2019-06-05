@@ -1,6 +1,5 @@
 package com.android.airmart.ui
 
-import android.content.res.Configuration
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -11,8 +10,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
 import com.android.airmart.R
-import com.android.airmart.ui.fragments.DisplayProductPostsFragment
-import com.android.airmart.ui.fragments.PostProductFragment
 import com.android.airmart.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
