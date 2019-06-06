@@ -28,6 +28,10 @@ import com.android.airmart.R
 import java.io.File
 
 import android.graphics.Bitmap
+import android.R.attr.data
+import androidx.core.app.NotificationCompat.getExtras
+
+
 
 
 
@@ -41,7 +45,7 @@ class PostProductFragment : Fragment() {
     private lateinit var descriptionEditText: EditText
     private lateinit var imageButton: Button
     private lateinit var postButton: Button
-    private lateinit var imageUri:Uri
+    private lateinit var mImageCaptureUri:Uri
     private val productListViewModel: ProductListViewModel by viewModels {
         InjectorUtils.provideProductListViewModelFactory(requireContext())
     }
@@ -100,6 +104,7 @@ class PostProductFragment : Fragment() {
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
         intent.putExtra("return-data", true);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
 
         startActivityForResult(intent, 1);
     }
@@ -111,6 +116,9 @@ class PostProductFragment : Fragment() {
             val extras = data!!.extras
             if (extras != null) {
                 //Get image
+                val photo = data.extras.get("data") as Bitmap
+                imageView.setImageBitmap(photo)
+                System.out.println(mImageCaptureUri)
                 val newProfilePic = extras.getParcelable<Bitmap>("data")
             }
         }
