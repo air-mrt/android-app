@@ -1,7 +1,13 @@
 package com.android.airmart.ui.fragments
 
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.os.Parcelable
+import android.provider.MediaStore
+import android.provider.SyncStateContract
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +25,13 @@ import com.android.airmart.viewmodel.ProductListViewModel
 import kotlinx.android.synthetic.main.fragment_post_product.*
 import com.muddzdev.styleabletoast.StyleableToast
 import com.android.airmart.R
+import java.io.File
+
+import android.graphics.Bitmap
+
+
+
+
 
 
 
@@ -26,7 +39,9 @@ class PostProductFragment : Fragment() {
     private lateinit var titleEditText: EditText
     private lateinit var priceEditText: EditText
     private lateinit var descriptionEditText: EditText
+    private lateinit var imageButton: Button
     private lateinit var postButton: Button
+    private lateinit var imageUri:Uri
     private val productListViewModel: ProductListViewModel by viewModels {
         InjectorUtils.provideProductListViewModelFactory(requireContext())
     }
@@ -36,6 +51,10 @@ class PostProductFragment : Fragment() {
         titleEditText = title_editText
         priceEditText = price_editText
         descriptionEditText = description_editText
+        imageButton = image_butt
+        imageButton.setOnClickListener {
+            chooesimage()
+        }
         postButton = post_button
         postButton.setOnClickListener {view ->
             val product = readFields()
@@ -45,6 +64,7 @@ class PostProductFragment : Fragment() {
 
         }
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,8 +80,9 @@ class PostProductFragment : Fragment() {
             titleEditText.text.toString(),
             descriptionEditText.text.toString(),
             priceEditText.text.toString(),
-            "username"
-        )
+
+
+            "username")
     }
     fun clearFields(){
         titleEditText.setText("")
@@ -69,6 +90,30 @@ class PostProductFragment : Fragment() {
         priceEditText.setText("")
     }
 
+    fun chooesimage(){
+        val intent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        intent.setType("image/*");
+        intent.putExtra("crop", "true")
+        intent.putExtra("scale", true);
+        intent.putExtra("outputX", 256);
+        intent.putExtra("outputY", 256);
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("return-data", true);
 
+        startActivityForResult(intent, 1);
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode != Activity.RESULT_OK) {
+            return
+        }
+        if (requestCode == 1) {
+            val extras = data!!.extras
+            if (extras != null) {
+                //Get image
+                val newProfilePic = extras.getParcelable<Bitmap>("data")
+            }
+        }
+    }
 }
 
