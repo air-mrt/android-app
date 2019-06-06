@@ -15,7 +15,7 @@ data class Comment(
     val productId:Int,
     val content:String,
     val username:String,
-    val createdAt: Date = Date()
+    val createdAt:String = Date().toString()
 
 
 ): Serializable

@@ -1,0 +1,18 @@
+[
+  {
+    "username": "user1",
+    "password": "12345678",
+    "name": "User one",
+    "email": "user1@airmrt.com",
+    "phone": "+2519090000"
+
+  },
+  {
+    "username": "user2",
+    "password": "12345678",
+    "name": "User two",
+    "email": "user2@airmrt.com",
+    "phone": "+25191111111"
+
+  }
+]

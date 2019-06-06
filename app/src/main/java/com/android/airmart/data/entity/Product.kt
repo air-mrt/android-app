@@ -14,6 +14,6 @@ data class Product(
     val description:String,
     val price:String,
     val username:String,
-    val createdAt: Date = Date()
+    val createdAt: String = Date().toString()
 
 ):Serializable
