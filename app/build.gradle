@@ -56,6 +56,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0-alpha06'
     //Toast Customization
     implementation 'com.muddzdev:styleabletoast:2.2.2'
+    //circular imageview
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
 
     // Testing dependencies
     androidTestImplementation "androidx.arch.core:core-testing:$rootProject.coreTestingVersion"
