@@ -4,8 +4,9 @@
         xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
-
+        <variable
+                name="addCommentClickListener"
+                type="android.view.View.OnClickListener"/>
         <variable
                 name="productviewModel"
                 type="com.android.airmart.viewmodel.PostDetailViewModel" />
@@ -147,14 +148,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
-                android:paddingBottom="@dimen/fab_bottom_padding"
+                android:paddingBottom="100dp"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    >
 
+                <androidx.recyclerview.widget.RecyclerView
+                        android:layout_marginTop="8dp"
+                        android:id="@+id/recyclerView"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
 
+                </androidx.recyclerview.widget.RecyclerView>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -189,7 +202,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="textMultiLine"
-                android:id="@+id/description_editText"
+                android:id="@+id/comment_editText"
                 android:ems="10"
         />
     </com.google.android.material.textfield.TextInputLayout>
@@ -201,6 +214,7 @@
             android:layout_gravity="center"
             android:layout_weight="0"
             android:text="add"
+            android:onClick="@{addCommentClickListener}"
             android:textSize="12dp"
             app:iconGravity="textStart"
             android:layout_marginEnd="@dimen/cat_card_single_spacing"
