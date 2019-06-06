@@ -20,6 +20,7 @@ import android.content.Context
 import com.android.airmart.data.AppDatabase
 import com.android.airmart.repository.ProductRepository
 import com.android.airmart.viewmodel.PostDetailViewModelFactory
+import com.android.airmart.viewmodel.PostProductViewModelFactory
 import com.android.airmart.viewmodel.ProductListViewModelFactory
 
 /**
@@ -39,6 +40,10 @@ object InjectorUtils {
     fun providePostDetailViewModelFactory(context: Context, productId:Int ): PostDetailViewModelFactory {
         val repository = getProductRepository(context)
         return PostDetailViewModelFactory(repository, productId)
+    }
+    fun providePostProductViewModelFactory(context: Context, username:String ): PostProductViewModelFactory {
+        val repository = getProductRepository(context)
+        return PostProductViewModelFactory(repository, username)
     }
 
 }

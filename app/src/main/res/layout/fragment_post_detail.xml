@@ -31,6 +31,7 @@
                     android:layout_height="match_parent"
                     android:fitsSystemWindows="true"
                     app:contentScrim="?attr/colorPrimary"
+                    app:title="@{productviewModel.product.title}"
                     app:layout_scrollFlags="scroll|exitUntilCollapsed"
             >
 
@@ -51,13 +52,14 @@
                                 android:padding="@dimen/cat_card_double_spacing"
                                 android:paddingBottom="@dimen/cat_card_single_spacing">
 
-                            <androidx.appcompat.widget.AppCompatImageView
-                                    android:layout_width="25dp"
-                                    android:layout_height="25dp"
-                                    android:layout_marginEnd="@dimen/cat_card_single_spacing"
-                                    android:layout_marginRight="@dimen/cat_card_single_spacing"
-                                    android:contentDescription="@string/cat_card_rich_media_logo_view_description"
-                                    app:srcCompat="@drawable/ic_profile_black_24dp"/>
+                            <de.hdodenhof.circleimageview.CircleImageView
+
+                                    android:id="@+id/profile_image"
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:src="@drawable/profile_avatar_placeholder"
+                                    app:civ_border_width="2dp"
+                                    app:civ_border_color="#FFFFFF"/>
 
                             <LinearLayout
                                     android:layout_width="0dp"

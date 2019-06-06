@@ -30,13 +30,7 @@ import java.io.File
 import android.graphics.Bitmap
 import android.R.attr.data
 import androidx.core.app.NotificationCompat.getExtras
-
-
-
-
-
-
-
+import com.android.airmart.viewmodel.PostProductViewModel
 
 
 class PostProductFragment : Fragment() {
@@ -46,8 +40,8 @@ class PostProductFragment : Fragment() {
     private lateinit var imageButton: Button
     private lateinit var postButton: Button
     private lateinit var mImageCaptureUri:Uri
-    private val productListViewModel: ProductListViewModel by viewModels {
-        InjectorUtils.provideProductListViewModelFactory(requireContext())
+    private val postProductViewModel: PostProductViewModel by viewModels {
+        InjectorUtils.providePostProductViewModelFactory(requireContext(), "user1")
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -62,7 +56,7 @@ class PostProductFragment : Fragment() {
         postButton = post_button
         postButton.setOnClickListener {view ->
             val product = readFields()
-            productListViewModel.insertProduct(product)
+            postProductViewModel.insertProduct(product)
             clearFields()
             StyleableToast.makeText(requireContext(), "Product Successfully Posted!", Toast.LENGTH_LONG, R.style.mytoast).show()
 
@@ -86,7 +80,7 @@ class PostProductFragment : Fragment() {
             priceEditText.text.toString(),
 
 
-            "username")
+            "user1")
     }
     fun clearFields(){
         titleEditText.setText("")
