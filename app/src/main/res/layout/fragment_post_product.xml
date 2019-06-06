@@ -87,13 +87,13 @@
                 android:layout_marginLeft="8dp" android:layout_marginStart="8dp"
                 app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp" app:layout_constraintTop_toBottomOf="@+id/description_editTextLayout"
-                android:layout_marginTop="104dp" app:layout_constraintHorizontal_bias="0.0"/>
+                android:layout_marginTop="176dp" app:layout_constraintHorizontal_bias="0.0"/>
         <com.google.android.material.button.MaterialButton
 
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
                 app:icon="@drawable/ic_post_black_24dp"
                 android:text="Add image"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/image_butt"
                 tools:layout_conversion_absoluteHeight="48dp"
@@ -102,6 +102,16 @@
                 app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp" app:layout_constraintTop_toBottomOf="@+id/description_editTextLayout"
                 android:layout_marginTop="8dp" android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toTopOf="@+id/post_button"/>
+                app:layout_constraintBottom_toTopOf="@+id/post_button" app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintVertical_bias="0.55"/>
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" tools:srcCompat="@tools:sample/avatars[13]"
+                android:id="@+id/imageView" android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/description_editTextLayout"
+                app:layout_constraintBottom_toTopOf="@+id/post_button" app:layout_constraintVertical_bias="0.25"
+                app:layout_constraintStart_toEndOf="@+id/image_butt" android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp" android:layout_marginRight="8dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
