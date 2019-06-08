@@ -39,6 +39,13 @@ import androidx.core.app.NotificationCompat.getExtras
 
 
 
+
+
+
+
+
+
+
 class PostProductFragment : Fragment() {
     private lateinit var titleEditText: EditText
     private lateinit var priceEditText: EditText
@@ -80,48 +87,23 @@ class PostProductFragment : Fragment() {
     }
 
     fun readFields(): Product {
-        return Product(0,
-            titleEditText.text.toString(),
-            descriptionEditText.text.toString(),
-            priceEditText.text.toString(),
-
-
-            "username")
+        return Product(0, titleEditText.text.toString(), descriptionEditText.text.toString(), priceEditText.text.toString(), mImageCaptureUri.toString(), "username")
     }
     fun clearFields(){
         titleEditText.setText("")
         descriptionEditText.setText("")
         priceEditText.setText("")
+        this.mImageCaptureUri=mImageCaptureUri
     }
 
     fun chooesimage(){
-        val intent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        intent.setType("image/*");
-        intent.putExtra("crop", "true")
-        intent.putExtra("scale", true);
-        intent.putExtra("outputX", 256);
-        intent.putExtra("outputY", 256);
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-        intent.putExtra("return-data", true);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(Intent.createChooser(intent, "select a picture"),1)
 
-        startActivityForResult(intent, 1);
     }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode != Activity.RESULT_OK) {
-            return
-        }
-        if (requestCode == 1) {
-            val extras = data!!.extras
-            if (extras != null) {
-                //Get image
-                val photo = data.extras.get("data") as Bitmap
-                imageView.setImageBitmap(photo)
-                System.out.println(mImageCaptureUri)
-                val newProfilePic = extras.getParcelable<Bitmap>("data")
-            }
-        }
-    }
+
+
 }
 

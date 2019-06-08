@@ -13,6 +13,7 @@ data class Product(
     val title:String,
     val description:String,
     val price:String,
+    val pic:String,
     val username:String,
     val createdAt: String = Date().toString()
 
