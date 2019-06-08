@@ -18,8 +18,10 @@ package com.android.airmart.utilities
 
 import android.content.Context
 import com.android.airmart.data.AppDatabase
+import com.android.airmart.repository.CommentRepository
 import com.android.airmart.repository.ProductRepository
 import com.android.airmart.viewmodel.PostDetailViewModelFactory
+import com.android.airmart.viewmodel.PostProductViewModelFactory
 import com.android.airmart.viewmodel.ProductListViewModelFactory
 
 /**
@@ -31,14 +33,23 @@ object InjectorUtils {
         return ProductRepository(
                 AppDatabase.getInstance(context.applicationContext).productDao())
     }
+    private fun getCommentRepository(context: Context): CommentRepository {
+        return CommentRepository(
+            AppDatabase.getInstance(context.applicationContext).commentDao())
+    }
 
     fun provideProductListViewModelFactory(context: Context): ProductListViewModelFactory {
         val repository = getProductRepository(context)
         return ProductListViewModelFactory(repository)
     }
     fun providePostDetailViewModelFactory(context: Context, productId:Int ): PostDetailViewModelFactory {
+        val productRepository = getProductRepository(context)
+        val commentRepository = getCommentRepository(context)
+        return PostDetailViewModelFactory(productRepository,commentRepository, productId)
+    }
+    fun providePostProductViewModelFactory(context: Context, username:String ): PostProductViewModelFactory {
         val repository = getProductRepository(context)
-        return PostDetailViewModelFactory(repository, productId)
+        return PostProductViewModelFactory(repository, username)
     }
 
 }

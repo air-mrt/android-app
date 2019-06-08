@@ -14,9 +14,12 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 
 import com.android.airmart.R
+import com.android.airmart.adapter.CommentListAdapter
+import com.android.airmart.adapter.ProductPostListAdapter
 import com.android.airmart.databinding.FragmentPostDetailBinding
 import com.android.airmart.utilities.InjectorUtils
 import com.android.airmart.viewmodel.PostDetailViewModel
+import kotlinx.android.synthetic.main.fragment_post_detail.*
 
 class PostDetailFragment : Fragment() {
     private val args: PostDetailFragmentArgs by navArgs()
@@ -32,14 +35,29 @@ class PostDetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val adapter = CommentListAdapter()
         val binding = DataBindingUtil.inflate<FragmentPostDetailBinding>(
             inflater, R.layout.fragment_post_detail, container, false).apply{
             productviewModel = postDetailViewModel
+            addCommentClickListener = onAddCommentButtonClicked()
             lifecycleOwner = this@PostDetailFragment
+            recyclerView.adapter = adapter
             executePendingBindings()
         }
-
+        subscribeUi(adapter)
         return binding.root
+    }
+
+    private fun subscribeUi(adapter: CommentListAdapter) {
+        postDetailViewModel.commentsForProduct.observe(viewLifecycleOwner, Observer { comments ->
+            if (comments != null) adapter.submitList(comments)
+        })
+    }
+    private fun onAddCommentButtonClicked(): View.OnClickListener{
+        return View.OnClickListener {
+            postDetailViewModel.addComment(comment_editText.text.toString(),"user1")
+        }
+
     }
 
 }

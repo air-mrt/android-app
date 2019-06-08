@@ -18,15 +18,17 @@ package com.android.airmart.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.android.airmart.repository.CommentRepository
 import com.android.airmart.repository.ProductRepository
 
 
 
 class PostDetailViewModelFactory(
-    private val repository: ProductRepository,
+    private val productRepository: ProductRepository,
+    private val commentRepository: CommentRepository,
     private val productId: Int
 ) : ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel> create(modelClass: Class<T>) = PostDetailViewModel(repository, productId)  as T
+    override fun <T : ViewModel> create(modelClass: Class<T>) = PostDetailViewModel(productRepository,commentRepository, productId)  as T
 }
