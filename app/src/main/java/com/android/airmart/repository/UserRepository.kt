@@ -18,8 +18,6 @@ class UserRepository constructor(private val userDao: UserDao, private val userA
         withContext(Dispatchers.IO){
         userApiService.LoginAsync(authBody = authBody).await()
         }
-
-
     fun allUsers(): LiveData<List<User>> = userDao.getAllUsers()
     fun insertUser(product: User) = userDao.insertUser(product)
     fun updateUser(product: User) = userDao.updateUser(product)
