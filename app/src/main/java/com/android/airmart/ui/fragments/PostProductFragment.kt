@@ -29,6 +29,8 @@ import java.io.File
 
 import android.graphics.Bitmap
 import android.R.attr.data
+import android.content.ContentValues
+import android.widget.ImageView
 import androidx.core.app.NotificationCompat.getExtras
 import com.android.airmart.viewmodel.PostProductViewModel
 
@@ -38,7 +40,12 @@ class PostProductFragment : Fragment() {
     private lateinit var descriptionEditText: EditText
     private lateinit var imageButton: Button
     private lateinit var postButton: Button
+<<<<<<< HEAD
     private  var mImageCaptureUri: Uri? = null
+=======
+    private lateinit var imgview :ImageView
+    private  var mImageCaptureUri:Uri? = null
+>>>>>>> 97e732e7a50250b93cf77b3e33c446f0a4a75ce9
     private val postProductViewModel: PostProductViewModel by viewModels {
         InjectorUtils.providePostProductViewModelFactory(requireContext(), "user1")
     }
@@ -49,6 +56,7 @@ class PostProductFragment : Fragment() {
         priceEditText = price_editText
         descriptionEditText = description_editText
         imageButton = image_butt
+        imgview =imageView
         imageButton.setOnClickListener {
             chooesimage()
         }
@@ -79,6 +87,10 @@ class PostProductFragment : Fragment() {
             descriptionEditText.text.toString(),
             priceEditText.text.toString(),
             mImageCaptureUri.toString(),
+<<<<<<< HEAD
+=======
+
+>>>>>>> 97e732e7a50250b93cf77b3e33c446f0a4a75ce9
             "user1")
 
     }
@@ -90,11 +102,22 @@ class PostProductFragment : Fragment() {
     }
 
     fun chooesimage(){
+
         val intent = Intent()
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri)
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
         startActivityForResult(Intent.createChooser(intent, "select a picture"),1)
 
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK)
+                mImageCaptureUri = data!!.data
+            imageView.setImageURI(mImageCaptureUri);
+
+        }
     }
 
 
