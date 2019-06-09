@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -18,6 +19,7 @@ import com.android.airmart.data.api.UserApiService
 import com.android.airmart.databinding.FragmentLoginBinding
 import com.android.airmart.utilities.InjectorUtils
 import com.android.airmart.viewmodel.LoginViewModel
+import com.muddzdev.styleabletoast.StyleableToast
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -49,10 +51,11 @@ class LoginFragment : Fragment() {
             val authBody = AuthBody(usernameEditText,passwordEditText)
             loginViewModel.login(authBody)
             loginViewModel.getResponse.observe(this, Observer {response->
-                username_editText.setText(response.body()?.token)
+
+                StyleableToast.makeText(requireContext(), response.body()?.username, Toast.LENGTH_LONG, R.style.mytoast).show()
 
             })
-                }
-            }
+        }
+    }
 }
 
