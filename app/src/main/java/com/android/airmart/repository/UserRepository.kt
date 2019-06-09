@@ -1,8 +1,8 @@
 package com.android.airmart.repository
 
 import androidx.lifecycle.LiveData
-import com.android.airmart.data.api.AuthBody
-import com.android.airmart.data.api.LoginResponse
+import com.android.airmart.data.api.model.AuthBody
+import com.android.airmart.data.api.model.LoginResponse
 import com.android.airmart.data.api.UserApiService
 import com.android.airmart.data.dao.UserDao
 import com.android.airmart.data.entity.User

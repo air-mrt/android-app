@@ -18,6 +18,7 @@ package com.android.airmart.utilities
 
 import android.content.Context
 import com.android.airmart.data.AppDatabase
+import com.android.airmart.data.api.ProductApiService
 import com.android.airmart.data.api.UserApiService
 import com.android.airmart.repository.CommentRepository
 import com.android.airmart.repository.ProductRepository
@@ -34,7 +35,7 @@ object InjectorUtils {
 
     private fun getProductRepository(context: Context): ProductRepository {
         return ProductRepository(
-                AppDatabase.getInstance(context.applicationContext).productDao())
+                AppDatabase.getInstance(context.applicationContext).productDao(), ProductApiService.getInstance())
     }
     private fun getCommentRepository(context: Context): CommentRepository {
         return CommentRepository(

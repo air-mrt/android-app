@@ -4,13 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.android.airmart.data.api.AuthBody
-import com.android.airmart.data.api.LoginResponse
+import com.android.airmart.data.api.model.AuthBody
+import com.android.airmart.data.api.model.LoginResponse
 import com.android.airmart.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Response
-import javax.inject.Inject
 
 
 class LoginViewModel(private val userRepository: UserRepository):ViewModel() {

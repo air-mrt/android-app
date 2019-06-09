@@ -3,7 +3,6 @@ package com.android.airmart.ui.fragments
 
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,21 +13,20 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 
 import com.android.airmart.R
-import com.android.airmart.data.api.AuthBody
-import com.android.airmart.data.api.UserApiService
+import com.android.airmart.data.api.model.AuthBody
 import com.android.airmart.databinding.FragmentLoginBinding
 import com.android.airmart.utilities.InjectorUtils
 import com.android.airmart.viewmodel.LoginViewModel
+import com.android.airmart.viewmodel.PostProductViewModel
 import com.muddzdev.styleabletoast.StyleableToast
 import kotlinx.android.synthetic.main.fragment_login.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import retrofit2.Response
 
 class LoginFragment : Fragment() {
     private val loginViewModel: LoginViewModel by viewModels {
         InjectorUtils.provideLoginViewModelFactory(requireContext())
+    }
+    private val postProductViewModel: PostProductViewModel by viewModels {
+        InjectorUtils.providePostProductViewModelFactory(requireContext(), "user1")
     }
 
     override fun onCreateView(
@@ -52,7 +50,7 @@ class LoginFragment : Fragment() {
             loginViewModel.login(authBody)
             loginViewModel.getResponse.observe(this, Observer {response->
 
-                StyleableToast.makeText(requireContext(), response.body()?.username, Toast.LENGTH_LONG, R.style.mytoast).show()
+                StyleableToast.makeText(requireContext(), response.body()?.token, Toast.LENGTH_LONG, R.style.mytoast).show()
 
             })
         }
