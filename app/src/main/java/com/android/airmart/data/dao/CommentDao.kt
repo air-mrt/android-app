@@ -14,4 +14,6 @@ interface CommentDao {
     fun updateComment(comment : Comment):Int
     @Delete
     fun deleteComment(comment: Comment):Int
+
+
 }
