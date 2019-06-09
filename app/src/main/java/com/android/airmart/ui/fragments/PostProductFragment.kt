@@ -40,12 +40,8 @@ class PostProductFragment : Fragment() {
     private lateinit var descriptionEditText: EditText
     private lateinit var imageButton: Button
     private lateinit var postButton: Button
-<<<<<<< HEAD
-    private  var mImageCaptureUri: Uri? = null
-=======
     private lateinit var imgview :ImageView
     private  var mImageCaptureUri:Uri? = null
->>>>>>> 97e732e7a50250b93cf77b3e33c446f0a4a75ce9
     private val postProductViewModel: PostProductViewModel by viewModels {
         InjectorUtils.providePostProductViewModelFactory(requireContext(), "user1")
     }
@@ -87,10 +83,6 @@ class PostProductFragment : Fragment() {
             descriptionEditText.text.toString(),
             priceEditText.text.toString(),
             mImageCaptureUri.toString(),
-<<<<<<< HEAD
-=======
-
->>>>>>> 97e732e7a50250b93cf77b3e33c446f0a4a75ce9
             "user1")
 
     }
