@@ -9,16 +9,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 
 import com.android.airmart.R
+import com.android.airmart.data.api.AuthBody
 import com.android.airmart.data.api.UserApiService
 import com.android.airmart.databinding.FragmentLoginBinding
+import com.android.airmart.utilities.InjectorUtils
+import com.android.airmart.viewmodel.LoginViewModel
+import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
 class LoginFragment : Fragment() {
+    private val loginViewModel: LoginViewModel by viewModels {
+        InjectorUtils.provideLoginViewModelFactory(requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,10 +44,15 @@ class LoginFragment : Fragment() {
 
     private fun onLoginButtonClicked(): View.OnClickListener{
         return View.OnClickListener {
-//            GlobalScope.launch(Dispatchers.IO) {
-//            if(true) {
-//                val response: Response<Void> = UserApiService.getInstance().
-//                Log.d("MainActivity", response.message())
+            val usernameEditText = username_editText.text.toString()
+            val passwordEditText = password_editText.text.toString()
+            val authBody = AuthBody(usernameEditText,passwordEditText)
+            loginViewModel.login(authBody)
+            loginViewModel.getResponse.observe(this, Observer {response->
+                username_editText.setText(response.body()?.token)
+
+            })
                 }
             }
 }
+

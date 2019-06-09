@@ -32,21 +32,13 @@ import android.R.attr.data
 import androidx.core.app.NotificationCompat.getExtras
 import com.android.airmart.viewmodel.PostProductViewModel
 
-
-
-
-
-
-
-
-
 class PostProductFragment : Fragment() {
     private lateinit var titleEditText: EditText
     private lateinit var priceEditText: EditText
     private lateinit var descriptionEditText: EditText
     private lateinit var imageButton: Button
     private lateinit var postButton: Button
-    private lateinit var mImageCaptureUri:Uri
+    private  var mImageCaptureUri: Uri? = null
     private val postProductViewModel: PostProductViewModel by viewModels {
         InjectorUtils.providePostProductViewModelFactory(requireContext(), "user1")
     }
@@ -81,17 +73,14 @@ class PostProductFragment : Fragment() {
     }
 
     fun readFields(): Product {
-<<<<<<< HEAD
-        return Product(0, titleEditText.text.toString(), descriptionEditText.text.toString(), priceEditText.text.toString(), mImageCaptureUri.toString(), "username")
-=======
+
         return Product(0,
             titleEditText.text.toString(),
             descriptionEditText.text.toString(),
             priceEditText.text.toString(),
-
-
+            mImageCaptureUri.toString(),
             "user1")
->>>>>>> eb22f684200a6666c91dbf35c9cc56e240acd432
+
     }
     fun clearFields(){
         titleEditText.setText("")
@@ -101,36 +90,6 @@ class PostProductFragment : Fragment() {
     }
 
     fun chooesimage(){
-<<<<<<< HEAD
-        val intent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        intent.setType("image/*");
-        intent.putExtra("crop", "true")
-        intent.putExtra("scale", true);
-        intent.putExtra("outputX", 256);
-        intent.putExtra("outputY", 256);
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-        intent.putExtra("return-data", true);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
-
-        startActivityForResult(intent, 1);
-    }
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        if (resultCode != Activity.RESULT_OK) {
-//            return
-//        }
-//        if (requestCode == 1) {
-//            val extras = data!!.extras
-//            if (extras != null) {
-//                //Get image
-//                val photo = data.extras.get("data") as Bitmap
-//                imageView.setImageBitmap(photo)
-//                System.out.println(mImageCaptureUri)
-//                val newProfilePic = extras.getParcelable<Bitmap>("data")
-//            }
-//        }
-//    }
-=======
         val intent = Intent()
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
@@ -139,6 +98,4 @@ class PostProductFragment : Fragment() {
     }
 
 
->>>>>>> 514408190472f180b3389d60de3fb84287fd1edb
 }
-
