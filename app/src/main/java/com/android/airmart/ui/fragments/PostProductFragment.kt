@@ -33,6 +33,13 @@ import androidx.core.app.NotificationCompat.getExtras
 import com.android.airmart.viewmodel.PostProductViewModel
 
 
+
+
+
+
+
+
+
 class PostProductFragment : Fragment() {
     private lateinit var titleEditText: EditText
     private lateinit var priceEditText: EditText
@@ -74,6 +81,9 @@ class PostProductFragment : Fragment() {
     }
 
     fun readFields(): Product {
+<<<<<<< HEAD
+        return Product(0, titleEditText.text.toString(), descriptionEditText.text.toString(), priceEditText.text.toString(), mImageCaptureUri.toString(), "username")
+=======
         return Product(0,
             titleEditText.text.toString(),
             descriptionEditText.text.toString(),
@@ -81,14 +91,17 @@ class PostProductFragment : Fragment() {
 
 
             "user1")
+>>>>>>> eb22f684200a6666c91dbf35c9cc56e240acd432
     }
     fun clearFields(){
         titleEditText.setText("")
         descriptionEditText.setText("")
         priceEditText.setText("")
+        this.mImageCaptureUri=mImageCaptureUri
     }
 
     fun chooesimage(){
+<<<<<<< HEAD
         val intent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         intent.setType("image/*");
         intent.putExtra("crop", "true")
@@ -117,5 +130,15 @@ class PostProductFragment : Fragment() {
 //            }
 //        }
 //    }
+=======
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(Intent.createChooser(intent, "select a picture"),1)
+
+    }
+
+
+>>>>>>> 514408190472f180b3389d60de3fb84287fd1edb
 }
 
