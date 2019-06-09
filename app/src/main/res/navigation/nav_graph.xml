@@ -24,4 +24,6 @@
                 app:enterAnim="@anim/slide_in_right" app:exitAnim="@anim/slide_out_left"
                 app:popEnterAnim="@anim/slide_out_right" app:popExitAnim="@anim/slide_in_left"/>
     </fragment>
+    <fragment android:id="@+id/loginFragment" android:name="com.android.airmart.ui.fragments.LoginFragment"
+              android:label="LoginFragment"/>
 </navigation>

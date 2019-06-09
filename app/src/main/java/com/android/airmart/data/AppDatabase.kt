@@ -15,7 +15,7 @@ import com.android.airmart.data.entity.Product
 import com.android.airmart.data.entity.User
 import com.android.airmart.worker.SeedDatabaseWorker
 
-@Database(entities = [Product::class, Comment::class, User::class], version = 4)
+@Database(entities = [Product::class, Comment::class, User::class], version = 7)
 abstract class AppDatabase : RoomDatabase(){
     abstract fun productDao(): ProductDao
     abstract fun userDao(): UserDao

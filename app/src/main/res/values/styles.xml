@@ -8,7 +8,7 @@
         <item name="stTextBold">true</item>
         <item name="stTextColor">#fff</item>
         <item name="stTextSize">14sp</item>
-        <item name="stColorBackground">#367418</item>
+        <item name="stColorBackground">#1F1E1E</item>
         <item name="stSolidBackground">true</item>
         <item name="stStrokeWidth">5dp</item>
         <item name="stStrokeColor">#fff</item>

@@ -102,20 +102,20 @@ class PostProductFragment : Fragment() {
 
         startActivityForResult(intent, 1);
     }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode != Activity.RESULT_OK) {
-            return
-        }
-        if (requestCode == 1) {
-            val extras = data!!.extras
-            if (extras != null) {
-                //Get image
-                val photo = data.extras.get("data") as Bitmap
-                imageView.setImageBitmap(photo)
-                System.out.println(mImageCaptureUri)
-                val newProfilePic = extras.getParcelable<Bitmap>("data")
-            }
-        }
-    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        if (resultCode != Activity.RESULT_OK) {
+//            return
+//        }
+//        if (requestCode == 1) {
+//            val extras = data!!.extras
+//            if (extras != null) {
+//                //Get image
+//                val photo = data.extras.get("data") as Bitmap
+//                imageView.setImageBitmap(photo)
+//                System.out.println(mImageCaptureUri)
+//                val newProfilePic = extras.getParcelable<Bitmap>("data")
+//            }
+//        }
+//    }
 }
 

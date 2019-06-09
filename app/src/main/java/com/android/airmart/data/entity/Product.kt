@@ -6,8 +6,8 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.io.Serializable
 import java.util.*
-
-@Entity(foreignKeys = [ForeignKey(entity = User::class, parentColumns = ["username"], childColumns = ["username"], onDelete = ForeignKey.CASCADE)], indices = [Index(value = ["username"])])
+//foreignKeys = [ForeignKey(entity = User::class, parentColumns = ["username"], childColumns = ["username"], onDelete = ForeignKey.CASCADE)], indices = [Index(value = ["username"])]
+@Entity()
 data class Product(
     @PrimaryKey(autoGenerate = true) val id:Int,
     val title:String,

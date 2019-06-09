@@ -78,7 +78,8 @@ dependencies {
     // Moshi
     implementation "com.squareup.moshi:moshi:1.8.0"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:1.8.0"
-
+    //Logging
+    //implementation "com.squareup.okhttp3:logging-interceptor:3.14.2"
     //Dagger
 
     implementation 'com.google.dagger:dagger-android:2.20'
