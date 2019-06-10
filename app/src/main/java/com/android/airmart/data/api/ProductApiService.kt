@@ -3,20 +3,32 @@ package com.android.airmart.data.api
 import com.android.airmart.data.api.model.ProductModel
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Path
+import retrofit2.http.*
 import java.util.concurrent.TimeUnit
 
 interface ProductApiService {
-    @GET("products/{id}")
+    @GET("{id}")
     fun getProductById(@Path("id") id: Long): Deferred<Response<ProductModel>>
+    @GET
+    fun getAllProducts(): Deferred<Response<List<ProductModel>>>
+    @DELETE("auth/{id}")
+    fun deleteProductById(@Path("id")id: Long,
+                          @Header("Authorization") token:String): Deferred<Response<Void>>
+    @Multipart
+    @POST("auth")
+    fun postProduct(@Part("image") file: MultipartBody.Part,
+                    @Part("productJson") productJson: RequestBody,
+                    @Header("Authorization") token:String): Deferred<Response<ProductModel>>
     companion object {
 
-        private val baseUrl = "http://10.0.2.2:8080/api/"
+        //private val baseUrl = "http://10.0.2.2:8080/api/products/"
+        private val baseUrl = "http://10.42.0.1:8080/api/products/"
 
         fun getInstance(): ProductApiService {
 

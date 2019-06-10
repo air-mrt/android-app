@@ -50,7 +50,7 @@ class LoginFragment : Fragment() {
             loginViewModel.login(authBody)
             loginViewModel.getResponse.observe(this, Observer {response->
 
-                StyleableToast.makeText(requireContext(), response.body()?.token, Toast.LENGTH_LONG, R.style.mytoast).show()
+                StyleableToast.makeText(requireContext(), response.message(), Toast.LENGTH_LONG, R.style.mytoast).show()
 
             })
         }

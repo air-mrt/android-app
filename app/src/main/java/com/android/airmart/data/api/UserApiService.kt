@@ -2,38 +2,44 @@ package com.android.airmart.data.api
 
 import com.android.airmart.data.api.model.AuthBody
 import com.android.airmart.data.api.model.LoginResponse
+import com.android.airmart.data.api.model.ProductModel
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.POST
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.*
+import java.util.concurrent.TimeUnit
 
 interface UserApiService {
     @POST("login")
-    fun LoginAsync(@Body authBody: AuthBody): Deferred<Response<LoginResponse>>
+    fun Login(@Body authBody: AuthBody): Deferred<Response<LoginResponse>>
+    @Multipart
+    @POST("register")
+    fun postProduct(@Part("image") file: MultipartBody.Part,
+                    @Part("userJson") productJson: RequestBody
+                   ): Deferred<Response<Void>>
 
     companion object {
 
-        private val baseUrl = "http://10.0.2.2:8080/api/"
+       // private val baseUrl = "http://10.0.2.2:8080/api/"
+        private val baseUrl = "http://10.42.0.1:8080/api/"
 
         fun getInstance(): UserApiService {
-
-
-
             val client = OkHttpClient
                 .Builder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
                 .build()
-
             val retrofit: Retrofit =  Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .client(client)
-                .addConverterFactory(MoshiConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .build()
-
             return retrofit.create(UserApiService::class.java)
 
 
