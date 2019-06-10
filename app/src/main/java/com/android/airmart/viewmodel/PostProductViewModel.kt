@@ -9,6 +9,8 @@ import com.android.airmart.data.entity.Product
 import com.android.airmart.repository.ProductRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 
 class PostProductViewModel (private val productRepository: ProductRepository, private val username:String) : ViewModel(){
@@ -25,8 +27,16 @@ class PostProductViewModel (private val productRepository: ProductRepository, pr
     val getResponse: LiveData<Response<ProductModel>>
         get() = _getResponse
 
+    private  val _postResponse = MutableLiveData<Response<ProductModel>>()
+    val postResponse: LiveData<Response<ProductModel>>
+        get() = _postResponse
+
     fun getProductById(id: Long) = viewModelScope.launch{
         _getResponse.postValue(productRepository.getProductByIdFromRetro(id))
+    }
+
+    fun postProduct(file: MultipartBody.Part, productJson: RequestBody, token:String) = viewModelScope.launch {
+        _postResponse.postValue(productRepository.postProduct(file,productJson,token))
     }
 
 }

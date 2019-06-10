@@ -5,8 +5,11 @@ import com.android.airmart.data.api.ProductApiService
 import com.android.airmart.data.api.model.ProductModel
 import com.android.airmart.data.dao.ProductDao
 import com.android.airmart.data.entity.Product
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import javax.inject.Singleton
 
@@ -23,4 +26,8 @@ class ProductRepository constructor(private val productDao: ProductDao, private 
         withContext(Dispatchers.IO){
             productApiService.getProductById(id).await()
         }
+    suspend fun postProduct(file: MultipartBody.Part,productJson: RequestBody,token:String): Response<ProductModel> =
+            withContext(Dispatchers.IO){
+                productApiService.postProduct(file, productJson, token).await()
+            }
 }

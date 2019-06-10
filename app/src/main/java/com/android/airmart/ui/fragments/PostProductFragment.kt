@@ -59,7 +59,9 @@ class PostProductFragment : Fragment() {
         postButton = post_button
         postButton.setOnClickListener {view ->
             val product = readFields()
-            postProductViewModel.insertProduct(product)
+            //postProductViewModel.insertProduct(product)
+            file = File(mImageCaptureUri?.path)
+            postProductViewModel.postProduct()
             clearFields()
             StyleableToast.makeText(requireContext(), "Product Successfully Posted!", Toast.LENGTH_LONG, R.style.mytoast).show()
 
