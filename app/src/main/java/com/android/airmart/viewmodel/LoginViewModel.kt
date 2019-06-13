@@ -13,16 +13,16 @@ import retrofit2.Response
 
 
 class LoginViewModel(private val userRepository: UserRepository):ViewModel() {
-    private  val _getResponse = MutableLiveData<Response<LoginResponse>>()
-    val getResponse: LiveData<Response<LoginResponse>>
-        get() = _getResponse
+    private  val _loginResponse = MutableLiveData<Response<LoginResponse>>()
+    val loginResponse: LiveData<Response<LoginResponse>>
+        get() = _loginResponse
     private val _insertResponse = MutableLiveData<Response<LoginResponse>>()
     val insertResponse: LiveData<Response<LoginResponse>>
         get() = _insertResponse
 
     fun login(authBody: AuthBody){
         viewModelScope.launch (Dispatchers.IO){
-        _getResponse.postValue(userRepository.login(authBody))
+        _loginResponse.postValue(userRepository.login(authBody))
         }
 
 

@@ -16,7 +16,7 @@ class UserRepository constructor(private val userDao: UserDao, private val userA
 
     suspend fun login(authBody: AuthBody): Response<LoginResponse> =
         withContext(Dispatchers.IO){
-        userApiService.Login(authBody = authBody).await()
+        userApiService.Login(authBody.username,authBody.password).await()
         }
     fun allUsers(): LiveData<List<User>> = userDao.getAllUsers()
     fun insertUser(product: User) = userDao.insertUser(product)

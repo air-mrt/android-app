@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
 
 interface UserApiService {
     @POST("login")
-    fun Login(@Body authBody: AuthBody): Deferred<Response<LoginResponse>>
+    fun Login(@Query("username") username: String,@Query("password") password: String): Deferred<Response<LoginResponse>>
     @Multipart
     @POST("register")
     fun postProduct(@Part("image") file: MultipartBody.Part,
@@ -26,7 +26,7 @@ interface UserApiService {
     companion object {
 
        // private val baseUrl = "http://10.0.2.2:8080/api/"
-        private val baseUrl = "http://10.42.0.1:8080/api/"
+        private val baseUrl = "http://10.42.0.1:9000/api/"
 
         fun getInstance(): UserApiService {
             val client = OkHttpClient

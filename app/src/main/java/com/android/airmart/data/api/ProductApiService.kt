@@ -22,13 +22,13 @@ interface ProductApiService {
                           @Header("Authorization") token:String): Deferred<Response<Void>>
     @Multipart
     @POST("auth")
-    fun postProduct(@Part("image") file: MultipartBody.Part,
+    fun postProduct(@Part file: MultipartBody.Part,
                     @Part("productJson") productJson: RequestBody,
                     @Header("Authorization") token:String): Deferred<Response<ProductModel>>
     companion object {
 
         //private val baseUrl = "http://10.0.2.2:8080/api/products/"
-        private val baseUrl = "http://10.42.0.1:8080/api/products/"
+        private val baseUrl = "http://10.42.0.1:9000/api/products/"
 
         fun getInstance(): ProductApiService {
 

@@ -83,7 +83,7 @@
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.button.MaterialButton
 
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                style="@style/Widget.MaterialComponents.Button"
                 app:icon="@drawable/ic_post_black_24dp"
                 android:text="Post Product"
                 android:layout_width="0dp"
@@ -112,7 +112,8 @@
                 app:layout_constraintBottom_toTopOf="@+id/post_button"/>
         <ImageView
                 android:layout_width="130dp"
-                android:layout_height="130dp" tools:srcCompat="@tools:sample/avatars[13]"
+                android:layout_height="130dp"
+                android:src="@drawable/ic_image_black_24dp"
                 android:id="@+id/imageView"
                 android:layout_marginEnd="8dp"
                 app:layout_constraintEnd_toEndOf="parent"

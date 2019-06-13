@@ -27,6 +27,9 @@ class PostProductViewModel (private val productRepository: ProductRepository, pr
     val getResponse: LiveData<Response<ProductModel>>
         get() = _getResponse
 
+    private  val _deleteResponse = MutableLiveData<Response<Void>>()
+    val deleteResponse: LiveData<Response<Void>>
+        get() = _deleteResponse
     private  val _postResponse = MutableLiveData<Response<ProductModel>>()
     val postResponse: LiveData<Response<ProductModel>>
         get() = _postResponse
@@ -38,5 +41,9 @@ class PostProductViewModel (private val productRepository: ProductRepository, pr
     fun postProduct(file: MultipartBody.Part, productJson: RequestBody, token:String) = viewModelScope.launch {
         _postResponse.postValue(productRepository.postProduct(file,productJson,token))
     }
+    fun deleteProductById(id:Long, token:String) =
+        viewModelScope.launch {
+            _deleteResponse.postValue(productRepository.deleteProductById(id,token))
+        }
 
 }

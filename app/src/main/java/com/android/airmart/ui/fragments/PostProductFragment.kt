@@ -5,9 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Parcelable
 import android.provider.MediaStore
-import android.provider.SyncStateContract
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,19 +18,22 @@ import androidx.fragment.app.viewModels
 
 import com.android.airmart.data.entity.Product
 import com.android.airmart.utilities.InjectorUtils
-import com.android.airmart.viewmodel.ProductListViewModel
 
 import kotlinx.android.synthetic.main.fragment_post_product.*
 import com.muddzdev.styleabletoast.StyleableToast
 import com.android.airmart.R
 import java.io.File
 
-import android.graphics.Bitmap
-import android.R.attr.data
-import android.content.ContentValues
 import android.widget.ImageView
-import androidx.core.app.NotificationCompat.getExtras
+import androidx.lifecycle.Observer
+import com.android.airmart.data.api.model.ProductRequest
+
 import com.android.airmart.viewmodel.PostProductViewModel
+import com.google.gson.GsonBuilder
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.converter.gson.GsonConverterFactory
 
 class PostProductFragment : Fragment() {
     private lateinit var titleEditText: EditText
@@ -58,12 +59,30 @@ class PostProductFragment : Fragment() {
         }
         postButton = post_button
         postButton.setOnClickListener {view ->
-            val product = readFields()
-            //postProductViewModel.insertProduct(product)
-            file = File(mImageCaptureUri?.path)
-            postProductViewModel.postProduct()
-            clearFields()
-            StyleableToast.makeText(requireContext(), "Product Successfully Posted!", Toast.LENGTH_LONG, R.style.mytoast).show()
+            val g = GsonBuilder().create()
+
+            val fileStream = requireContext().contentResolver.openInputStream(mImageCaptureUri)
+            val extension = requireContext().contentResolver.getType(mImageCaptureUri).substring(6)
+            val fileBytes = fileStream.readBytes()
+            fileStream.close()
+            var file = File(mImageCaptureUri?.path)
+            val image = MultipartBody.Part.createFormData("image",file?.name+"."+extension,RequestBody.create(MediaType.parse("image/*"),fileBytes))
+            //val image =  RequestBody.create(MediaType.parse("image/jpeg"),fileBytes)
+            val productJson = "{\"title\":\"Retrofit\",\"price\":\"100\",\"description\":\"From Retrofit\"}"
+            val productPart = RequestBody.create(MediaType.parse("text/plain"),g.toJson(readFields()))
+            val token ="Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGVzIjpbXSwiaWF0IjoxNTYwNDUxNzQ1LCJleHAiOjE1NjA0NTUzNDV9.73dzM_5Am2arcsx1kz-qqz70SXZ8gvbRMPKWUKrxQnA"
+            postProductViewModel.postProduct(image, productPart,token)
+            postProductViewModel.postResponse.observe(this, Observer{res->
+                if(res.isSuccessful) {
+                    clearFields()
+                    StyleableToast.makeText(
+                        requireContext(),
+                         res.body()?.title + " Posted Successfully !",
+                        Toast.LENGTH_LONG,
+                        R.style.mytoast
+                    ).show()
+                }
+            })
 
         }
     }
@@ -78,21 +97,20 @@ class PostProductFragment : Fragment() {
 
     }
 
-    fun readFields(): Product {
+    fun readFields(): ProductRequest {
 
-        return Product(0,
+        return ProductRequest(
             titleEditText.text.toString(),
-            descriptionEditText.text.toString(),
             priceEditText.text.toString(),
-            mImageCaptureUri.toString(),
-            "user1")
+            descriptionEditText.text.toString()
+          )
 
     }
     fun clearFields(){
         titleEditText.setText("")
         descriptionEditText.setText("")
         priceEditText.setText("")
-        this.mImageCaptureUri=mImageCaptureUri
+        imageView.setImageResource(R.drawable.ic_image_black_24dp)
     }
 
     fun chooesimage(){

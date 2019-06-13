@@ -20,6 +20,7 @@ import com.android.airmart.viewmodel.LoginViewModel
 import com.android.airmart.viewmodel.PostProductViewModel
 import com.muddzdev.styleabletoast.StyleableToast
 import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.android.synthetic.main.fragment_login.view.*
 
 class LoginFragment : Fragment() {
     private val loginViewModel: LoginViewModel by viewModels {
@@ -44,16 +45,23 @@ class LoginFragment : Fragment() {
 
     private fun onLoginButtonClicked(): View.OnClickListener{
         return View.OnClickListener {
-            val usernameEditText = username_editText.text.toString()
-            val passwordEditText = password_editText.text.toString()
-            val authBody = AuthBody(usernameEditText,passwordEditText)
-            loginViewModel.login(authBody)
-            loginViewModel.getResponse.observe(this, Observer {response->
+            loginViewModel.login(readFields())
+            loginViewModel.loginResponse.observe(this, Observer {res->
 
-                StyleableToast.makeText(requireContext(), response.message(), Toast.LENGTH_LONG, R.style.mytoast).show()
-
+                StyleableToast.makeText(requireContext(), res.body()?.token, Toast.LENGTH_LONG, R.style.mytoast).show()
+                clearFields()
             })
         }
+    }
+    private fun readFields():AuthBody {
+        return AuthBody(
+            username_editText.text.toString(),
+            password_editText.text.toString()
+        )
+    }
+    private fun clearFields(){
+        username_editText.setText("")
+        password_editText.setText("")
     }
 }
 
