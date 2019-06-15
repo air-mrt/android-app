@@ -7,7 +7,7 @@
         android:title="@string/title_home" />
 
     <item
-        android:id="@+id/searchFragment"
+        android:id="@+id/contactInfoFragment"
         android:icon="@drawable/ic_search_black_24dp"
         android:title="@string/title_search" />
 

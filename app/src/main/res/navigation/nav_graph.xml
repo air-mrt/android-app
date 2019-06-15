@@ -28,4 +28,6 @@
               android:label="LoginFragment"/>
     <fragment android:id="@+id/searchFragment" android:name="com.android.airmart.ui.fragments.SearchFragment"
               android:label="fragment_search" tools:layout="@layout/fragment_search"/>
+    <fragment android:id="@+id/contactInfoFragment" android:name="com.android.airmart.ui.modals.ContactInfoFragment"
+              android:label="ContactInfoFragment"/>
 </navigation>

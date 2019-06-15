@@ -59,7 +59,7 @@
                                     android:layout_width="50dp"
                                     android:layout_height="50dp"
                                     android:src="@drawable/profile_avatar_placeholder"
-                                    app:civ_border_width="2dp"
+                                    app:civ_border_width="1dp"
                                     app:civ_border_color="#FFFFFF"/>
 
                             <LinearLayout
@@ -91,7 +91,7 @@
                                 android:layout_height="194dp"
                                 android:background="@android:color/transparent"
                                 android:contentDescription="@string/cat_card_rich_media_image_view_description"
-                                app:backgroundTint="@color/mtrl_on_surface_emphasis_medium"
+                                app:backgroundTint="@color/mtrl_dark_on_surface_emphasis_medium"
                                 app:backgroundTintMode="add"
                                 app:srcCompat="@drawable/ic_broken_image_black_24dp"/>
 

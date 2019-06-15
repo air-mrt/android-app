@@ -15,13 +15,13 @@ import retrofit2.Response
 
 class PostProductViewModel (private val productRepository: ProductRepository, private val username:String) : ViewModel(){
     fun insertProduct (product: Product) = viewModelScope.launch (Dispatchers.IO){
-        productRepository.insertProduct(product)
+        productRepository.insertProductRoom(product)
     }
     fun updateProduct (product: Product) = viewModelScope.launch (Dispatchers.IO){
-        productRepository.updateProduct(product)
+        productRepository.updateProductRoom(product)
     }
     fun deleteProduct (product: Product) = viewModelScope.launch (Dispatchers.IO){
-        productRepository.deleteProduct(product)
+        productRepository.deleteProductRoom(product)
     }
     private  val _getResponse = MutableLiveData<Response<ProductModel>>()
     val getResponse: LiveData<Response<ProductModel>>
@@ -35,15 +35,15 @@ class PostProductViewModel (private val productRepository: ProductRepository, pr
         get() = _postResponse
 
     fun getProductById(id: Long) = viewModelScope.launch{
-        _getResponse.postValue(productRepository.getProductByIdFromRetro(id))
+        _getResponse.postValue(productRepository.getProductByIdApi(id))
     }
 
     fun postProduct(file: MultipartBody.Part, productJson: RequestBody, token:String) = viewModelScope.launch {
-        _postResponse.postValue(productRepository.postProduct(file,productJson,token))
+        _postResponse.postValue(productRepository.postProductApi(file,productJson,token))
     }
     fun deleteProductById(id:Long, token:String) =
         viewModelScope.launch {
-            _deleteResponse.postValue(productRepository.deleteProductById(id,token))
+            _deleteResponse.postValue(productRepository.deleteProductByIdApi(id,token))
         }
 
 }

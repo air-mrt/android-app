@@ -27,6 +27,7 @@ import java.io.File
 import android.widget.ImageView
 import androidx.lifecycle.Observer
 import com.android.airmart.data.api.model.ProductRequest
+import com.android.airmart.ui.modals.ContactInfoFragment
 
 import com.android.airmart.viewmodel.PostProductViewModel
 import com.google.gson.GsonBuilder
@@ -59,30 +60,32 @@ class PostProductFragment : Fragment() {
         }
         postButton = post_button
         postButton.setOnClickListener {view ->
-            val g = GsonBuilder().create()
-
-            val fileStream = requireContext().contentResolver.openInputStream(mImageCaptureUri)
-            val extension = requireContext().contentResolver.getType(mImageCaptureUri).substring(6)
-            val fileBytes = fileStream.readBytes()
-            fileStream.close()
-            var file = File(mImageCaptureUri?.path)
-            val image = MultipartBody.Part.createFormData("image",file?.name+"."+extension,RequestBody.create(MediaType.parse("image/*"),fileBytes))
-            //val image =  RequestBody.create(MediaType.parse("image/jpeg"),fileBytes)
-            val productJson = "{\"title\":\"Retrofit\",\"price\":\"100\",\"description\":\"From Retrofit\"}"
-            val productPart = RequestBody.create(MediaType.parse("text/plain"),g.toJson(readFields()))
-            val token ="Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGVzIjpbXSwiaWF0IjoxNTYwNDUxNzQ1LCJleHAiOjE1NjA0NTUzNDV9.73dzM_5Am2arcsx1kz-qqz70SXZ8gvbRMPKWUKrxQnA"
-            postProductViewModel.postProduct(image, productPart,token)
-            postProductViewModel.postResponse.observe(this, Observer{res->
-                if(res.isSuccessful) {
-                    clearFields()
-                    StyleableToast.makeText(
-                        requireContext(),
-                         res.body()?.title + " Posted Successfully !",
-                        Toast.LENGTH_LONG,
-                        R.style.mytoast
-                    ).show()
-                }
-            })
+            val contactInfoFragment = ContactInfoFragment()
+            contactInfoFragment.show(childFragmentManager,"contact")
+            //postProductViewModel.insertProduct(Product(1,"title","desc","100","dsad","user"))
+//            val g = GsonBuilder().create()
+//            val fileStream = requireContext().contentResolver.openInputStream(mImageCaptureUri)
+//            val extension = requireContext().contentResolver.getType(mImageCaptureUri).substring(6)
+//            val fileBytes = fileStream.readBytes()
+//            fileStream.close()
+//            var file = File(mImageCaptureUri?.path)
+//            val image = MultipartBody.Part.createFormData("image",file?.name+"."+extension,RequestBody.create(MediaType.parse("image/*"),fileBytes))
+//            //val image =  RequestBody.create(MediaType.parse("image/jpeg"),fileBytes)
+//            val productJson = "{\"title\":\"Retrofit\",\"price\":\"100\",\"description\":\"From Retrofit\"}"
+//            val productPart = RequestBody.create(MediaType.parse("text/plain"),g.toJson(readFields()))
+//            val token ="Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGVzIjpbXSwiaWF0IjoxNTYwNDUxNzQ1LCJleHAiOjE1NjA0NTUzNDV9.73dzM_5Am2arcsx1kz-qqz70SXZ8gvbRMPKWUKrxQnA"
+//            postProductViewModel.postProduct(image, productPart,token)
+//            postProductViewModel.postResponse.observe(this, Observer{res->
+//                if(res.isSuccessful) {
+//                    clearFields()
+//                    StyleableToast.makeText(
+//                        requireContext(),
+//                         res.body()?.title + " Posted Successfully !",
+//                        Toast.LENGTH_LONG,
+//                        R.style.mytoast
+//                    ).show()
+//                }
+//            })
 
         }
     }

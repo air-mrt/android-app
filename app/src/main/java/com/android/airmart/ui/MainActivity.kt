@@ -1,8 +1,6 @@
 package com.android.airmart.ui
 
-import android.app.Activity
-import android.content.Intent
-import android.net.Uri
+
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -18,7 +16,6 @@ import com.android.airmart.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var mImageCaptureUri: Uri
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,11 +29,5 @@ class MainActivity : AppCompatActivity() {
     }
     override fun onSupportNavigateUp() =
         Navigation.findNavController(this, R.id.nav_fragment).navigateUp()
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 1) {
-            if (resultCode == Activity.RESULT_OK)
-                mImageCaptureUri = data!!.data
-        }
-    }
+
 }

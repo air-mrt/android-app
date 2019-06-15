@@ -4,6 +4,7 @@ package com.android.airmart.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -12,6 +13,7 @@ import com.android.airmart.R
 import com.android.airmart.data.entity.Product
 import com.android.airmart.databinding.RecyclerProductPostItemBinding
 import com.android.airmart.ui.fragments.ProductListFragmentDirections
+import com.android.airmart.ui.modals.ContactInfoFragment
 import kotlinx.android.synthetic.main.recycler_product_post_item.view.*
 
 class ProductPostListAdapter: ListAdapter<Product,ProductPostListAdapter.ViewHolder>(ProductDiffCallback()){
@@ -19,7 +21,7 @@ class ProductPostListAdapter: ListAdapter<Product,ProductPostListAdapter.ViewHol
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val product = getItem(position)
         holder.apply {
-            bind(createOnClickListener(product.id),product)
+            bind(onCommentClickListener(product.id),onContactClickListener(product.id),onInterestedClickListener(product.id),product)
             itemView.tag = product
         }
     }
@@ -30,7 +32,19 @@ class ProductPostListAdapter: ListAdapter<Product,ProductPostListAdapter.ViewHol
     }
 
 
-    private fun createOnClickListener(productId: Int): View.OnClickListener {
+    private fun onCommentClickListener(productId: Int): View.OnClickListener {
+        return View.OnClickListener {
+            val direction = ProductListFragmentDirections.actionDisplayProductPostsFragmentToPostDetailFragment(productId)
+            it.findNavController().navigate(direction)
+        }
+    }
+    private fun onContactClickListener(productId: Int): View.OnClickListener {
+        return View.OnClickListener {
+           val contactInfoFragment = ContactInfoFragment()
+
+        }
+    }
+    private fun onInterestedClickListener(productId: Int): View.OnClickListener {
         return View.OnClickListener {
             val direction = ProductListFragmentDirections.actionDisplayProductPostsFragmentToPostDetailFragment(productId)
             it.findNavController().navigate(direction)
@@ -41,9 +55,11 @@ class ProductPostListAdapter: ListAdapter<Product,ProductPostListAdapter.ViewHol
         private val binding: RecyclerProductPostItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(listener: View.OnClickListener, item: Product) {
+        fun bind(commentListener: View.OnClickListener,contactListener: View.OnClickListener,interestedListener: View.OnClickListener, item: Product) {
             binding.apply {
-                commentClickListener = listener
+                commentClickListener = commentListener
+                contactClickListener = contactListener
+                interestedClickListener = interestedListener
                 product = item
                 executePendingBindings()
             }

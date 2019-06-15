@@ -7,6 +7,12 @@
                 name="commentClickListener"
                 type="android.view.View.OnClickListener"/>
         <variable
+                name="contactClickListener"
+                type="android.view.View.OnClickListener"/>
+        <variable
+                name="interestedClickListener"
+                type="android.view.View.OnClickListener"/>
+        <variable
                 name="product"
                 type="com.android.airmart.data.entity.Product"/>
 
@@ -40,7 +46,7 @@
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
                                 android:src="@drawable/profile_avatar_placeholder"
-                                app:civ_border_width="2dp"
+                                app:civ_border_width="1dp"
                                 app:civ_border_color="#FFFFFF"/>
 
                         <LinearLayout
@@ -72,7 +78,7 @@
                             android:layout_height="194dp"
                             android:background="@android:color/transparent"
                             android:contentDescription="@string/cat_card_rich_media_image_view_description"
-                            app:backgroundTint="@color/mtrl_on_surface_emphasis_medium"
+                            app:backgroundTint="@color/mtrl_dark_on_surface_emphasis_medium"
                             app:backgroundTintMode="add"
                             app:srcCompat="@drawable/ic_broken_image_black_24dp"/>
 
@@ -93,6 +99,7 @@
                                 app:icon="@drawable/ic_interested_black_24dp"
                                 style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
                                 android:text="Interested"
+                                android:onClick="@{interestedClickListener}"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="@dimen/cat_card_single_spacing"
@@ -116,6 +123,7 @@
                                 app:icon="@drawable/ic_contact_mail_black_24dp"
                                 style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
                                 android:layout_width="50dp"
+                                android:onClick="@{contactClickListener}"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 app:iconGravity="textStart"
