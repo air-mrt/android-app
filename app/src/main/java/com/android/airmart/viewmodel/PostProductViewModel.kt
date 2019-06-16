@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.android.airmart.data.api.model.ProductModel
+import com.android.airmart.data.api.model.ProductResponse
 import com.android.airmart.data.entity.Product
 import com.android.airmart.repository.ProductRepository
 import kotlinx.coroutines.Dispatchers
@@ -23,22 +23,22 @@ class PostProductViewModel (private val productRepository: ProductRepository, pr
     fun deleteProduct (product: Product) = viewModelScope.launch (Dispatchers.IO){
         productRepository.deleteProductRoom(product)
     }
-    private  val _getResponse = MutableLiveData<Response<ProductModel>>()
-    val getResponse: LiveData<Response<ProductModel>>
+    private  val _getResponse = MutableLiveData<Response<ProductResponse>>()
+    val getResponse: LiveData<Response<ProductResponse>>
         get() = _getResponse
 
     private  val _deleteResponse = MutableLiveData<Response<Void>>()
     val deleteResponse: LiveData<Response<Void>>
         get() = _deleteResponse
-    private  val _postResponse = MutableLiveData<Response<ProductModel>>()
-    val postResponse: LiveData<Response<ProductModel>>
+    private  val _postResponse = MutableLiveData<Response<ProductResponse>>()
+    val postResponse: LiveData<Response<ProductResponse>>
         get() = _postResponse
 
     fun getProductById(id: Long) = viewModelScope.launch{
         _getResponse.postValue(productRepository.getProductByIdApi(id))
     }
 
-    fun postProduct(file: MultipartBody.Part, productJson: RequestBody, token:String) = viewModelScope.launch {
+    fun postProduct(file: MultipartBody.Part?, productJson: RequestBody, token:String) = viewModelScope.launch {
         _postResponse.postValue(productRepository.postProductApi(file,productJson,token))
     }
     fun deleteProductById(id:Long, token:String) =

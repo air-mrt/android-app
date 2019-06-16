@@ -1,23 +1,60 @@
 package com.android.airmart.ui.fragments
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 
 import com.android.airmart.R
 import com.android.airmart.databinding.FragmentDashboardBinding
 import com.android.airmart.databinding.FragmentDashboardBinding.inflate
+import com.android.airmart.utilities.InjectorUtils
+import com.android.airmart.utilities.SHARED_PREFERENCE_FILE
+import com.android.airmart.viewmodel.DashboardViewModel
+import com.android.airmart.viewmodel.LoginViewModel
 import com.muddzdev.styleabletoast.StyleableToast
+import kotlinx.android.synthetic.main.fragment_dashboard.*
 
 
 class DashboardFragment : Fragment() {
+    private val dashboardViewModel: DashboardViewModel by viewModels {
+        InjectorUtils.provideDashboardViewModelFactory(requireContext())
+    }
+    lateinit var sharedPref: SharedPreferences
+    lateinit var nameTextView:TextView
+    lateinit var usernameTextView:TextView
+    lateinit var phoneTextView:TextView
+    lateinit var totalPostsTextView:TextView
+    lateinit var token:String
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        sharedPref = requireActivity().getSharedPreferences(SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE)
+        token = """Bearer ${sharedPref.getString("tokenKey","")}"""
+        nameTextView = name_textView
+        usernameTextView = username_textView
+        phoneTextView = phone_textView
+        totalPostsTextView = total_post_textView
+        dashboardViewModel.getUserInfo(token)
+        dashboardViewModel.loginResponse?.observe(this, Observer {res->
+            if (res!=null){
+                nameTextView.text = res.name
+                usernameTextView.text = res.username
+                phoneTextView.text = res.phone
+                totalPostsTextView.text = res.numberOfPosts
+            }
+
+        })
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

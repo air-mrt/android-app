@@ -17,5 +17,5 @@ interface ProductDao{
     @Delete
     fun deleteProduct(product: Product):Int
     @Query("SELECT * FROM product WHERE id = :productId LIMIT 1")
-    fun getProductById(productId: Int): LiveData<Product>
+    fun getProductById(productId: Long): LiveData<Product>
 }

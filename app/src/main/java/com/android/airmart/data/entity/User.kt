@@ -6,11 +6,12 @@ import java.io.Serializable
 
 @Entity
 data class User(
-    @PrimaryKey val username:String,
-    val password:String,
-    val name:String,
-    val email:String,
-    val phone:String
+    @PrimaryKey val username: String,
+    val name: String,
+    val phone: String,
+    val email: String,
+    val profilePicture: String,
+    val numberOfPosts: String
 
 
 ): Serializable

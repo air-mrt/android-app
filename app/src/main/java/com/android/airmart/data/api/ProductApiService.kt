@@ -1,6 +1,6 @@
 package com.android.airmart.data.api
 
-import com.android.airmart.data.api.model.ProductModel
+import com.android.airmart.data.api.model.ProductResponse
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
 import okhttp3.MultipartBody
@@ -14,17 +14,17 @@ import java.util.concurrent.TimeUnit
 
 interface ProductApiService {
     @GET("{id}")
-    fun getProductById(@Path("id") id: Long): Deferred<Response<ProductModel>>
+    fun getProductById(@Path("id") id: Long): Deferred<Response<ProductResponse>>
     @GET
-    fun getAllProducts(): Deferred<Response<List<ProductModel>>>
+    fun getAllProducts(): Deferred<Response<List<ProductResponse>>>
     @DELETE("auth/{id}")
     fun deleteProductById(@Path("id")id: Long,
                           @Header("Authorization") token:String): Deferred<Response<Void>>
     @Multipart
     @POST("auth")
-    fun postProduct(@Part file: MultipartBody.Part,
+    fun postProduct(@Part file: MultipartBody.Part?,
                     @Part("productJson") productJson: RequestBody,
-                    @Header("Authorization") token:String): Deferred<Response<ProductModel>>
+                    @Header("Authorization") token:String): Deferred<Response<ProductResponse>>
     companion object {
 
         //private val baseUrl = "http://10.0.2.2:8080/api/products/"

@@ -2,7 +2,9 @@ package com.android.airmart.ui.fragments
 
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -16,7 +18,6 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 
 
-import com.android.airmart.data.entity.Product
 import com.android.airmart.utilities.InjectorUtils
 
 import kotlinx.android.synthetic.main.fragment_post_product.*
@@ -25,16 +26,18 @@ import com.android.airmart.R
 import java.io.File
 
 import android.widget.ImageView
+import androidx.core.content.edit
 import androidx.lifecycle.Observer
+import com.afollestad.materialdialogs.MaterialDialog
 import com.android.airmart.data.api.model.ProductRequest
-import com.android.airmart.ui.modals.ContactInfoFragment
+import com.android.airmart.utilities.EditTextValidator
+import com.android.airmart.utilities.SHARED_PREFERENCE_FILE
 
 import com.android.airmart.viewmodel.PostProductViewModel
-import com.google.gson.GsonBuilder
+import com.google.gson.Gson
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import retrofit2.converter.gson.GsonConverterFactory
 
 class PostProductFragment : Fragment() {
     private lateinit var titleEditText: EditText
@@ -44,9 +47,12 @@ class PostProductFragment : Fragment() {
     private lateinit var postButton: Button
     private lateinit var imgview :ImageView
     private  var mImageCaptureUri:Uri? = null
+    private lateinit var token:String
+    lateinit var sharedPref: SharedPreferences
     private val postProductViewModel: PostProductViewModel by viewModels {
         InjectorUtils.providePostProductViewModelFactory(requireContext(), "user1")
     }
+    private val gsonBuilder : Gson  = InjectorUtils.provideGson()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -59,33 +65,61 @@ class PostProductFragment : Fragment() {
             chooesimage()
         }
         postButton = post_button
-        postButton.setOnClickListener {view ->
-            val contactInfoFragment = ContactInfoFragment()
-            contactInfoFragment.show(childFragmentManager,"contact")
-            //postProductViewModel.insertProduct(Product(1,"title","desc","100","dsad","user"))
-//            val g = GsonBuilder().create()
-//            val fileStream = requireContext().contentResolver.openInputStream(mImageCaptureUri)
-//            val extension = requireContext().contentResolver.getType(mImageCaptureUri).substring(6)
-//            val fileBytes = fileStream.readBytes()
-//            fileStream.close()
-//            var file = File(mImageCaptureUri?.path)
-//            val image = MultipartBody.Part.createFormData("image",file?.name+"."+extension,RequestBody.create(MediaType.parse("image/*"),fileBytes))
-//            //val image =  RequestBody.create(MediaType.parse("image/jpeg"),fileBytes)
-//            val productJson = "{\"title\":\"Retrofit\",\"price\":\"100\",\"description\":\"From Retrofit\"}"
-//            val productPart = RequestBody.create(MediaType.parse("text/plain"),g.toJson(readFields()))
-//            val token ="Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGVzIjpbXSwiaWF0IjoxNTYwNDUxNzQ1LCJleHAiOjE1NjA0NTUzNDV9.73dzM_5Am2arcsx1kz-qqz70SXZ8gvbRMPKWUKrxQnA"
-//            postProductViewModel.postProduct(image, productPart,token)
-//            postProductViewModel.postResponse.observe(this, Observer{res->
-//                if(res.isSuccessful) {
-//                    clearFields()
-//                    StyleableToast.makeText(
-//                        requireContext(),
-//                         res.body()?.title + " Posted Successfully !",
-//                        Toast.LENGTH_LONG,
-//                        R.style.mytoast
-//                    ).show()
-//                }
-//            })
+        sharedPref = requireActivity().getSharedPreferences(SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE)
+        token = """Bearer ${sharedPref.getString("tokenKey","")}"""
+
+        postButton.setOnClickListener {
+
+            if(validateInputs()){
+                val progressBar = MaterialDialog
+                    .Builder(requireContext())
+                    .title("Posting Product")
+                    .content("please wait..")
+                    .progress(true,0)
+                    .cancelable(false)
+                    .show()
+                val productPart = RequestBody.create(MediaType.parse("text/plain"),gsonBuilder.toJson(readFields()))
+                if(mImageCaptureUri != null){
+                    val fileStream = requireContext().contentResolver.openInputStream(mImageCaptureUri)
+                    val extension = requireContext().contentResolver.getType(mImageCaptureUri).substring(6)
+                    val fileBytes = fileStream.readBytes()
+                    fileStream?.close()
+                    val file = File(mImageCaptureUri?.path)
+                    val image = MultipartBody.Part.createFormData("image",file?.name+"."+extension,RequestBody.create(MediaType.parse("image/*"),fileBytes))
+                    //TODO Check connection
+                    postProductViewModel.postProduct(image, productPart,token)
+                }
+                else{  //TODO Check connection
+                    postProductViewModel.postProduct(null, productPart,token)
+                }
+                postProductViewModel.postResponse.observe(this, Observer{res->
+                    if(res == null) {
+                        //show progress bar
+                        progressBar
+                    }
+                    else{
+                        //close progress bar
+                        progressBar.dismiss()
+                        if(res.isSuccessful) {
+                            clearFields()
+                            StyleableToast.makeText(
+                                requireContext(),
+                                res.body()?.title + " Posted Successfully !",
+                                Toast.LENGTH_LONG,
+                                R.style.mytoast
+                            ).show()
+                        }
+                        else{
+                            //close progress bar
+                            progressBar.dismiss()
+                            //TODO handle error case
+                        }
+                    }
+
+                })
+
+            }
+
 
         }
     }
@@ -108,6 +142,24 @@ class PostProductFragment : Fragment() {
             descriptionEditText.text.toString()
           )
 
+    }
+    fun validateInputs():Boolean{
+        var validationState = true
+        when{
+            EditTextValidator.isEmpty(titleEditText)->{
+                titleEditText.setError("Title is Required")
+                validationState = false
+            }
+            EditTextValidator.isEmpty(priceEditText)-> {
+                    priceEditText.setError("Price is Required")
+                validationState = false
+            }
+            EditTextValidator.isEmpty(descriptionEditText)-> {
+                descriptionEditText.setError("Description is Required")
+                validationState = false
+            }
+        }
+        return validationState
     }
     fun clearFields(){
         titleEditText.setText("")

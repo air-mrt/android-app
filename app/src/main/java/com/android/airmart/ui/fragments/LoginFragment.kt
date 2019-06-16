@@ -2,6 +2,8 @@ package com.android.airmart.ui.fragments
 
 
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,11 +13,15 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.afollestad.materialdialogs.MaterialDialog
 
 import com.android.airmart.R
 import com.android.airmart.data.api.model.AuthBody
 import com.android.airmart.databinding.FragmentLoginBinding
+import com.android.airmart.utilities.ISLOGGEDIN_KEY
 import com.android.airmart.utilities.InjectorUtils
+import com.android.airmart.utilities.SHARED_PREFERENCE_FILE
+import com.android.airmart.utilities.TOKEN_KEY
 import com.android.airmart.viewmodel.LoginViewModel
 import com.android.airmart.viewmodel.PostProductViewModel
 import com.muddzdev.styleabletoast.StyleableToast
@@ -26,10 +32,13 @@ class LoginFragment : Fragment() {
     private val loginViewModel: LoginViewModel by viewModels {
         InjectorUtils.provideLoginViewModelFactory(requireContext())
     }
-    private val postProductViewModel: PostProductViewModel by viewModels {
-        InjectorUtils.providePostProductViewModelFactory(requireContext(), "user1")
-    }
 
+    lateinit var sharedPref: SharedPreferences
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedPref = requireActivity().getSharedPreferences(SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE)
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,12 +54,43 @@ class LoginFragment : Fragment() {
 
     private fun onLoginButtonClicked(): View.OnClickListener{
         return View.OnClickListener {
-            loginViewModel.login(readFields())
-            loginViewModel.loginResponse.observe(this, Observer {res->
+            val progressBar = MaterialDialog
+                .Builder(requireContext())
+                .title("Login in progress")
+                .content("please wait..")
+                .progress(true,0)
+                .autoDismiss(false)
+                .show()
+            //TODO Check connection
+            if(true){
+                //perform API call
+                loginViewModel.login(readFields())
+                // Show progress bar till the request is completed
+                loginViewModel.loginResponse?.observe(this, Observer {res->
+                    if(res == null) {
+                        //show progress bar
+                         progressBar
+                    }
+                    else{
+                        //close progress bar
+                        progressBar.dismiss()
+                        if(res.isSuccessful){
+                            //save shared pref
+                            savePreference(res.body()!!.token,true)
+                            //show success message
+                            StyleableToast.makeText(requireContext(), "SUCCESS", Toast.LENGTH_LONG, R.style.mytoast).show()
+                            clearFields()
+                        }
+                        else{
+                            //show error message
+                            StyleableToast.makeText(requireContext(), "ERROR", Toast.LENGTH_LONG, R.style.mytoast).show()
+                        }
 
-                StyleableToast.makeText(requireContext(), res.body()?.token, Toast.LENGTH_LONG, R.style.mytoast).show()
-                clearFields()
-            })
+                    }
+
+                })
+            }
+
         }
     }
     private fun readFields():AuthBody {
@@ -63,5 +103,14 @@ class LoginFragment : Fragment() {
         username_editText.setText("")
         password_editText.setText("")
     }
+    private fun savePreference(token:String,isLoggedIn:Boolean){
+        with(sharedPref.edit()){
+            putString(TOKEN_KEY,token)
+            putBoolean(ISLOGGEDIN_KEY,isLoggedIn)
+            commit()
+        }
+
+    }
+
 }
 

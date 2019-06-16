@@ -11,8 +11,8 @@ import java.util.*
     ]
     , indices = [Index(value = ["productId"])])
 data class Comment(
-    @PrimaryKey(autoGenerate = true) val id:Int,
-    val productId:Int,
+    @PrimaryKey(autoGenerate = true) val id:Long,
+    val productId:Long,
     val content:String,
     val username:String,
     val createdAt:String = Date().toString()

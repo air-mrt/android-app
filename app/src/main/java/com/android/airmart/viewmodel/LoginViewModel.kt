@@ -16,10 +16,6 @@ class LoginViewModel(private val userRepository: UserRepository):ViewModel() {
     private  val _loginResponse = MutableLiveData<Response<LoginResponse>>()
     val loginResponse: LiveData<Response<LoginResponse>>
         get() = _loginResponse
-    private val _insertResponse = MutableLiveData<Response<LoginResponse>>()
-    val insertResponse: LiveData<Response<LoginResponse>>
-        get() = _insertResponse
-
     fun login(authBody: AuthBody){
         viewModelScope.launch (Dispatchers.IO){
         _loginResponse.postValue(userRepository.login(authBody))

@@ -26,7 +26,7 @@ import com.android.airmart.repository.ProductRepository
 class PostDetailViewModelFactory(
     private val productRepository: ProductRepository,
     private val commentRepository: CommentRepository,
-    private val productId: Int
+    private val productId: Long
 ) : ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")

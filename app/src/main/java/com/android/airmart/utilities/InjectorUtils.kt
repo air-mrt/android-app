@@ -23,10 +23,9 @@ import com.android.airmart.data.api.UserApiService
 import com.android.airmart.repository.CommentRepository
 import com.android.airmart.repository.ProductRepository
 import com.android.airmart.repository.UserRepository
-import com.android.airmart.viewmodel.LoginViewModelFactory
-import com.android.airmart.viewmodel.PostDetailViewModelFactory
-import com.android.airmart.viewmodel.PostProductViewModelFactory
-import com.android.airmart.viewmodel.ProductListViewModelFactory
+import com.android.airmart.viewmodel.*
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 
 /**
  * Static methods used to inject classes needed for various Activities and Fragments.
@@ -50,7 +49,7 @@ object InjectorUtils {
         val repository = getProductRepository(context)
         return ProductListViewModelFactory(repository)
     }
-    fun providePostDetailViewModelFactory(context: Context, productId:Int ): PostDetailViewModelFactory {
+    fun providePostDetailViewModelFactory(context: Context, productId:Long ): PostDetailViewModelFactory {
         val productRepository = getProductRepository(context)
         val commentRepository = getCommentRepository(context)
         return PostDetailViewModelFactory(productRepository,commentRepository, productId)
@@ -62,6 +61,14 @@ object InjectorUtils {
     fun provideLoginViewModelFactory(context: Context): LoginViewModelFactory {
         val repository = getUserRepository(context)
         return LoginViewModelFactory(repository)
+    }
+    fun provideDashboardViewModelFactory(context: Context): DashboardViewModelFactory {
+        val repository = getUserRepository(context)
+        return DashboardViewModelFactory(repository)
+    }
+    fun provideGson(): Gson {
+        return GsonBuilder().create()
+
     }
 
 }

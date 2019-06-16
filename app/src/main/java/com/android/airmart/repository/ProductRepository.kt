@@ -2,10 +2,9 @@ package com.android.airmart.repository
 
 import androidx.lifecycle.LiveData
 import com.android.airmart.data.api.ProductApiService
-import com.android.airmart.data.api.model.ProductModel
+import com.android.airmart.data.api.model.ProductResponse
 import com.android.airmart.data.dao.ProductDao
 import com.android.airmart.data.entity.Product
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
@@ -21,12 +20,12 @@ class ProductRepository constructor(private val productDao: ProductDao, private 
     fun updateProductRoom(product: Product) = productDao.updateProduct(product)
     fun deleteProductRoom(product: Product) = productDao.deleteProduct(product)
     fun getProductByTitleRoom(title: String): LiveData<Product> = productDao.getProductByTitle(title)
-    fun getProductByIdRoom(productId: Int): LiveData<Product> = productDao.getProductById(productId)
-    suspend fun getProductByIdApi(id: Long): Response<ProductModel> =
+    fun getProductByIdRoom(productId: Long): LiveData<Product> = productDao.getProductById(productId)
+    suspend fun getProductByIdApi(id: Long): Response<ProductResponse> =
         withContext(Dispatchers.IO){
             productApiService.getProductById(id).await()
         }
-    suspend fun postProductApi(file: MultipartBody.Part,productJson: RequestBody,token:String): Response<ProductModel> =
+    suspend fun postProductApi(file: MultipartBody.Part?,productJson: RequestBody,token:String): Response<ProductResponse> =
             withContext(Dispatchers.IO){
                 productApiService.postProduct(file, productJson, token).await()
             }

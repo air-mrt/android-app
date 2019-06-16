@@ -6,15 +6,15 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.io.Serializable
 import java.util.*
-//foreignKeys = [ForeignKey(entity = User::class, parentColumns = ["username"], childColumns = ["username"], onDelete = ForeignKey.CASCADE)], indices = [Index(value = ["username"])]
-@Entity()
+@Entity
 data class Product(
-    @PrimaryKey(autoGenerate = true) val id:Int,
+    @PrimaryKey(autoGenerate = true) val id:Long,
+    val username: String,
     val title:String,
-    val description:String,
     val price:String,
-    val pic:String,
-    val username:String,
-    val createdAt: String = Date().toString()
+    val description:String,
+    val pictureUrl:String,
+    val createdAt: String
+//    val interested: Set<String>
 
 ):Serializable

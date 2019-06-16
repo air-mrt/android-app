@@ -8,7 +8,7 @@ import javax.inject.Singleton
 @Singleton
 class CommentRepository constructor(private val commentDao: CommentDao) {
 
-    fun allCommentsbyProductId(productId:Int): LiveData<List<Comment>> = commentDao.getAllCommentsByProductId(productId)
+    fun allCommentsbyProductId(productId:Long): LiveData<List<Comment>> = commentDao.getAllCommentsByProductId(productId)
     fun insertComment(comment: Comment) = commentDao.insertComment(comment)
     fun updateComment(comment: Comment) = commentDao.updateComment(comment)
     fun deleteComment(comment: Comment) = commentDao.deleteComment(comment)

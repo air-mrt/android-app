@@ -32,19 +32,19 @@ class ProductPostListAdapter: ListAdapter<Product,ProductPostListAdapter.ViewHol
     }
 
 
-    private fun onCommentClickListener(productId: Int): View.OnClickListener {
+    private fun onCommentClickListener(productId: Long): View.OnClickListener {
         return View.OnClickListener {
             val direction = ProductListFragmentDirections.actionDisplayProductPostsFragmentToPostDetailFragment(productId)
             it.findNavController().navigate(direction)
         }
     }
-    private fun onContactClickListener(productId: Int): View.OnClickListener {
+    private fun onContactClickListener(productId: Long): View.OnClickListener {
         return View.OnClickListener {
            val contactInfoFragment = ContactInfoFragment()
 
         }
     }
-    private fun onInterestedClickListener(productId: Int): View.OnClickListener {
+    private fun onInterestedClickListener(productId: Long): View.OnClickListener {
         return View.OnClickListener {
             val direction = ProductListFragmentDirections.actionDisplayProductPostsFragmentToPostDetailFragment(productId)
             it.findNavController().navigate(direction)

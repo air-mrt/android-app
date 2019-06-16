@@ -17,5 +17,5 @@ interface UserDao {
     @Delete
     fun deleteUser(user: User):Int
     @Query("SELECT * FROM user WHERE username = :username LIMIT 1")
-    fun getUsersByUsername(username: String): LiveData<User>
+    fun getUserByUsername(username: String): User
 }

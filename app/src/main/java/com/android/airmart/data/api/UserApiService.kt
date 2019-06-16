@@ -1,8 +1,10 @@
 package com.android.airmart.data.api
 
-import com.android.airmart.data.api.model.AuthBody
 import com.android.airmart.data.api.model.LoginResponse
-import com.android.airmart.data.api.model.ProductModel
+import com.android.airmart.data.api.model.UserInfo
+import com.android.airmart.utilities.API_CONNECT_TIMEOUT
+import com.android.airmart.utilities.API_READ_TIMEOUT
+import com.android.airmart.utilities.LOCALHOST_BASE_URL
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
 import okhttp3.MultipartBody
@@ -22,20 +24,19 @@ interface UserApiService {
     fun postProduct(@Part("image") file: MultipartBody.Part,
                     @Part("userJson") productJson: RequestBody
                    ): Deferred<Response<Void>>
+    @GET("users/info")
+    fun getLoggedInUserInfo(@Header("Authorization") token:String):Deferred<Response<UserInfo>>
 
     companion object {
-
-       // private val baseUrl = "http://10.0.2.2:8080/api/"
-        private val baseUrl = "http://10.42.0.1:9000/api/"
 
         fun getInstance(): UserApiService {
             val client = OkHttpClient
                 .Builder()
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
+                .connectTimeout(API_CONNECT_TIMEOUT, TimeUnit.SECONDS)
+                .readTimeout(API_READ_TIMEOUT, TimeUnit.SECONDS)
                 .build()
             val retrofit: Retrofit =  Retrofit.Builder()
-                .baseUrl(baseUrl)
+                .baseUrl(LOCALHOST_BASE_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(CoroutineCallAdapterFactory())

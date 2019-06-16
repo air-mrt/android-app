@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 class PostDetailViewModel(
     productRepository: ProductRepository,
     private val commentRepository: CommentRepository,
-    private val productId: Int
+    private val productId: Long
 ) : ViewModel() {
 
     val product: LiveData<Product>

@@ -58,6 +58,8 @@ dependencies {
     implementation 'com.muddzdev:styleabletoast:2.2.2'
     //circular imageview
     implementation 'de.hdodenhof:circleimageview:3.0.0'
+    //Material Dialogs
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
 
     // Testing dependencies
     androidTestImplementation "androidx.arch.core:core-testing:$rootProject.coreTestingVersion"
