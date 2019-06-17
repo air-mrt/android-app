@@ -12,8 +12,9 @@ import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
+import java.net.ConnectException
 
-class PostProductViewModel (private val productRepository: ProductRepository, private val username:String) : ViewModel(){
+class PostProductViewModel (private val productRepository: ProductRepository) : ViewModel(){
     fun insertProduct (product: Product) = viewModelScope.launch (Dispatchers.IO){
         productRepository.insertProductRoom(product)
     }
@@ -37,9 +38,14 @@ class PostProductViewModel (private val productRepository: ProductRepository, pr
     fun getProductById(id: Long) = viewModelScope.launch{
         _getResponse.postValue(productRepository.getProductByIdApi(id))
     }
-
     fun postProduct(file: MultipartBody.Part?, productJson: RequestBody, token:String) = viewModelScope.launch {
-        _postResponse.postValue(productRepository.postProductApi(file,productJson,token))
+        try{
+            _postResponse.postValue(productRepository.postProductApi(file,productJson,token))
+        }
+        catch (e:ConnectException){
+            //do nothing
+        }
+
     }
     fun deleteProductById(id:Long, token:String) =
         viewModelScope.launch {

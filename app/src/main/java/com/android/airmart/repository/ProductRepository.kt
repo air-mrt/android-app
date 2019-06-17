@@ -10,6 +10,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
+import java.net.ConnectException
 import javax.inject.Singleton
 
 @Singleton
@@ -25,7 +26,8 @@ class ProductRepository constructor(private val productDao: ProductDao, private 
         withContext(Dispatchers.IO){
             productApiService.getProductById(id).await()
         }
-    suspend fun postProductApi(file: MultipartBody.Part?,productJson: RequestBody,token:String): Response<ProductResponse> =
+    @Throws(ConnectException::class)
+    suspend fun postProductApi (file: MultipartBody.Part?,productJson: RequestBody,token:String): Response<ProductResponse> =
             withContext(Dispatchers.IO){
                 productApiService.postProduct(file, productJson, token).await()
             }

@@ -9,3 +9,4 @@ const val LOCALHOST_BASE_URL = "http://10.42.0.1:9000/api/"
 const val LOCALHOST_BASE_URL_EMULATOR = "http://10.0.2.2:8080/api/"
 const val API_CONNECT_TIMEOUT:Long = 10
 const val API_READ_TIMEOUT:Long = 30
+const val DEFAULT_VALUE_SHARED_PREF = ""

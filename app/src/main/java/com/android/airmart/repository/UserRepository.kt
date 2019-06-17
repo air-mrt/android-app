@@ -4,9 +4,11 @@ import androidx.lifecycle.LiveData
 import com.android.airmart.data.api.model.AuthBody
 import com.android.airmart.data.api.model.LoginResponse
 import com.android.airmart.data.api.UserApiService
+import com.android.airmart.data.api.model.MessageResponse
 import com.android.airmart.data.api.model.UserInfo
 import com.android.airmart.data.dao.UserDao
 import com.android.airmart.data.entity.User
+import com.android.airmart.utilities.DEFAULT_VALUE_SHARED_PREF
 import com.bumptech.glide.Glide.init
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -25,7 +27,11 @@ class UserRepository constructor(private val userDao: UserDao, private val userA
             withContext(Dispatchers.IO){
                 userApiService.getLoggedInUserInfo(token).await()
             }
-    suspend fun getLoggedInUserInfo(token: String):User? =
+    suspend fun validateTokenAPI(token:String):Response<MessageResponse> =
+        withContext(Dispatchers.IO){
+            userApiService.validateToken(token).await()
+        }
+    suspend fun getLoggedInUserInfo(token: String, username:String):User? =
         withContext(Dispatchers.IO){
             try{
                 val res = getLoggedInUserInfoAPI(token).body()
@@ -37,9 +43,14 @@ class UserRepository constructor(private val userDao: UserDao, private val userA
                 }
             }
             catch (e: ConnectException){
-                    //TODO fetch user info from room if there is any
-                    return@withContext userDao.getUserByUsername("user3")
+                    if (username != DEFAULT_VALUE_SHARED_PREF){
+                        return@withContext userDao.getUserByUsername(username)
+                    }
+                    //if there is no saved username in shared pref
+                    return@withContext null
+
             }
+            //some error case
             return@withContext null
         }
     fun allUsers(): LiveData<List<User>> = userDao.getAllUsers()

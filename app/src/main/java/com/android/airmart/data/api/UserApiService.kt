@@ -1,6 +1,8 @@
 package com.android.airmart.data.api
 
+
 import com.android.airmart.data.api.model.LoginResponse
+import com.android.airmart.data.api.model.MessageResponse
 import com.android.airmart.data.api.model.UserInfo
 import com.android.airmart.utilities.API_CONNECT_TIMEOUT
 import com.android.airmart.utilities.API_READ_TIMEOUT
@@ -26,6 +28,9 @@ interface UserApiService {
                    ): Deferred<Response<Void>>
     @GET("users/info")
     fun getLoggedInUserInfo(@Header("Authorization") token:String):Deferred<Response<UserInfo>>
+
+    @GET("validateToken")
+    fun validateToken(@Query("token")token:String):Deferred<Response<MessageResponse>>
 
     companion object {
 

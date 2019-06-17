@@ -14,12 +14,12 @@ import retrofit2.Response
 
 class DashboardViewModel(private val userRepository: UserRepository): ViewModel()  {
     private  val _userInfoResponse = MutableLiveData<User>()
-    val loginResponse: LiveData<User>?
+    val userInfoResponse: LiveData<User>?
         get() = _userInfoResponse
 
-     fun getUserInfo(token:String)  =
+     fun getUserInfo(token:String, username:String)  =
          viewModelScope.launch(Dispatchers.IO) {
-             _userInfoResponse.postValue(userRepository.getLoggedInUserInfo(token))
+             _userInfoResponse.postValue(userRepository.getLoggedInUserInfo(token,username))
          }
 
 

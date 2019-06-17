@@ -18,8 +18,7 @@ import androidx.navigation.findNavController
 import com.android.airmart.R
 import com.android.airmart.databinding.FragmentDashboardBinding
 import com.android.airmart.databinding.FragmentDashboardBinding.inflate
-import com.android.airmart.utilities.InjectorUtils
-import com.android.airmart.utilities.SHARED_PREFERENCE_FILE
+import com.android.airmart.utilities.*
 import com.android.airmart.viewmodel.DashboardViewModel
 import com.android.airmart.viewmodel.LoginViewModel
 import com.muddzdev.styleabletoast.StyleableToast
@@ -36,21 +35,21 @@ class DashboardFragment : Fragment() {
     lateinit var phoneTextView:TextView
     lateinit var totalPostsTextView:TextView
     lateinit var token:String
+    lateinit var username:String
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         sharedPref = requireActivity().getSharedPreferences(SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE)
-        token = """Bearer ${sharedPref.getString("tokenKey","")}"""
+        token = """Bearer ${sharedPref.getString(TOKEN_KEY,DEFAULT_VALUE_SHARED_PREF)}"""
+        username = sharedPref.getString(USERNAME_KEY, DEFAULT_VALUE_SHARED_PREF)
         nameTextView = name_textView
         usernameTextView = username_textView
         phoneTextView = phone_textView
-        totalPostsTextView = total_post_textView
-        dashboardViewModel.getUserInfo(token)
-        dashboardViewModel.loginResponse?.observe(this, Observer {res->
+        dashboardViewModel.getUserInfo(token,username)
+        dashboardViewModel.userInfoResponse?.observe(this, Observer {res->
             if (res!=null){
                 nameTextView.text = res.name
-                usernameTextView.text = res.username
+                usernameTextView.text = """@${res.username}"""
                 phoneTextView.text = res.phone
-                totalPostsTextView.text = res.numberOfPosts
             }
 
         })
@@ -64,6 +63,10 @@ class DashboardFragment : Fragment() {
             inflater, R.layout.fragment_dashboard, container, false).apply{
             newProductClickListener = View.OnClickListener {
                 val direction = DashboardFragmentDirections.actionDashboardFragmentToPostProductFragment()
+                it.findNavController().navigate(direction)
+            }
+            productHistoryClickListener = View.OnClickListener {
+                val direction = DashboardFragmentDirections.actionDashboardFragmentToPostHistoryFragment()
                 it.findNavController().navigate(direction)
             }
             executePendingBindings()

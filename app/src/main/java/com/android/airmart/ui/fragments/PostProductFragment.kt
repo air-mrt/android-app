@@ -26,6 +26,7 @@ import com.android.airmart.R
 import java.io.File
 
 import android.widget.ImageView
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.edit
 import androidx.lifecycle.Observer
 import com.afollestad.materialdialogs.MaterialDialog
@@ -38,21 +39,24 @@ import com.google.gson.Gson
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import java.net.ConnectException
 
 class PostProductFragment : Fragment() {
+    var isConnected = true
     private lateinit var titleEditText: EditText
     private lateinit var priceEditText: EditText
     private lateinit var descriptionEditText: EditText
     private lateinit var imageButton: Button
     private lateinit var postButton: Button
-    private lateinit var imgview :ImageView
-    private  var mImageCaptureUri:Uri? = null
-    private lateinit var token:String
+    private lateinit var imgview: ImageView
+    private var mImageCaptureUri: Uri? = null
+    private lateinit var token: String
     lateinit var sharedPref: SharedPreferences
+
     private val postProductViewModel: PostProductViewModel by viewModels {
-        InjectorUtils.providePostProductViewModelFactory(requireContext(), "user1")
+        InjectorUtils.providePostProductViewModelFactory(requireContext())
     }
-    private val gsonBuilder : Gson  = InjectorUtils.provideGson()
+    private val gsonBuilder: Gson = InjectorUtils.provideGson()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -60,47 +64,70 @@ class PostProductFragment : Fragment() {
         priceEditText = price_editText
         descriptionEditText = description_editText
         imageButton = image_butt
-        imgview =imageView
+        imgview = imageView
         imageButton.setOnClickListener {
             chooesimage()
         }
         postButton = post_button
         sharedPref = requireActivity().getSharedPreferences(SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE)
-        token = """Bearer ${sharedPref.getString("tokenKey","")}"""
+        token = """Bearer ${sharedPref.getString("tokenKey", "")}"""
+
+        val progressBar = MaterialDialog
+            .Builder(requireContext())
+            .title("Posting Product")
+            .content("please wait..")
+            .progress(true, 0)
+            .cancelable(false)
+            .build()
+        val errorDialog = MaterialDialog
+            .Builder(requireContext())
+            .title("Could not connect to server")
+            .content("Unable to make connection to server. Make sure you have an internet connection and try again.")
+            .positiveText("OK")
+            .build()
 
         postButton.setOnClickListener {
+            if (validateInputs()) {
+                val productPart = RequestBody.create(MediaType.parse("text/plain"), gsonBuilder.toJson(readFields()))
+                if (mImageCaptureUri != null) {
+                    val fileStream = requireContext().contentResolver.openInputStream(mImageCaptureUri!!)
+                    val extension = requireContext().contentResolver.getType(mImageCaptureUri!!)!!.substring(6)
+                    val fileBytes = fileStream!!.readBytes()
+                    fileStream.close()
+                    val file = File(mImageCaptureUri!!.path)
+                    val image = MultipartBody.Part.createFormData(
+                        "image",
+                        file.name + "." + extension,
+                        RequestBody.create(MediaType.parse("image/*"), fileBytes)
+                    )
+                    try {
+                        //TODO check if token is expired and generate new token
+                        postProductViewModel.postProduct(image, productPart, token)
 
-            if(validateInputs()){
-                val progressBar = MaterialDialog
-                    .Builder(requireContext())
-                    .title("Posting Product")
-                    .content("please wait..")
-                    .progress(true,0)
-                    .cancelable(false)
-                    .show()
-                val productPart = RequestBody.create(MediaType.parse("text/plain"),gsonBuilder.toJson(readFields()))
-                if(mImageCaptureUri != null){
-                    val fileStream = requireContext().contentResolver.openInputStream(mImageCaptureUri)
-                    val extension = requireContext().contentResolver.getType(mImageCaptureUri).substring(6)
-                    val fileBytes = fileStream.readBytes()
-                    fileStream?.close()
-                    val file = File(mImageCaptureUri?.path)
-                    val image = MultipartBody.Part.createFormData("image",file?.name+"."+extension,RequestBody.create(MediaType.parse("image/*"),fileBytes))
-                    //TODO Check connection
-                    postProductViewModel.postProduct(image, productPart,token)
-                }
-                else{  //TODO Check connection
-                    postProductViewModel.postProduct(null, productPart,token)
-                }
-                postProductViewModel.postResponse.observe(this, Observer{res->
-                    if(res == null) {
-                        //show progress bar
-                        progressBar
+                    } catch (e: ConnectException) {
+                        // show connection error dialog
+                        errorDialog.show()
                     }
-                    else{
+
+                } else {
+                    try {
+                        //TODO check if token is expired and generate new token
+                        postProductViewModel.postProduct(null, productPart, token)
+                    } catch (e: ConnectException) {
+                        // show connection error dialog
+                        errorDialog.show()
+
+                    }
+                }
+                postProductViewModel.postResponse.observe(this, Observer { res ->
+
+                    if (res == null) {
+                        //show progress bar
+                        progressBar.show()
+                    } else {
                         //close progress bar
-                        progressBar.dismiss()
-                        if(res.isSuccessful) {
+                        //progressBar.dismiss()
+                        if (res.isSuccessful) {
                             clearFields()
                             StyleableToast.makeText(
                                 requireContext(),
@@ -108,8 +135,7 @@ class PostProductFragment : Fragment() {
                                 Toast.LENGTH_LONG,
                                 R.style.mytoast
                             ).show()
-                        }
-                        else{
+                        } else {
                             //close progress bar
                             progressBar.dismiss()
                             //TODO handle error case
@@ -140,43 +166,46 @@ class PostProductFragment : Fragment() {
             titleEditText.text.toString(),
             priceEditText.text.toString(),
             descriptionEditText.text.toString()
-          )
+        )
 
     }
-    fun validateInputs():Boolean{
+
+    fun validateInputs(): Boolean {
         var validationState = true
-        when{
-            EditTextValidator.isEmpty(titleEditText)->{
+        when {
+            EditTextValidator.isEmpty(titleEditText) -> {
                 titleEditText.setError("Title is Required")
                 validationState = false
             }
-            EditTextValidator.isEmpty(priceEditText)-> {
-                    priceEditText.setError("Price is Required")
+            EditTextValidator.isEmpty(priceEditText) -> {
+                priceEditText.setError("Price is Required")
                 validationState = false
             }
-            EditTextValidator.isEmpty(descriptionEditText)-> {
+            EditTextValidator.isEmpty(descriptionEditText) -> {
                 descriptionEditText.setError("Description is Required")
                 validationState = false
             }
         }
         return validationState
     }
-    fun clearFields(){
+
+    fun clearFields() {
         titleEditText.setText("")
         descriptionEditText.setText("")
         priceEditText.setText("")
         imageView.setImageResource(R.drawable.ic_image_black_24dp)
     }
 
-    fun chooesimage(){
+    fun chooesimage() {
 
         val intent = Intent()
         intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri)
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
-        startActivityForResult(Intent.createChooser(intent, "select a picture"),1)
+        startActivityForResult(Intent.createChooser(intent, "select a picture"), 1)
 
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1) {

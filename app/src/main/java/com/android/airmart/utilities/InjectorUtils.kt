@@ -54,9 +54,9 @@ object InjectorUtils {
         val commentRepository = getCommentRepository(context)
         return PostDetailViewModelFactory(productRepository,commentRepository, productId)
     }
-    fun providePostProductViewModelFactory(context: Context, username:String ): PostProductViewModelFactory {
+    fun providePostProductViewModelFactory(context: Context): PostProductViewModelFactory {
         val repository = getProductRepository(context)
-        return PostProductViewModelFactory(repository, username)
+        return PostProductViewModelFactory(repository)
     }
     fun provideLoginViewModelFactory(context: Context): LoginViewModelFactory {
         val repository = getUserRepository(context)

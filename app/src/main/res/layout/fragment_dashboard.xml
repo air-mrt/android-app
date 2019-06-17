@@ -7,10 +7,13 @@
         <variable
                 name="newProductClickListener"
                 type="android.view.View.OnClickListener"/>
+        <variable
+                name="productHistoryClickListener"
+                type="android.view.View.OnClickListener"/>
 
         <variable
                 name="viewModel"
-                type="com.android.airmart.viewmodel.ProductListViewModel" />
+                type="com.android.airmart.viewmodel.DashboardViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -23,14 +26,14 @@
         <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/appbar"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/app_bar_height"
+                android:layout_height="wrap_content"
                 android:fitsSystemWindows="true"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                     android:id="@+id/toolbar_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:fitsSystemWindows="true"
                     app:contentScrim="?attr/colorPrimary"
                     android:padding="8dp"
@@ -39,7 +42,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                                                                    android:layout_width="match_parent"
-                                                                   android:layout_height="wrap_content"
+                                                                   android:layout_height="match_parent"
                                                                    >
 
                     <de.hdodenhof.circleimageview.CircleImageView
@@ -58,31 +61,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" android:id="@+id/guideline"
                             app:layout_constraintGuide_begin="80dp"/>
-                    <TextView
-                            android:text="Total Posts"
-                            android:textAppearance="?attr/textAppearanceSubtitle1"
-                            android:textColor="@color/divider"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/total_label_textView" app:layout_constraintStart_toStartOf="@+id/guideline2"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toTopOf="@+id/total_post_textView"/>
-                    <TextView
-                            android:text="100"
-                            android:textAppearance="?attr/textAppearanceSubtitle2"
-                            android:textColor="@color/icons"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/total_post_textView"
-                            app:layout_constraintStart_toStartOf="@+id/guideline2"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/total_label_textView"
-                            android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/guideline3"/>
+
                     <TextView
                             android:text="Jhon Doe"
+                            android:textColor="@color/divider"
                             android:textAppearance="?attr/textAppearanceHeadline6"
-                            android:textColor="@color/icons"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:id="@+id/name_textView" android:layout_marginStart="8dp"
@@ -163,8 +146,8 @@
                         android:id="@+id/cat_card_post_product"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
                         android:clickable="true"
@@ -182,14 +165,14 @@
                             android:layout_marginRight="16dp"
                             android:text="Post New Product"
 
-                            android:textAppearance="?attr/textAppearanceHeadline6"/>
+                            android:textAppearance="?attr/textAppearanceSubtitle1"/>
 
                     <ImageView
                             android:id="@+id/cat_card_list_item_drag_handle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:padding="16dp"
+                            android:padding="8dp"
                             android:src="@drawable/ic_navigate_next_black_24dp"/>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -198,11 +181,12 @@
                         android:id="@+id/cat_card_post_history"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
                         android:clickable="true"
+                        android:onClick="@{productHistoryClickListener}"
                         app:layout_constraintStart_toStartOf="parent"
                         android:layout_marginStart="8dp"
                         app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
@@ -216,15 +200,48 @@
                             android:layout_marginLeft="16dp"
                             android:layout_marginRight="16dp"
                             android:text="Post History"
-                            android:textAppearance="?attr/textAppearanceHeadline6"/>
+                            android:textAppearance="?attr/textAppearanceSubtitle1"/>
 
                     <ImageView
                             android:id="@+id/cat_card_list_item_drag_handle2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:padding="16dp"
+                            android:padding="8dp"
                             android:src="@drawable/ic_navigate_next_black_24dp"/>
+                </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.card.MaterialCardView
+
+                        android:id="@+id/cat_card_logout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:clickable="true"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginStart="8dp"
+                        app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+                        app:layout_constraintTop_toBottomOf="@+id/cat_card_post_history">
+
+                    <TextView
+                            android:id="@+id/cat_card_list_item_title3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginRight="16dp"
+                            android:text="Logout"
+                            android:textAppearance="?attr/textAppearanceSubtitle1"/>
+
+                    <ImageView
+                            android:id="@+id/cat_card_list_item_drag_handle3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:padding="8dp"
+                            android:src="@drawable/ic_lock_open_black_24dp"/>
                 </com.google.android.material.card.MaterialCardView>
 
 

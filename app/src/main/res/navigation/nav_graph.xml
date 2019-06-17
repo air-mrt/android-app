@@ -23,6 +23,8 @@
                 app:destination="@id/postProductFragment"
                 app:enterAnim="@anim/slide_in_right" app:exitAnim="@anim/slide_out_left"
                 app:popEnterAnim="@anim/slide_out_right" app:popExitAnim="@anim/slide_in_left"/>
+        <action android:id="@+id/action_dashboardFragment_to_postHistoryFragment"
+                app:destination="@id/postHistoryFragment"/>
     </fragment>
     <fragment android:id="@+id/loginFragment" android:name="com.android.airmart.ui.fragments.LoginFragment"
               android:label="LoginFragment"/>
@@ -30,4 +32,6 @@
               android:label="fragment_search" tools:layout="@layout/fragment_search"/>
     <fragment android:id="@+id/contactInfoFragment" android:name="com.android.airmart.ui.modals.ContactInfoFragment"
               android:label="ContactInfoFragment"/>
+    <fragment android:id="@+id/postHistoryFragment" android:name="com.android.airmart.ui.fragments.PostHistoryFragment"
+              android:label="fragment_post_history" tools:layout="@layout/fragment_post_history"/>
 </navigation>

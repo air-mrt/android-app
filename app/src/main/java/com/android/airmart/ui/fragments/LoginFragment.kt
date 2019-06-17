@@ -18,10 +18,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.android.airmart.R
 import com.android.airmart.data.api.model.AuthBody
 import com.android.airmart.databinding.FragmentLoginBinding
-import com.android.airmart.utilities.ISLOGGEDIN_KEY
-import com.android.airmart.utilities.InjectorUtils
-import com.android.airmart.utilities.SHARED_PREFERENCE_FILE
-import com.android.airmart.utilities.TOKEN_KEY
+import com.android.airmart.utilities.*
 import com.android.airmart.viewmodel.LoginViewModel
 import com.android.airmart.viewmodel.PostProductViewModel
 import com.muddzdev.styleabletoast.StyleableToast
@@ -60,7 +57,7 @@ class LoginFragment : Fragment() {
                 .content("please wait..")
                 .progress(true,0)
                 .autoDismiss(false)
-                .show()
+                .build()
             //TODO Check connection
             if(true){
                 //perform API call
@@ -69,14 +66,15 @@ class LoginFragment : Fragment() {
                 loginViewModel.loginResponse?.observe(this, Observer {res->
                     if(res == null) {
                         //show progress bar
-                         progressBar
+                         progressBar.show()
                     }
                     else{
                         //close progress bar
                         progressBar.dismiss()
                         if(res.isSuccessful){
                             //save shared pref
-                            savePreference(res.body()!!.token,true)
+                            //TODO encrypt password before saving it to shared pref
+                            savePreference(res.body()!!.token,res.body()!!.username,readFields().password,true)
                             //show success message
                             StyleableToast.makeText(requireContext(), "SUCCESS", Toast.LENGTH_LONG, R.style.mytoast).show()
                             clearFields()
@@ -103,9 +101,11 @@ class LoginFragment : Fragment() {
         username_editText.setText("")
         password_editText.setText("")
     }
-    private fun savePreference(token:String,isLoggedIn:Boolean){
+    private fun savePreference(token:String,username:String,password:String,isLoggedIn:Boolean){
         with(sharedPref.edit()){
             putString(TOKEN_KEY,token)
+            putString(USERNAME_KEY,username)
+            putString(PASSWORD_KEY,password)
             putBoolean(ISLOGGEDIN_KEY,isLoggedIn)
             commit()
         }
