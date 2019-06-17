@@ -18,8 +18,6 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 
 
-import com.android.airmart.utilities.InjectorUtils
-
 import kotlinx.android.synthetic.main.fragment_post_product.*
 import com.muddzdev.styleabletoast.StyleableToast
 import com.android.airmart.R
@@ -31,8 +29,7 @@ import androidx.core.content.edit
 import androidx.lifecycle.Observer
 import com.afollestad.materialdialogs.MaterialDialog
 import com.android.airmart.data.api.model.ProductRequest
-import com.android.airmart.utilities.EditTextValidator
-import com.android.airmart.utilities.SHARED_PREFERENCE_FILE
+import com.android.airmart.utilities.*
 
 import com.android.airmart.viewmodel.PostProductViewModel
 import com.google.gson.Gson
@@ -70,7 +67,7 @@ class PostProductFragment : Fragment() {
         }
         postButton = post_button
         sharedPref = requireActivity().getSharedPreferences(SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE)
-        token = """Bearer ${sharedPref.getString("tokenKey", "")}"""
+        token = """Bearer ${sharedPref.getString(TOKEN_KEY, DEFAULT_VALUE_SHARED_PREF)}"""
 
         val progressBar = MaterialDialog
             .Builder(requireContext())

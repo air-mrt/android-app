@@ -49,6 +49,11 @@ object InjectorUtils {
         val repository = getProductRepository(context)
         return ProductListViewModelFactory(repository)
     }
+    fun providePostHistoryViewModelFactory(context: Context): PostHistoryViewModelFactory {
+        val repository = getProductRepository(context)
+        val userepository = getUserRepository(context)
+        return PostHistoryViewModelFactory(repository,userepository)
+    }
     fun providePostDetailViewModelFactory(context: Context, productId:Long ): PostDetailViewModelFactory {
         val productRepository = getProductRepository(context)
         val commentRepository = getCommentRepository(context)

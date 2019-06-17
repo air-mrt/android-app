@@ -10,6 +10,8 @@ interface ProductDao{
     fun getAllProducts(): LiveData<List<Product>>
     @Query("SELECT * FROM product WHERE title = :title LIMIT 1")
     fun getProductByTitle(title:String):LiveData<Product>
+    @Query("SELECT * FROM product WHERE username = :username ORDER BY createdAt")
+    fun getAllProductsByUser(username:String):List<Product>
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertProduct(product : Product):Long
     @Update

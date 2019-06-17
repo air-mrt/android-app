@@ -1,6 +1,9 @@
 package com.android.airmart.data.api
 
 import com.android.airmart.data.api.model.ProductResponse
+import com.android.airmart.utilities.API_CONNECT_TIMEOUT
+import com.android.airmart.utilities.API_READ_TIMEOUT
+import com.android.airmart.utilities.LOCALHOST_BASE_URL
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
 import okhttp3.MultipartBody
@@ -13,31 +16,27 @@ import retrofit2.http.*
 import java.util.concurrent.TimeUnit
 
 interface ProductApiService {
-    @GET("{id}")
+    @GET("products/{id}")
     fun getProductById(@Path("id") id: Long): Deferred<Response<ProductResponse>>
-    @GET
-    fun getAllProducts(): Deferred<Response<List<ProductResponse>>>
+
+    @GET("products")
+    fun getAllProducts(@Query("username")username:String = "null"): Deferred<Response<List<ProductResponse>>>
     @DELETE("auth/{id}")
     fun deleteProductById(@Path("id")id: Long,
                           @Header("Authorization") token:String): Deferred<Response<Void>>
     @Multipart
-    @POST("auth")
+    @POST("products/auth")
     fun postProduct(@Part file: MultipartBody.Part?,
                     @Part("productJson") productJson: RequestBody,
                     @Header("Authorization") token:String): Deferred<Response<ProductResponse>>
+
     companion object {
-
-        //private val baseUrl = "http://10.0.2.2:8080/api/products/"
-        private val baseUrl = "http://10.42.0.1:9000/api/products/"
-
+        private val baseUrl = LOCALHOST_BASE_URL
         fun getInstance(): ProductApiService {
-
-
-
             val client = OkHttpClient
                 .Builder()
-                .connectTimeout(10,TimeUnit.SECONDS)
-                .readTimeout(30,TimeUnit.SECONDS)
+                .connectTimeout(API_CONNECT_TIMEOUT,TimeUnit.SECONDS)
+                .readTimeout(API_READ_TIMEOUT,TimeUnit.SECONDS)
                 .build()
 
             val retrofit: Retrofit =  Retrofit.Builder()

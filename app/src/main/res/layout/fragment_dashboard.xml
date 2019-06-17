@@ -63,7 +63,7 @@
                             app:layout_constraintGuide_begin="80dp"/>
 
                     <TextView
-                            android:text="Jhon Doe"
+                            android:text="Loading.."
                             android:textColor="@color/divider"
                             android:textAppearance="?attr/textAppearanceHeadline6"
                             android:layout_width="0dp"
@@ -74,7 +74,7 @@
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toTopOf="@+id/username_textView"/>
                     <TextView
-                            android:text="\@username"
+                            android:text="Loading.."
                             android:textColor="@color/divider"
                             android:textAppearance="?attr/textAppearanceSubtitle1"
                             android:layout_width="0dp"
@@ -85,7 +85,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/name_textView"
                             app:layout_constraintBottom_toTopOf="@+id/phone_textView"/>
                     <TextView
-                            android:text="+251111111"
+                            android:text="Loading.."
                             android:textColor="@color/divider"
                             android:textAppearance="?attr/textAppearanceSubtitle2"
                             android:layout_width="0dp"

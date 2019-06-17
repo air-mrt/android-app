@@ -36,11 +36,11 @@ class PostProductViewModel (private val productRepository: ProductRepository) : 
         get() = _postResponse
 
     fun getProductById(id: Long) = viewModelScope.launch{
-        _getResponse.postValue(productRepository.getProductByIdApi(id))
+        _getResponse.postValue(productRepository.getProductByIdAPI(id))
     }
     fun postProduct(file: MultipartBody.Part?, productJson: RequestBody, token:String) = viewModelScope.launch {
         try{
-            _postResponse.postValue(productRepository.postProductApi(file,productJson,token))
+            _postResponse.postValue(productRepository.postProductAPI(file,productJson,token))
         }
         catch (e:ConnectException){
             //do nothing
@@ -49,7 +49,7 @@ class PostProductViewModel (private val productRepository: ProductRepository) : 
     }
     fun deleteProductById(id:Long, token:String) =
         viewModelScope.launch {
-            _deleteResponse.postValue(productRepository.deleteProductByIdApi(id,token))
+            _deleteResponse.postValue(productRepository.deleteProductByIdAPI(id,token))
         }
 
 }
