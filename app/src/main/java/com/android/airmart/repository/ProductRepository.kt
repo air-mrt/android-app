@@ -46,15 +46,9 @@ class ProductRepository constructor(private val productDao: ProductDao, private 
         }
     suspend fun deleteProductById(id:Long,token:String)=
         withContext(Dispatchers.IO){
-        try{
             deleteProductByIdAPI(id,token)
             productDao.deleteProduct(productDao.getProductById(id))
             return@withContext true
-        }
-        catch (e:ConnectException){
-            return@withContext false
-        }
-            return@withContext false
         }
 
     @Throws(ConnectException::class)

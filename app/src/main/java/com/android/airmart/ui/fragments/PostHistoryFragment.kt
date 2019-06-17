@@ -77,11 +77,9 @@ class PostHistoryFragment : Fragment() {
          }
         job.invokeOnCompletion {
             progress.dismiss()
-             postHistoryViewModel.deleteResponse.observe(this, Observer {
-                 if (!it){
+                 if (job.isCancelled){
                     showErrorDialog().show()
                  }
-             })
          }
 
 

@@ -27,6 +27,7 @@ import android.widget.ImageView
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.edit
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.android.airmart.data.api.model.ProductRequest
 import com.android.airmart.utilities.*
@@ -116,10 +117,11 @@ class PostProductFragment : Fragment() {
                         clearFields()
                         StyleableToast.makeText(
                             requireContext(),
-                            res.body()?.title + " Posted Successfully !",
+                            "Product Posted Successfully !",
                             Toast.LENGTH_LONG,
                             R.style.mytoast
                         ).show()
+                        findNavController().popBackStack()
                     } else {
                         //error case
                         errDialog.show()

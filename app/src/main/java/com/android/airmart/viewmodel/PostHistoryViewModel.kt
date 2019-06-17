@@ -10,9 +10,11 @@ import com.android.airmart.data.entity.User
 import com.android.airmart.repository.ProductRepository
 import com.android.airmart.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.Response
+import java.net.ConnectException
 
 class PostHistoryViewModel (private val productRepository: ProductRepository, private val userRepository: UserRepository) : ViewModel(){
     private  val _allProductResponse = MutableLiveData<List<Product>>()
@@ -35,7 +37,13 @@ class PostHistoryViewModel (private val productRepository: ProductRepository, pr
         _allProductResponse.postValue(productRepository.allProductsByUser(username))
     }
     fun deletePostById(productId:Long,token:String) = viewModelScope.launch{
-        _deleteResponse.postValue(productRepository.deleteProductById(productId,token))
+        try {
+            _deleteResponse.postValue(productRepository.deleteProductById(productId,token))
+        }
+        catch (e:ConnectException){
+            this.coroutineContext.cancel()
+        }
+
 
 }
 }
