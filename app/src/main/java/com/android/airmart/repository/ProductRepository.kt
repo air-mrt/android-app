@@ -15,13 +15,8 @@ import javax.inject.Singleton
 
 @Singleton
 class ProductRepository constructor(private val productDao: ProductDao, private val productApiService: ProductApiService) {
-
-    fun allProductsRoom(): LiveData<List<Product>> = productDao.getAllProducts()
-    fun insertProductRoom(product: Product) = productDao.insertProduct(product)
-    fun updateProductRoom(product: Product) = productDao.updateProduct(product)
-    fun deleteProductRoom(product: Product) = productDao.deleteProduct(product)
-    fun getProductByTitleRoom(title: String): LiveData<Product> = productDao.getProductByTitle(title)
-    fun getProductByIdRoom(productId: Long): LiveData<Product> = productDao.getProductById(productId)
+    fun getProductById(id:Long) = productDao.getProductByIdRoom(id)
+    fun allProductsRoom() = productDao.getAllProducts()
     suspend fun getProductByIdAPI(id: Long): Response<ProductResponse> =
         withContext(Dispatchers.IO){
             productApiService.getProductById(id).await()
@@ -48,6 +43,18 @@ class ProductRepository constructor(private val productDao: ProductDao, private 
                 return@withContext productDao.getAllProductsByUser(username)
             }
             return@withContext productDao.getAllProductsByUser(username)
+        }
+    suspend fun deleteProductById(id:Long,token:String)=
+        withContext(Dispatchers.IO){
+        try{
+            deleteProductByIdAPI(id,token)
+            productDao.deleteProduct(productDao.getProductById(id))
+            return@withContext true
+        }
+        catch (e:ConnectException){
+            return@withContext false
+        }
+            return@withContext false
         }
 
     @Throws(ConnectException::class)

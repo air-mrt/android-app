@@ -93,7 +93,8 @@
                                 android:contentDescription="@string/cat_card_rich_media_image_view_description"
                                 app:backgroundTint="@color/mtrl_dark_on_surface_emphasis_medium"
                                 app:backgroundTintMode="add"
-                                app:srcCompat="@drawable/ic_broken_image_black_24dp"/>
+                                app:imageFromUrl="@{productviewModel.product.pictureUrl}"
+                                android:src="@drawable/ic_broken_image_black_24dp"/>
 
                         <TextView
                                 android:layout_width="wrap_content"

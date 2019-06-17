@@ -24,7 +24,7 @@ class PostDetailViewModel(
 
 
     init {
-        product = productRepository.getProductByIdRoom(productId)
+        product = productRepository.getProductById(productId)
         commentsForProduct = commentRepository.allCommentsbyProductId(productId)
     }
 

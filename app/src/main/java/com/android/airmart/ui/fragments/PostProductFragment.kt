@@ -68,22 +68,9 @@ class PostProductFragment : Fragment() {
         postButton = post_button
         sharedPref = requireActivity().getSharedPreferences(SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE)
         token = """Bearer ${sharedPref.getString(TOKEN_KEY, DEFAULT_VALUE_SHARED_PREF)}"""
-
-        val progressBar = MaterialDialog
-            .Builder(requireContext())
-            .title("Posting Product")
-            .content("please wait..")
-            .progress(true, 0)
-            .cancelable(false)
-            .build()
-        val errorDialog = MaterialDialog
-            .Builder(requireContext())
-            .title("Could not connect to server")
-            .content("Unable to make connection to server. Make sure you have an internet connection and try again.")
-            .positiveText("OK")
-            .build()
-
         postButton.setOnClickListener {
+            val progress = showProgressBar()
+            val errDialog = showErrorDialog()
             if (validateInputs()) {
                 val productPart = RequestBody.create(MediaType.parse("text/plain"), gsonBuilder.toJson(readFields()))
                 if (mImageCaptureUri != null) {
@@ -97,48 +84,46 @@ class PostProductFragment : Fragment() {
                         file.name + "." + extension,
                         RequestBody.create(MediaType.parse("image/*"), fileBytes)
                     )
-                    try {
-                        //TODO check if token is expired and generate new token
-                        postProductViewModel.postProduct(image, productPart, token)
 
-                    } catch (e: ConnectException) {
-                        // show connection error dialog
-                        errorDialog.show()
+                    //TODO check if token is expired and generate new token
+
+                    val job1 = postProductViewModel.postProduct(image, productPart, token)
+                    if (job1.isActive) {
+                        progress.show()
                     }
 
+                    job1.invokeOnCompletion {
+                        if (job1.isCancelled) {
+                        errDialog.show()
+                    }
+                        progress.dismiss()
+                    }
                 } else {
-                    try {
-                        //TODO check if token is expired and generate new token
-                        postProductViewModel.postProduct(null, productPart, token)
-                    } catch (e: ConnectException) {
-                        // show connection error dialog
-                        errorDialog.show()
-
+                    //TODO check if token is expired and generate new token
+                    val job2 = postProductViewModel.postProduct(null, productPart, token)
+                    if (job2.isActive) {
+                        progress.show()
+                    }
+                    job2.invokeOnCompletion {
+                        if (job2.isCancelled) {
+                        errDialog.show()
+                    }
+                        progress.dismiss()
                     }
                 }
                 postProductViewModel.postResponse.observe(this, Observer { res ->
-
-                    if (res == null) {
-                        //show progress bar
-                        progressBar.show()
+                    if (res.isSuccessful) {
+                        clearFields()
+                        StyleableToast.makeText(
+                            requireContext(),
+                            res.body()?.title + " Posted Successfully !",
+                            Toast.LENGTH_LONG,
+                            R.style.mytoast
+                        ).show()
                     } else {
-                        //close progress bar
-                        //progressBar.dismiss()
-                        if (res.isSuccessful) {
-                            clearFields()
-                            StyleableToast.makeText(
-                                requireContext(),
-                                res.body()?.title + " Posted Successfully !",
-                                Toast.LENGTH_LONG,
-                                R.style.mytoast
-                            ).show()
-                        } else {
-                            //close progress bar
-                            progressBar.dismiss()
-                            //TODO handle error case
-                        }
+                        //error case
+                        errDialog.show()
                     }
-
                 })
 
             }
@@ -155,6 +140,25 @@ class PostProductFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_post_product, container, false)
 
+    }
+
+    fun showProgressBar(): MaterialDialog {
+        return MaterialDialog
+            .Builder(requireContext())
+            .title("Posting Product")
+            .content("please wait..")
+            .progress(true, 0)
+            .build()
+    }
+
+    fun showErrorDialog(): MaterialDialog {
+        return MaterialDialog
+            .Builder(requireContext())
+            .title("Could not connect to server")
+            .content("Unable to make connection to server. Make sure you have an internet connection and try again.")
+            .positiveText("OK")
+            .onPositive { dialog, which -> dialog.dismiss() }
+            .build()
     }
 
     fun readFields(): ProductRequest {

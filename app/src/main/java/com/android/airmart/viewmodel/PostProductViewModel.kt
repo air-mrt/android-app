@@ -8,6 +8,7 @@ import com.android.airmart.data.api.model.ProductResponse
 import com.android.airmart.data.entity.Product
 import com.android.airmart.repository.ProductRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -15,15 +16,7 @@ import retrofit2.Response
 import java.net.ConnectException
 
 class PostProductViewModel (private val productRepository: ProductRepository) : ViewModel(){
-    fun insertProduct (product: Product) = viewModelScope.launch (Dispatchers.IO){
-        productRepository.insertProductRoom(product)
-    }
-    fun updateProduct (product: Product) = viewModelScope.launch (Dispatchers.IO){
-        productRepository.updateProductRoom(product)
-    }
-    fun deleteProduct (product: Product) = viewModelScope.launch (Dispatchers.IO){
-        productRepository.deleteProductRoom(product)
-    }
+
     private  val _getResponse = MutableLiveData<Response<ProductResponse>>()
     val getResponse: LiveData<Response<ProductResponse>>
         get() = _getResponse
@@ -43,7 +36,7 @@ class PostProductViewModel (private val productRepository: ProductRepository) : 
             _postResponse.postValue(productRepository.postProductAPI(file,productJson,token))
         }
         catch (e:ConnectException){
-            //do nothing
+            this.coroutineContext.cancel()
         }
 
     }

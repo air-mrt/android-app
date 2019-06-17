@@ -10,6 +10,7 @@ import com.android.airmart.data.entity.User
 import com.android.airmart.repository.ProductRepository
 import com.android.airmart.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
@@ -17,6 +18,10 @@ class PostHistoryViewModel (private val productRepository: ProductRepository, pr
     private  val _allProductResponse = MutableLiveData<List<Product>>()
     val allProductResponse: LiveData<List<Product>>
         get() = _allProductResponse
+
+    private  val _deleteResponse = MutableLiveData<Boolean>()
+    val deleteResponse: LiveData<Boolean>
+        get() = _deleteResponse
     private  val _userInfoResponse = MutableLiveData<User>()
     val userInfoResponse: LiveData<User>?
         get() = _userInfoResponse
@@ -29,4 +34,8 @@ class PostHistoryViewModel (private val productRepository: ProductRepository, pr
     fun getAllProductsByUsername(username:String) = viewModelScope.launch{
         _allProductResponse.postValue(productRepository.allProductsByUser(username))
     }
+    fun deletePostById(productId:Long,token:String) = viewModelScope.launch{
+        _deleteResponse.postValue(productRepository.deleteProductById(productId,token))
+
+}
 }

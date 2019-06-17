@@ -7,17 +7,20 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.materialdialogs.MaterialDialog
+import com.android.airmart.R
 
 import com.android.airmart.data.entity.Product
 import com.android.airmart.databinding.RecyclerPostHistoryItemBinding
+import com.android.airmart.ui.fragments.PostHistoryFragment
 
 
-class PostHistoryListAdapter: ListAdapter<Product,PostHistoryListAdapter.ViewHolder>(PostHistoryDiffCallback()){
+class PostHistoryListAdapter(private val postHistoryFragment: PostHistoryFragment): ListAdapter<Product,PostHistoryListAdapter.ViewHolder>(PostHistoryDiffCallback()){
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val product = getItem(position)
         holder.apply {
-            bind(onEditClickListener(product.id),onDeleteClickListener(product.id),product)
+            bind(onDeleteClickListener(product.id),onEditClickListener(product.id),product)
             itemView.tag = product
         }
     }
@@ -30,7 +33,19 @@ class PostHistoryListAdapter: ListAdapter<Product,PostHistoryListAdapter.ViewHol
 
     private fun onDeleteClickListener(productId: Long): View.OnClickListener {
         return View.OnClickListener {
-            //TODO implement function
+            MaterialDialog
+                .Builder(it.context)
+                .title("Delete Post")
+                .content("Are you sure you want to delete post permanently ?")
+                .negativeText("Delete")
+                .negativeColorRes(R.color.Danger)
+                .onNegative(MaterialDialog.SingleButtonCallback {
+                        dialog, which ->
+                    //TODO implement delete
+                    postHistoryFragment.deletePost(productId)
+                })
+                .neutralText("Cancel")
+                .show()
         }
     }
     private fun onEditClickListener(productId: Long): View.OnClickListener {

@@ -21,7 +21,7 @@ interface ProductApiService {
 
     @GET("products")
     fun getAllProducts(@Query("username")username:String = "null"): Deferred<Response<List<ProductResponse>>>
-    @DELETE("auth/{id}")
+    @DELETE("products/auth/{id}")
     fun deleteProductById(@Path("id")id: Long,
                           @Header("Authorization") token:String): Deferred<Response<Void>>
     @Multipart
