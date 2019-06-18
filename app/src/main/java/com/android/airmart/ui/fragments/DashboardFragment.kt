@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -36,6 +37,7 @@ class DashboardFragment : Fragment() {
     lateinit var totalPostsTextView:TextView
     lateinit var token:String
     lateinit var username:String
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         sharedPref = requireActivity().getSharedPreferences(SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE)
@@ -44,6 +46,7 @@ class DashboardFragment : Fragment() {
         nameTextView = name_textView
         usernameTextView = username_textView
         phoneTextView = phone_textView
+
         dashboardViewModel.getUserInfo(token,username)
         dashboardViewModel.userInfoResponse?.observe(this, Observer {res->
             if (res!=null){
@@ -53,6 +56,7 @@ class DashboardFragment : Fragment() {
             }
 
         })
+
     }
 
     override fun onCreateView(
@@ -68,6 +72,10 @@ class DashboardFragment : Fragment() {
             productHistoryClickListener = View.OnClickListener {
                 val direction = DashboardFragmentDirections.actionDashboardFragmentToPostHistoryFragment()
                 it.findNavController().navigate(direction)
+            }
+            editProfileClickListener = View.OnClickListener {
+                val directions =  DashboardFragmentDirections.actionDashboardFragmentToEditProfileFragment()
+                it.findNavController().navigate(directions)
             }
             executePendingBindings()
         }

@@ -11,12 +11,9 @@ import kotlinx.coroutines.launch
 class SearchViewModel ( productRepository: ProductRepository, private val title: String
 ) : ViewModel() {
 
-
     fun search(titles:String) {
         viewModelScope.launch(Dispatchers.IO) {
-            if(titles==title){
 
-            }
         }
     }
 
