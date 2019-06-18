@@ -1,6 +1,7 @@
 package com.android.airmart.ui.fragments
 
 
+import android.os.AsyncTask
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -36,9 +37,11 @@ class SearchFragment : Fragment() {
         edittext=edit_search_Text
         serchbtun=search_button
         serchbtun.setOnClickListener {
-            searchViewmodel.search(edittext.toString())
+            searchViewmodel.search(edittext.text.toString())
+
+            }
         }
-    }
+
     override fun onCreateView(
 
         inflater: LayoutInflater, container: ViewGroup?,

@@ -14,6 +14,9 @@
         <variable
                 name="viewModel"
                 type="com.android.airmart.viewmodel.DashboardViewModel" />
+        <variable
+                name="editProfileClickListener"
+                type="android.view.View.OnClickListener"/>
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -111,6 +114,7 @@
                             app:icon="@drawable/ic_edit_black_24dp"
                             android:backgroundTint="@color/colorSecondary_text"
                             android:text="Edit Profile"
+                            android:onClick="@{editProfileClickListener}"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:id="@+id/edit_button"

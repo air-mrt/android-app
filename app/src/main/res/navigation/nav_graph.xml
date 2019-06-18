@@ -28,6 +28,8 @@
                 app:popEnterAnim="@anim/slide_out_right" app:popExitAnim="@anim/slide_in_left"/>
         <action android:id="@+id/action_dashboardFragment_to_postHistoryFragment"
                 app:destination="@id/postHistoryFragment"/>
+        <action android:id="@+id/action_dashboardFragment_to_editProfileFragment"
+                app:destination="@id/editProfileFragment"/>
     </fragment>
     <fragment android:id="@+id/loginFragment" android:name="com.android.airmart.ui.fragments.LoginFragment"
               android:label="Login"/>
@@ -37,4 +39,6 @@
               android:label="ContactInfoFragment"/>
     <fragment android:id="@+id/postHistoryFragment" android:name="com.android.airmart.ui.fragments.PostHistoryFragment"
               android:label="Post History" tools:layout="@layout/fragment_post_history"/>
+    <fragment android:id="@+id/editProfileFragment" android:name="com.android.airmart.ui.fragments.EditProfileFragment"
+              android:label="fragment_edit_profile" tools:layout="@layout/fragment_edit_profile"/>
 </navigation>
