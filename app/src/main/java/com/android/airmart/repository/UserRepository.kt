@@ -35,9 +35,8 @@ class UserRepository constructor(private val userDao: UserDao, private val userA
         withContext(Dispatchers.IO){
             try{
                 val res = getLoggedInUserInfoAPI(token).body()
-                lateinit var user:User
                 if (res!=null){
-                    user = User(res.username,res.name,res.phone,res.email,res.profilePicture,res.numberOfPosts)
+                    val user = User(res.username,res.name,res.phone,res.email,res.profilePicture,res.numberOfPosts)
                     userDao.insertUser(user)
                     return@withContext user
                 }
@@ -53,6 +52,17 @@ class UserRepository constructor(private val userDao: UserDao, private val userA
             //some error case
             return@withContext null
         }
+    suspend fun validateToken(token:String)=
+            withContext(Dispatchers.IO){
+                try {
+                    val res = validateTokenAPI(token)
+                        if (res.isSuccessful) return@withContext true
+                        return@withContext false
+                }
+                catch (e:ConnectException){
+                    return@withContext false
+                }
+            }
     fun allUsers(): LiveData<List<User>> = userDao.getAllUsers()
     fun insertUser(product: User) = userDao.insertUser(product)
     fun updateUser(product: User) = userDao.updateUser(product)

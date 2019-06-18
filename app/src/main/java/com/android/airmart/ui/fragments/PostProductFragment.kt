@@ -40,7 +40,6 @@ import okhttp3.RequestBody
 import java.net.ConnectException
 
 class PostProductFragment : Fragment() {
-    var isConnected = true
     private lateinit var titleEditText: EditText
     private lateinit var priceEditText: EditText
     private lateinit var descriptionEditText: EditText
@@ -118,10 +117,11 @@ class PostProductFragment : Fragment() {
                         StyleableToast.makeText(
                             requireContext(),
                             "Product Posted Successfully !",
-                            Toast.LENGTH_LONG,
+                            Toast.LENGTH_SHORT,
                             R.style.mytoast
                         ).show()
-                        findNavController().popBackStack()
+                        //navigate to dashboard
+                        findNavController().navigate(PostProductFragmentDirections.actionPostProductFragmentToDashboardFragment())
                     } else {
                         //error case
                         errDialog.show()

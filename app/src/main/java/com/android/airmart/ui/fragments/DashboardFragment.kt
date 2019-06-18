@@ -14,6 +14,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
+import com.afollestad.materialdialogs.MaterialDialog
 
 import com.android.airmart.R
 import com.android.airmart.databinding.FragmentDashboardBinding
@@ -33,27 +34,41 @@ class DashboardFragment : Fragment() {
     lateinit var nameTextView:TextView
     lateinit var usernameTextView:TextView
     lateinit var phoneTextView:TextView
-    lateinit var totalPostsTextView:TextView
     lateinit var token:String
     lateinit var username:String
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         sharedPref = requireActivity().getSharedPreferences(SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE)
-        token = """Bearer ${sharedPref.getString(TOKEN_KEY,DEFAULT_VALUE_SHARED_PREF)}"""
-        username = sharedPref.getString(USERNAME_KEY, DEFAULT_VALUE_SHARED_PREF)
+        token = SharedPrefUtil.getToken(sharedPref)
+        username = SharedPrefUtil.getUsername(sharedPref)
         nameTextView = name_textView
         usernameTextView = username_textView
         phoneTextView = phone_textView
-        dashboardViewModel.getUserInfo(token,username)
-        dashboardViewModel.userInfoResponse?.observe(this, Observer {res->
-            if (res!=null){
-                nameTextView.text = res.name
-                usernameTextView.text = """@${res.username}"""
-                phoneTextView.text = res.phone
-            }
-
-        })
-    }
+        //before getting userInfo check if token is valid
+        val job = dashboardViewModel.validateToken(token)
+        val progress = showProgressBar()
+        if(job.isActive){
+            progress.show()
+        }
+        job.invokeOnCompletion {
+            progress.dismiss()
+            dashboardViewModel.validateTokenResponse.observe(this, Observer { res->
+                if (res){
+                    dashboardViewModel.getUserInfo(token,username)
+                    dashboardViewModel.userInfoResponse?.observe(this, Observer {res->
+                        if (res!=null){
+                            nameTextView.text = res.name
+                            usernameTextView.text = """@${res.username}"""
+                            phoneTextView.text = res.phone
+                        }
+                    })
+                }
+                else{
+                    //generate new token
+                }
+            })
+        }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,5 +88,13 @@ class DashboardFragment : Fragment() {
         }
 
         return binding.root
+    }
+    fun showProgressBar(): MaterialDialog {
+        return MaterialDialog
+            .Builder(requireContext())
+            .title("Validating Token")
+            .content("please wait..")
+            .progress(true, 0)
+            .build()
     }
 }

@@ -16,7 +16,10 @@
         <argument android:name="productId" app:argType="long"/>
     </fragment>
     <fragment android:id="@+id/postProductFragment" android:name="com.android.airmart.ui.fragments.PostProductFragment"
-              android:label="Post Product"/>
+              android:label="Post Product">
+        <action android:id="@+id/action_postProductFragment_to_dashboardFragment"
+                app:destination="@id/dashboardFragment"/>
+    </fragment>
     <fragment android:id="@+id/dashboardFragment" android:name="com.android.airmart.ui.fragments.DashboardFragment"
               android:label="Dashboard" tools:layout="@layout/fragment_dashboard">
         <action android:id="@+id/action_dashboardFragment_to_postProductFragment"
