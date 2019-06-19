@@ -23,6 +23,7 @@ import com.android.airmart.databinding.FragmentDashboardBinding.inflate
 import com.android.airmart.utilities.*
 import com.android.airmart.viewmodel.DashboardViewModel
 import com.android.airmart.viewmodel.LoginViewModel
+import com.google.android.material.snackbar.Snackbar
 import com.muddzdev.styleabletoast.StyleableToast
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import java.util.*
@@ -46,27 +47,22 @@ class DashboardFragment : Fragment() {
         phoneTextView = phone_textView
         //before getting userInfo check if token is valid
                 if (!SharedPrefUtil.isTokenExpired(sharedPref)){
-                    StyleableToast.makeText(requireContext(), "valid token"+ SharedPrefUtil.getIssuedTime(sharedPref)+"<"+SharedPrefUtil.getExpTime(sharedPref), Toast.LENGTH_LONG, R.style.mytoast).show()
-
                     dashboardViewModel.getUserInfo(SharedPrefUtil.getToken(sharedPref), SharedPrefUtil.getUsername(sharedPref))
 
                 }
                 else{
-                    StyleableToast.makeText(requireContext(), "expired token"+ SharedPrefUtil.getIssuedTime(sharedPref)+">"+SharedPrefUtil.getExpTime(sharedPref), Toast.LENGTH_LONG, R.style.mytoast).show()
                     val job = dashboardViewModel.login(SharedPrefUtil.getSavedLoginCredentials(sharedPref))
                     val progress= showProgressBar()
-                    val errDialog = showErrorDialog()
                     if(job.isActive){
                         progress.show()
                     }
                     job.invokeOnCompletion {
                         progress.dismiss()
                         if (job.isCancelled) {
-                            errDialog.show()
+                            errDialog()
                         }
                         dashboardViewModel.getUserInfo(SharedPrefUtil.getToken(sharedPref), SharedPrefUtil.getUsername(sharedPref))
                     }
-
                 }
         dashboardViewModel.userInfoResponse?.observe(this, Observer {res->
             if (res!=null){
@@ -115,13 +111,10 @@ class DashboardFragment : Fragment() {
             .progress(true, 0)
             .build()
     }
-    fun showErrorDialog(): MaterialDialog {
-        return MaterialDialog
-            .Builder(requireContext())
-            .title("Could not connect to server")
-            .content("Unable to make connection to server. Make sure you have an internet connection and try again.")
-            .positiveText("OK")
-            .onPositive { dialog, which -> dialog.dismiss() }
-            .build()
+    fun errDialog() {
+        val snackBar:Snackbar = Snackbar.make(view!!,"No Internet Connection",Snackbar.LENGTH_LONG)
+        val sbView:View = snackBar.view
+        sbView.setBackgroundColor(resources.getColor(R.color.Danger))
+        snackBar.show()
     }
 }
