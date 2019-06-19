@@ -37,8 +37,13 @@ class PostHistoryFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         totalPostsTextView =total_post_textView
-        postHistoryViewModel.getUserInfo(token,username)
         updateTotalPosts(totalPostsTextView)
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,6 +57,7 @@ class PostHistoryFragment : Fragment() {
             username = sharedPref.getString(USERNAME_KEY, DEFAULT_VALUE_SHARED_PREF)
             token = """Bearer ${sharedPref.getString(TOKEN_KEY,DEFAULT_VALUE_SHARED_PREF)}"""
             postHistoryViewModel.getAllProductsByUsername(username)
+            postHistoryViewModel.getUserInfo(token,username)
             executePendingBindings()
         }
         subscribeUi(adapter)

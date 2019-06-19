@@ -29,8 +29,6 @@ interface UserApiService {
     @GET("users/info")
     fun getLoggedInUserInfo(@Header("Authorization") token:String):Deferred<Response<UserInfo>>
 
-    @GET("validateToken")
-    fun validateToken(@Query("token")token:String):Deferred<Response<MessageResponse>>
 
     companion object {
 

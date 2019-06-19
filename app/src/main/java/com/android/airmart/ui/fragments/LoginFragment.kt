@@ -74,7 +74,7 @@ class LoginFragment : Fragment() {
                         if(res.isSuccessful){
                             //save shared pref
                             //TODO encrypt password before saving it to shared pref
-                            SharedPrefUtil.savePreference(sharedPref,res.body()!!.token,res.body()!!.username,readFields().password,true)
+                            SharedPrefUtil.savePreference(sharedPref,res.body()!!.token,res.body()!!.username,res.body()!!.expirationDate,res.body()!!.issuedDate,readFields().password,true)
                             //show success message
                             StyleableToast.makeText(requireContext(), "SUCCESS", Toast.LENGTH_LONG, R.style.mytoast).show()
                             clearFields()

@@ -25,6 +25,7 @@ import com.android.airmart.viewmodel.DashboardViewModel
 import com.android.airmart.viewmodel.LoginViewModel
 import com.muddzdev.styleabletoast.StyleableToast
 import kotlinx.android.synthetic.main.fragment_dashboard.*
+import java.util.*
 
 
 class DashboardFragment : Fragment() {
@@ -35,43 +36,53 @@ class DashboardFragment : Fragment() {
     lateinit var nameTextView:TextView
     lateinit var usernameTextView:TextView
     lateinit var phoneTextView:TextView
-    lateinit var token:String
-    lateinit var username:String
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         sharedPref = requireActivity().getSharedPreferences(SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE)
-        token = SharedPrefUtil.getToken(sharedPref)
-        username = SharedPrefUtil.getUsername(sharedPref)
+
         nameTextView = name_textView
         usernameTextView = username_textView
         phoneTextView = phone_textView
         //before getting userInfo check if token is valid
-        val job = dashboardViewModel.validateToken(token)
-        val progress = showProgressBar()
-        if(job.isActive){
-            progress.show()
-        }
-        job.invokeOnCompletion {
-            progress.dismiss()
-            dashboardViewModel.validateTokenResponse.observe(this, Observer { res->
-                if (res){
-                    dashboardViewModel.getUserInfo(token,username)
-                    dashboardViewModel.userInfoResponse?.observe(this, Observer {res->
-                        if (res!=null){
-                            nameTextView.text = res.name
-                            usernameTextView.text = """@${res.username}"""
-                            phoneTextView.text = res.phone
-                        }
-                    })
+                if (!SharedPrefUtil.isTokenExpired(sharedPref)){
+                    StyleableToast.makeText(requireContext(), "valid token"+ SharedPrefUtil.getIssuedTime(sharedPref)+"<"+SharedPrefUtil.getExpTime(sharedPref), Toast.LENGTH_LONG, R.style.mytoast).show()
+
+                    dashboardViewModel.getUserInfo(SharedPrefUtil.getToken(sharedPref), SharedPrefUtil.getUsername(sharedPref))
+
                 }
                 else{
-                    //generate new token
-                }
-            })
-        }
+                    StyleableToast.makeText(requireContext(), "expired token"+ SharedPrefUtil.getIssuedTime(sharedPref)+">"+SharedPrefUtil.getExpTime(sharedPref), Toast.LENGTH_LONG, R.style.mytoast).show()
+                    val job = dashboardViewModel.login(SharedPrefUtil.getSavedLoginCredentials(sharedPref))
+                    val progress= showProgressBar()
+                    val errDialog = showErrorDialog()
+                    if(job.isActive){
+                        progress.show()
+                    }
+                    job.invokeOnCompletion {
+                        progress.dismiss()
+                        if (job.isCancelled) {
+                            errDialog.show()
+                        }
+                        dashboardViewModel.getUserInfo(SharedPrefUtil.getToken(sharedPref), SharedPrefUtil.getUsername(sharedPref))
+                    }
 
-    }
+                }
+        dashboardViewModel.userInfoResponse?.observe(this, Observer {res->
+            if (res!=null){
+                nameTextView.text = res.name
+                usernameTextView.text = """@${res.username}"""
+                phoneTextView.text = res.phone
+            }
+        })
+        dashboardViewModel.loginResponse.observe(this,Observer{res->
+            if(res.isSuccessful){
+                //save shared pref
+                //TODO encrypt password before saving it to shared pref
+                SharedPrefUtil.updatePreference(sharedPref,res.body()!!.token,res.body()!!.expirationDate,res.body()!!.issuedDate)
+            }
+        })
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -99,9 +110,18 @@ class DashboardFragment : Fragment() {
     fun showProgressBar(): MaterialDialog {
         return MaterialDialog
             .Builder(requireContext())
-            .title("Validating Token")
+            .title("Generating Token")
             .content("please wait..")
             .progress(true, 0)
+            .build()
+    }
+    fun showErrorDialog(): MaterialDialog {
+        return MaterialDialog
+            .Builder(requireContext())
+            .title("Could not connect to server")
+            .content("Unable to make connection to server. Make sure you have an internet connection and try again.")
+            .positiveText("OK")
+            .onPositive { dialog, which -> dialog.dismiss() }
             .build()
     }
 }

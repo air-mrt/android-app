@@ -1,14 +1,30 @@
 package com.android.airmart.utilities
 
 import android.content.SharedPreferences
+import com.android.airmart.data.api.model.AuthBody
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 object SharedPrefUtil {
-    fun savePreference(sharedPref: SharedPreferences,token:String,username:String,password:String,isLoggedIn:Boolean){
+    fun savePreference(sharedPref: SharedPreferences,token:String,username:String,expirationDate:Date,issuedDate:Date,password:String,isLoggedIn:Boolean){
         with(sharedPref.edit()){
             putString(TOKEN_KEY,token)
             putString(USERNAME_KEY,username)
             putString(PASSWORD_KEY,password)
+            putString(EXP_DATE_KEY,expirationDate.time.toString())
+            putString(ISSUED_DATE_KEY,issuedDate.time.toString())
+            putLong(LAST_LOGIN_KEY,Date().time)
             putBoolean(ISLOGGEDIN_KEY,isLoggedIn)
+            commit()
+        }
+    }
+    fun updatePreference(sharedPref: SharedPreferences,token:String,expirationDate:Date,issuedDate:Date){
+        with(sharedPref.edit()){
+            putString(TOKEN_KEY,token)
+            putString(EXP_DATE_KEY,expirationDate.time.toString())
+            putString(ISSUED_DATE_KEY,issuedDate.time.toString())
+            putLong(LAST_LOGIN_KEY,Date().time)
             commit()
         }
     }
@@ -17,6 +33,28 @@ object SharedPrefUtil {
     }
     fun getUsername(sharedPref: SharedPreferences):String{
         return sharedPref.getString(USERNAME_KEY, DEFAULT_VALUE_SHARED_PREF)
-
+    }
+    fun getExpTime(sharedPref: SharedPreferences):String{
+        return sharedPref.getString(EXP_DATE_KEY, DEFAULT_VALUE_SHARED_PREF)
+    }
+    fun getIssuedTime(sharedPref: SharedPreferences):String{
+        return sharedPref.getString(ISSUED_DATE_KEY, DEFAULT_VALUE_SHARED_PREF)
+    }
+    fun getLastLoginTime(sharedPref: SharedPreferences):Long{
+        return sharedPref.getLong(LAST_LOGIN_KEY, DEFAULT_LONG_VALUE_SHARED_PREF)
+    }
+    fun getPassword(sharedPref: SharedPreferences):String{
+        return sharedPref.getString(PASSWORD_KEY, DEFAULT_VALUE_SHARED_PREF)
+    }
+    fun isTokenExpired(sharedPref: SharedPreferences):Boolean{
+        val validityLength = getExpTime(sharedPref).toLong()  - getIssuedTime(sharedPref).toLong()
+        if (Date().time > getLastLoginTime(sharedPref)+validityLength) return true
+        return false
+    }
+    fun getSavedLoginCredentials(sharedPref: SharedPreferences):AuthBody{
+        return AuthBody(
+            this.getUsername(sharedPref),
+            this.getPassword(sharedPref)
+        )
     }
 }

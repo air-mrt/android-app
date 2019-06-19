@@ -27,10 +27,6 @@ class UserRepository constructor(private val userDao: UserDao, private val userA
             withContext(Dispatchers.IO){
                 userApiService.getLoggedInUserInfo(token).await()
             }
-    suspend fun validateTokenAPI(token:String):Response<MessageResponse> =
-        withContext(Dispatchers.IO){
-            userApiService.validateToken(token).await()
-        }
     suspend fun getLoggedInUserInfo(token: String, username:String):User? =
         withContext(Dispatchers.IO){
             try{
@@ -52,17 +48,7 @@ class UserRepository constructor(private val userDao: UserDao, private val userA
             //some error case
             return@withContext null
         }
-    suspend fun validateToken(token:String)=
-            withContext(Dispatchers.IO){
-                try {
-                    val res = validateTokenAPI(token)
-                        if (res.isSuccessful) return@withContext true
-                        return@withContext false
-                }
-                catch (e:ConnectException){
-                    return@withContext false
-                }
-            }
+
     fun allUsers(): LiveData<List<User>> = userDao.getAllUsers()
     fun insertUser(product: User) = userDao.insertUser(product)
     fun updateUser(product: User) = userDao.updateUser(product)
