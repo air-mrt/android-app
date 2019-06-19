@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -19,15 +18,11 @@ import com.android.airmart.adapter.PostHistoryListAdapter
 import com.android.airmart.databinding.FragmentPostHistoryBinding
 import com.android.airmart.utilities.*
 import com.android.airmart.viewmodel.PostHistoryViewModel
-import com.muddzdev.styleabletoast.StyleableToast
 import kotlinx.android.synthetic.main.fragment_post_history.*
-import kotlinx.coroutines.Job
 
 
 class PostHistoryFragment : Fragment() {
     lateinit var sharedPref: SharedPreferences
-    lateinit var username:String
-    lateinit var token:String
     lateinit var totalPostsTextView:TextView
     lateinit var adapter:PostHistoryListAdapter
     val  postHistoryViewModel: PostHistoryViewModel by viewModels {
@@ -54,10 +49,8 @@ class PostHistoryFragment : Fragment() {
             lifecycleOwner = this@PostHistoryFragment
             recyclerView.adapter = adapter
             sharedPref = requireActivity().getSharedPreferences(SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE)
-            username = sharedPref.getString(USERNAME_KEY, DEFAULT_VALUE_SHARED_PREF)
-            token = """Bearer ${sharedPref.getString(TOKEN_KEY,DEFAULT_VALUE_SHARED_PREF)}"""
-            postHistoryViewModel.getAllProductsByUsername(username)
-            postHistoryViewModel.getUserInfo(token,username)
+            postHistoryViewModel.getAllProductsByUsername(SharedPrefUtil.getUsername(sharedPref))
+            postHistoryViewModel.getUserInfo(SharedPrefUtil.getToken(sharedPref),SharedPrefUtil.getUsername(sharedPref))
             executePendingBindings()
         }
         subscribeUi(adapter)
@@ -69,13 +62,13 @@ class PostHistoryFragment : Fragment() {
         })
     }
     private fun updateTotalPosts(totalPostsTextView:TextView){
-        postHistoryViewModel.userInfoResponse?.observe(this, Observer {res->
+        postHistoryViewModel.userInfoResponse?.observe(viewLifecycleOwner, Observer {res->
             if (res!=null){
                 totalPostsTextView.text = res.numberOfPosts
             }
         })
     }
-     fun deletePost(productId:Long, token:String = this.token){
+     fun deletePost(productId:Long, token:String = SharedPrefUtil.getToken(sharedPref)){
          val job = postHistoryViewModel.deletePostById(productId,token)
          val progress = showProgressBar()
          if(job.isActive){
@@ -83,6 +76,8 @@ class PostHistoryFragment : Fragment() {
          }
         job.invokeOnCompletion {
             progress.dismiss()
+            postHistoryViewModel.getAllProductsByUsername(SharedPrefUtil.getUsername(sharedPref))
+            postHistoryViewModel.getUserInfo(SharedPrefUtil.getToken(sharedPref),SharedPrefUtil.getUsername(sharedPref))
                  if (job.isCancelled){
                     showErrorDialog().show()
                  }

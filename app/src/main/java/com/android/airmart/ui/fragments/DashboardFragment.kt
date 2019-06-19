@@ -3,6 +3,7 @@ package com.android.airmart.ui.fragments
 import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -18,6 +19,7 @@ import androidx.navigation.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 
 import com.android.airmart.R
+import com.android.airmart.data.entity.User
 import com.android.airmart.databinding.FragmentDashboardBinding
 import com.android.airmart.databinding.FragmentDashboardBinding.inflate
 import com.android.airmart.utilities.*
@@ -61,23 +63,9 @@ class DashboardFragment : Fragment() {
                         if (job.isCancelled) {
                             errDialog()
                         }
-                        dashboardViewModel.getUserInfo(SharedPrefUtil.getToken(sharedPref), SharedPrefUtil.getUsername(sharedPref))
+
                     }
                 }
-        dashboardViewModel.userInfoResponse?.observe(this, Observer {res->
-            if (res!=null){
-                nameTextView.text = res.name
-                usernameTextView.text = """@${res.username}"""
-                phoneTextView.text = res.phone
-            }
-        })
-        dashboardViewModel.loginResponse.observe(this,Observer{res->
-            if(res.isSuccessful){
-                //save shared pref
-                //TODO encrypt password before saving it to shared pref
-                SharedPrefUtil.updatePreference(sharedPref,res.body()!!.token,res.body()!!.expirationDate,res.body()!!.issuedDate)
-            }
-        })
         }
 
     override fun onCreateView(
@@ -100,6 +88,21 @@ class DashboardFragment : Fragment() {
             }
             executePendingBindings()
         }
+        dashboardViewModel.userInfoResponse?.observe(this, Observer<User> { res->
+            if (res!=null){
+                nameTextView.text = res.name
+                usernameTextView.text = """@${res.username}"""
+                phoneTextView.text = res.phone
+            }
+        })
+        dashboardViewModel.loginResponse.observe(this,Observer{res->
+            if(res.isSuccessful){
+                //save shared pref
+                //TODO encrypt password before saving it to shared pref
+                SharedPrefUtil.updatePreference(sharedPref,res.body()!!.token,res.body()!!.expirationDate,res.body()!!.issuedDate)
+                dashboardViewModel.getUserInfo(SharedPrefUtil.getToken(sharedPref), SharedPrefUtil.getUsername(sharedPref))
+            }
+        })
 
         return binding.root
     }
@@ -111,10 +114,16 @@ class DashboardFragment : Fragment() {
             .progress(true, 0)
             .build()
     }
+    @Suppress("DEPRECATION")
     fun errDialog() {
         val snackBar:Snackbar = Snackbar.make(view!!,"No Internet Connection",Snackbar.LENGTH_LONG)
         val sbView:View = snackBar.view
-        sbView.setBackgroundColor(resources.getColor(R.color.Danger))
+        if (Build.VERSION.SDK_INT >= 23){
+            sbView.setBackgroundColor(resources.getColor(R.color.Danger, requireContext().theme))
+        }
+       else{
+            sbView.setBackgroundColor(resources.getColor(R.color.Danger))
+        }
         snackBar.show()
     }
 }
