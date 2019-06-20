@@ -19,7 +19,6 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.android.airmart.R
 import com.android.airmart.data.entity.User
 import com.android.airmart.databinding.FragmentDashboardBinding
-import com.android.airmart.ui.fragments.DashboardFragmentDirections
 import com.android.airmart.utilities.*
 import com.android.airmart.viewmodel.DashboardViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -34,39 +33,40 @@ class DashboardFragment : Fragment() {
     lateinit var nameTextView:TextView
     lateinit var usernameTextView:TextView
     lateinit var phoneTextView:TextView
-    override fun onStart() {
-        super.onStart()
-        if (!SharedPrefUtil.isLoggedIn(sharedPref)){
-            findNavController().navigate(R.id.loginFragment)
-        }
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         sharedPref = requireActivity().getSharedPreferences(SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE)
+        if (!SharedPrefUtil.isLoggedIn(sharedPref)){
+            findNavController().navigate(R.id.loginFragment)
+        }
+        else{
+            nameTextView = name_textView
+            usernameTextView = username_textView
+            phoneTextView = phone_textView
+            //before getting userInfo check if token is valid
+            if (!SharedPrefUtil.isTokenExpired(sharedPref)){
+                dashboardViewModel.getUserInfo(SharedPrefUtil.getToken(sharedPref), SharedPrefUtil.getUsername(sharedPref))
 
-        nameTextView = name_textView
-        usernameTextView = username_textView
-        phoneTextView = phone_textView
-        //before getting userInfo check if token is valid
-                if (!SharedPrefUtil.isTokenExpired(sharedPref)){
-                    dashboardViewModel.getUserInfo(SharedPrefUtil.getToken(sharedPref), SharedPrefUtil.getUsername(sharedPref))
+            }
+            else{
+                val job = dashboardViewModel.login(SharedPrefUtil.getSavedLoginCredentials(sharedPref))
+                val progress= showProgressBar()
+                if(job.isActive){
+                    progress.show()
+                }
+                job.invokeOnCompletion {
+                    progress.dismiss()
+                    if (job.isCancelled) {
+                        errDialog()
+                    }
 
                 }
-                else{
-                    val job = dashboardViewModel.login(SharedPrefUtil.getSavedLoginCredentials(sharedPref))
-                    val progress= showProgressBar()
-                    if(job.isActive){
-                        progress.show()
-                    }
-                    job.invokeOnCompletion {
-                        progress.dismiss()
-                        if (job.isCancelled) {
-                            errDialog()
-                        }
+            }
 
-                    }
-                }
+        }
+
+
         }
 
     override fun onCreateView(

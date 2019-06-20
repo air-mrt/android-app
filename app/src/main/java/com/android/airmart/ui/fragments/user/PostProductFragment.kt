@@ -28,7 +28,6 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.android.airmart.data.api.model.ProductRequest
-import com.android.airmart.ui.fragments.PostProductFragmentDirections
 import com.android.airmart.utilities.*
 
 import com.android.airmart.viewmodel.PostProductViewModel
@@ -53,12 +52,6 @@ class PostProductFragment : Fragment() {
     }
     private val gsonBuilder: Gson = InjectorUtils.provideGson()
 
-    override fun onStart() {
-        super.onStart()
-        if (!SharedPrefUtil.isLoggedIn(sharedPref)) {
-            findNavController().navigate(R.id.loginFragment)
-        }
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -72,6 +65,9 @@ class PostProductFragment : Fragment() {
         }
         postButton = post_button
         sharedPref = requireActivity().getSharedPreferences(SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE)
+        if (!SharedPrefUtil.isLoggedIn(sharedPref)){
+            findNavController().navigate(R.id.loginFragment)
+        }
         token = """Bearer ${sharedPref.getString(TOKEN_KEY, DEFAULT_VALUE_SHARED_PREF)}"""
         postButton.setOnClickListener {
             val progress = showProgressBar()

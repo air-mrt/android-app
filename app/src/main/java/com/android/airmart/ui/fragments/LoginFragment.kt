@@ -6,6 +6,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -51,10 +53,9 @@ class LoginFragment : Fragment() {
 
     private fun onLoginButtonClicked(): View.OnClickListener{
         return View.OnClickListener {
-            //TODO Check connection
-            if(true){
                 //perform API call
                 val job = loginViewModel.login(readFields())
+                val errDialog = showErrorDialog()
                 val progress= showProgressBar()
                 if(job.isActive){
                     progress.show()
@@ -62,8 +63,16 @@ class LoginFragment : Fragment() {
                 job.invokeOnCompletion {
                     progress.dismiss()
                     if (job.isCancelled) {
-                        showErrorDialog()
+                        if (Looper.myLooper()==null){
+                            Looper.prepare()
+                            errDialog.show()
+                        }
+                        else{
+                            errDialog.show()
+                        }
+
                     }
+
                 }
                 loginViewModel.loginResponse?.observe(this, Observer {res->
                         if(res.isSuccessful){
@@ -71,15 +80,16 @@ class LoginFragment : Fragment() {
                             //TODO encrypt password before saving it to shared pref
                             SharedPrefUtil.savePreference(sharedPref,res.body()!!.token,res.body()!!.username,res.body()!!.expirationDate,res.body()!!.issuedDate,readFields().password,true)
                             //show success message
+                            progress.dismiss()
                             successLogin()
                             clearFields()
                         }
                         else{
                             //show error message
+                            progress.dismiss()
                             wrongPasswordDialog()
                             clearFields()
                         } })
-            }
         }
     }
     private fun readFields():AuthBody {

@@ -37,12 +37,7 @@ class PostHistoryFragment : Fragment() {
     }
 
 
-    override fun onStart() {
-        super.onStart()
-        if (!SharedPrefUtil.isLoggedIn(sharedPref)){
-            findNavController().navigate(R.id.loginFragment)
-        }
-    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,6 +47,9 @@ class PostHistoryFragment : Fragment() {
             lifecycleOwner = this@PostHistoryFragment
             recyclerView.adapter = adapter
             sharedPref = requireActivity().getSharedPreferences(SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE)
+            if (!SharedPrefUtil.isLoggedIn(sharedPref)){
+                findNavController().navigate(R.id.loginFragment)
+            }
             postHistoryViewModel.getAllProductsByUsername(SharedPrefUtil.getUsername(sharedPref))
             postHistoryViewModel.getUserInfo(SharedPrefUtil.getToken(sharedPref),SharedPrefUtil.getUsername(sharedPref))
             executePendingBindings()
