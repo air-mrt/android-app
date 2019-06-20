@@ -12,7 +12,7 @@ import com.android.airmart.R
 
 import com.android.airmart.data.entity.Product
 import com.android.airmart.databinding.RecyclerPostHistoryItemBinding
-import com.android.airmart.ui.fragments.PostHistoryFragment
+import com.android.airmart.ui.fragments.user.PostHistoryFragment
 
 
 class PostHistoryListAdapter(private val postHistoryFragment: PostHistoryFragment): ListAdapter<Product,PostHistoryListAdapter.ViewHolder>(PostHistoryDiffCallback()){
@@ -41,7 +41,6 @@ class PostHistoryListAdapter(private val postHistoryFragment: PostHistoryFragmen
                 .negativeColorRes(R.color.Danger)
                 .onNegative(MaterialDialog.SingleButtonCallback {
                         dialog, which ->
-                    //TODO implement delete
                     postHistoryFragment.deletePost(productId)
                 })
                 .neutralText("Cancel")

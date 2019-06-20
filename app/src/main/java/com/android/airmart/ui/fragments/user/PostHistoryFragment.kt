@@ -1,4 +1,4 @@
-package com.android.airmart.ui.fragments
+package com.android.airmart.ui.fragments.user
 
 
 import android.content.Context
@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.android.airmart.R
 import com.android.airmart.adapter.PostHistoryListAdapter
@@ -36,9 +37,11 @@ class PostHistoryFragment : Fragment() {
     }
 
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun onStart() {
+        super.onStart()
+        if (!SharedPrefUtil.isLoggedIn(sharedPref)){
+            findNavController().navigate(R.id.loginFragment)
+        }
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -1,4 +1,4 @@
-package com.android.airmart.ui.fragments
+package com.android.airmart.ui.fragments.user
 
 
 import android.app.Activity
@@ -24,12 +24,11 @@ import com.android.airmart.R
 import java.io.File
 
 import android.widget.ImageView
-import androidx.core.app.ActivityCompat.startActivityForResult
-import androidx.core.content.edit
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.android.airmart.data.api.model.ProductRequest
+import com.android.airmart.ui.fragments.PostProductFragmentDirections
 import com.android.airmart.utilities.*
 
 import com.android.airmart.viewmodel.PostProductViewModel
@@ -37,7 +36,6 @@ import com.google.gson.Gson
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import java.net.ConnectException
 
 class PostProductFragment : Fragment() {
     private lateinit var titleEditText: EditText
@@ -54,6 +52,13 @@ class PostProductFragment : Fragment() {
         InjectorUtils.providePostProductViewModelFactory(requireContext())
     }
     private val gsonBuilder: Gson = InjectorUtils.provideGson()
+
+    override fun onStart() {
+        super.onStart()
+        if (!SharedPrefUtil.isLoggedIn(sharedPref)) {
+            findNavController().navigate(R.id.loginFragment)
+        }
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -81,7 +86,7 @@ class PostProductFragment : Fragment() {
                     val file = File(mImageCaptureUri!!.path)
                     val image = MultipartBody.Part.createFormData(
                         "image",
-                        file.name + "." + extension,
+                        file.name + "" + extension,
                         RequestBody.create(MediaType.parse("image/*"), fileBytes)
                     )
 
@@ -94,8 +99,8 @@ class PostProductFragment : Fragment() {
 
                     job1.invokeOnCompletion {
                         if (job1.isCancelled) {
-                        errDialog.show()
-                    }
+                            errDialog.show()
+                        }
                         progress.dismiss()
                     }
                 } else {
@@ -106,8 +111,8 @@ class PostProductFragment : Fragment() {
                     }
                     job2.invokeOnCompletion {
                         if (job2.isCancelled) {
-                        errDialog.show()
-                    }
+                            errDialog.show()
+                        }
                         progress.dismiss()
                     }
                 }

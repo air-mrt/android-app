@@ -4,6 +4,7 @@ package com.android.airmart.ui.fragments
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -20,10 +21,9 @@ import com.android.airmart.data.api.model.AuthBody
 import com.android.airmart.databinding.FragmentLoginBinding
 import com.android.airmart.utilities.*
 import com.android.airmart.viewmodel.LoginViewModel
-import com.android.airmart.viewmodel.PostProductViewModel
+import com.google.android.material.snackbar.Snackbar
 import com.muddzdev.styleabletoast.StyleableToast
 import kotlinx.android.synthetic.main.fragment_login.*
-import kotlinx.android.synthetic.main.fragment_login.view.*
 
 class LoginFragment : Fragment() {
     private val loginViewModel: LoginViewModel by viewModels {
@@ -51,44 +51,35 @@ class LoginFragment : Fragment() {
 
     private fun onLoginButtonClicked(): View.OnClickListener{
         return View.OnClickListener {
-            val progressBar = MaterialDialog
-                .Builder(requireContext())
-                .title("Login in progress")
-                .content("please wait..")
-                .progress(true,0)
-                .autoDismiss(false)
-                .build()
             //TODO Check connection
             if(true){
                 //perform API call
-                loginViewModel.login(readFields())
-                // Show progress bar till the request is completed
-                loginViewModel.loginResponse?.observe(this, Observer {res->
-                    if(res == null) {
-                        //show progress bar
-                         progressBar.show()
+                val job = loginViewModel.login(readFields())
+                val progress= showProgressBar()
+                if(job.isActive){
+                    progress.show()
+                }
+                job.invokeOnCompletion {
+                    progress.dismiss()
+                    if (job.isCancelled) {
+                        showErrorDialog()
                     }
-                    else{
-                        //close progress bar
-                        progressBar.dismiss()
+                }
+                loginViewModel.loginResponse?.observe(this, Observer {res->
                         if(res.isSuccessful){
                             //save shared pref
                             //TODO encrypt password before saving it to shared pref
                             SharedPrefUtil.savePreference(sharedPref,res.body()!!.token,res.body()!!.username,res.body()!!.expirationDate,res.body()!!.issuedDate,readFields().password,true)
                             //show success message
-                            StyleableToast.makeText(requireContext(), "SUCCESS", Toast.LENGTH_LONG, R.style.mytoast).show()
+                            successLogin()
                             clearFields()
                         }
                         else{
                             //show error message
-                            StyleableToast.makeText(requireContext(), "ERROR", Toast.LENGTH_LONG, R.style.mytoast).show()
-                        }
-
-                    }
-
-                })
+                            wrongPasswordDialog()
+                            clearFields()
+                        } })
             }
-
         }
     }
     private fun readFields():AuthBody {
@@ -100,6 +91,46 @@ class LoginFragment : Fragment() {
     private fun clearFields(){
         username_editText.setText("")
         password_editText.setText("")
+    }
+    fun showProgressBar(): MaterialDialog {
+        return MaterialDialog
+            .Builder(requireContext())
+            .title("Logging in")
+            .content("please wait..")
+            .progress(true, 0)
+            .build()
+    }
+    fun showErrorDialog(): MaterialDialog {
+        return MaterialDialog
+            .Builder(requireContext())
+            .title("Could not connect to server")
+            .content("Unable to make connection to server. Make sure you have an internet connection and try again.")
+            .positiveText("OK")
+            .onPositive { dialog, which -> dialog.dismiss() }
+            .build()
+    }
+    fun successLogin() {
+        val snackBar: Snackbar = Snackbar.make(view!!,"Login Successful", Snackbar.LENGTH_LONG)
+        val sbView:View = snackBar.view
+        if (Build.VERSION.SDK_INT >= 23){
+            sbView.setBackgroundColor(resources.getColor(R.color.Success, requireContext().theme))
+        }
+        else{
+            sbView.setBackgroundColor(resources.getColor(R.color.Success))
+        }
+        snackBar.show()
+    }
+    @Suppress("DEPRECATION")
+    fun wrongPasswordDialog() {
+        val snackBar:Snackbar = Snackbar.make(view!!,"Wrong Username or Password",Snackbar.LENGTH_LONG)
+        val sbView:View = snackBar.view
+        if (Build.VERSION.SDK_INT >= 23){
+            sbView.setBackgroundColor(resources.getColor(R.color.Danger, requireContext().theme))
+        }
+        else{
+            sbView.setBackgroundColor(resources.getColor(R.color.Danger))
+        }
+        snackBar.show()
     }
 
 

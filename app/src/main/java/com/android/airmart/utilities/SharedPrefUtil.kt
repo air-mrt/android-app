@@ -1,6 +1,7 @@
 package com.android.airmart.utilities
 
 import android.content.SharedPreferences
+import androidx.annotation.BoolRes
 import com.android.airmart.data.api.model.AuthBody
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -27,6 +28,16 @@ object SharedPrefUtil {
             putLong(LAST_LOGIN_KEY,Date().time)
             commit()
         }
+    }
+    fun clearPreference(sharedPref: SharedPreferences){
+       with(sharedPref.edit()){
+           clear()
+           commit()
+       }
+    }
+    fun isLoggedIn(sharedPref: SharedPreferences):Boolean{
+        return sharedPref.getBoolean(ISLOGGEDIN_KEY, DEFAULT_BOOL_VALUE_SHARED_PREF)
+
     }
     fun getToken(sharedPref: SharedPreferences):String{
         return """Bearer ${sharedPref.getString(TOKEN_KEY,DEFAULT_VALUE_SHARED_PREF)}"""

@@ -1,34 +1,29 @@
-package com.android.airmart.ui.fragments
+package com.android.airmart.ui.fragments.user
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 
 import com.android.airmart.R
 import com.android.airmart.data.entity.User
 import com.android.airmart.databinding.FragmentDashboardBinding
-import com.android.airmart.databinding.FragmentDashboardBinding.inflate
+import com.android.airmart.ui.fragments.DashboardFragmentDirections
 import com.android.airmart.utilities.*
 import com.android.airmart.viewmodel.DashboardViewModel
-import com.android.airmart.viewmodel.LoginViewModel
 import com.google.android.material.snackbar.Snackbar
-import com.muddzdev.styleabletoast.StyleableToast
 import kotlinx.android.synthetic.main.fragment_dashboard.*
-import java.util.*
 
 
 class DashboardFragment : Fragment() {
@@ -39,6 +34,12 @@ class DashboardFragment : Fragment() {
     lateinit var nameTextView:TextView
     lateinit var usernameTextView:TextView
     lateinit var phoneTextView:TextView
+    override fun onStart() {
+        super.onStart()
+        if (!SharedPrefUtil.isLoggedIn(sharedPref)){
+            findNavController().navigate(R.id.loginFragment)
+        }
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -75,16 +76,34 @@ class DashboardFragment : Fragment() {
         val binding = DataBindingUtil.inflate<FragmentDashboardBinding>(
             inflater, R.layout.fragment_dashboard, container, false).apply{
             newProductClickListener = View.OnClickListener {
-                val direction = DashboardFragmentDirections.actionDashboardFragmentToPostProductFragment()
+                val direction =
+                    DashboardFragmentDirections.actionDashboardFragmentToPostProductFragment()
                 it.findNavController().navigate(direction)
             }
             productHistoryClickListener = View.OnClickListener {
-                val direction = DashboardFragmentDirections.actionDashboardFragmentToPostHistoryFragment()
+                val direction =
+                    DashboardFragmentDirections.actionDashboardFragmentToPostHistoryFragment()
                 it.findNavController().navigate(direction)
             }
             editProfileClickListener = View.OnClickListener {
-                val directions =  DashboardFragmentDirections.actionDashboardFragmentToEditProfileFragment()
+                val directions =
+                    DashboardFragmentDirections.actionDashboardFragmentToEditProfileFragment()
                 it.findNavController().navigate(directions)
+            }
+            logoutClickListener = View.OnClickListener {
+                MaterialDialog
+                    .Builder(it.context)
+                    .title("Logout")
+                    .content("Are you sure you want to Logout ?")
+                    .negativeText("LOGOUT")
+                    .negativeColorRes(R.color.Danger)
+                    .onNegative(MaterialDialog.SingleButtonCallback {
+                            dialog, which ->
+                        SharedPrefUtil.clearPreference(sharedPref)
+                        //TODO navigate to home screen
+                    })
+                    .neutralText("Cancel")
+                    .show()
             }
             executePendingBindings()
         }
