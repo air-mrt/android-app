@@ -27,9 +27,13 @@
                 app:enterAnim="@anim/slide_in_right" app:exitAnim="@anim/slide_out_left"
                 app:popEnterAnim="@anim/slide_out_right" app:popExitAnim="@anim/slide_in_left"/>
         <action android:id="@+id/action_dashboardFragment_to_postHistoryFragment"
-                app:destination="@id/postHistoryFragment"/>
+                app:destination="@id/postHistoryFragment" app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left" app:popEnterAnim="@anim/slide_out_right"
+                app:popExitAnim="@anim/slide_in_left"/>
         <action android:id="@+id/action_dashboardFragment_to_editProfileFragment"
-                app:destination="@id/editProfileFragment"/>
+                app:destination="@id/editProfileFragment" app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left" app:popEnterAnim="@anim/slide_out_right"
+                app:popExitAnim="@anim/slide_in_left"/>
     </fragment>
     <fragment android:id="@+id/loginFragment" android:name="com.android.airmart.ui.fragments.LoginFragment"
               android:label="Login"/>
@@ -38,7 +42,16 @@
     <fragment android:id="@+id/contactInfoFragment" android:name="com.android.airmart.ui.modals.ContactInfoFragment"
               android:label="ContactInfoFragment"/>
     <fragment android:id="@+id/postHistoryFragment" android:name="com.android.airmart.ui.fragments.user.PostHistoryFragment"
-              android:label="Post History" tools:layout="@layout/fragment_post_history"/>
+              android:label="Post History" tools:layout="@layout/fragment_post_history">
+        <action android:id="@+id/action_postHistoryFragment_to_editProductFragment"
+                app:destination="@id/editProductFragment"
+        />
+    </fragment>
     <fragment android:id="@+id/editProfileFragment" android:name="com.android.airmart.ui.fragments.EditProfileFragment"
               android:label="fragment_edit_profile" tools:layout="@layout/fragment_edit_profile"/>
+    <fragment android:id="@+id/editProductFragment"
+              android:name="com.android.airmart.ui.fragments.user.EditProductFragment"
+              android:label="EditProductFragment">
+        <argument android:name="productId" app:argType="long"/>
+    </fragment>
 </navigation>

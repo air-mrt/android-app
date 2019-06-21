@@ -6,16 +6,15 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 
 import com.android.airmart.R
@@ -24,11 +23,10 @@ import com.android.airmart.databinding.FragmentLoginBinding
 import com.android.airmart.utilities.*
 import com.android.airmart.viewmodel.LoginViewModel
 import com.google.android.material.snackbar.Snackbar
-import com.muddzdev.styleabletoast.StyleableToast
 import kotlinx.android.synthetic.main.fragment_login.*
 
 class LoginFragment : Fragment() {
-    private val loginViewModel: LoginViewModel by viewModels {
+    private val loginViewModel: LoginViewModel by activityViewModels {
         InjectorUtils.provideLoginViewModelFactory(requireContext())
     }
 
@@ -42,9 +40,10 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+        // do binding
         val binding = DataBindingUtil.inflate<FragmentLoginBinding>(
             inflater, R.layout.fragment_login, container,false).apply {
+            lifecycleOwner = this@LoginFragment
             loginClickListener = onLoginButtonClicked()
             executePendingBindings()
         }
@@ -70,27 +69,41 @@ class LoginFragment : Fragment() {
                         else{
                             errDialog.show()
                         }
-
                     }
-
                 }
-                loginViewModel.loginResponse?.observe(this, Observer {res->
-                        if(res.isSuccessful){
-                            //save shared pref
-                            //TODO encrypt password before saving it to shared pref
-                            SharedPrefUtil.savePreference(sharedPref,res.body()!!.token,res.body()!!.username,res.body()!!.expirationDate,res.body()!!.issuedDate,readFields().password,true)
-                            //show success message
-                            progress.dismiss()
-                            successLogin()
-                            clearFields()
-                        }
-                        else{
-                            //show error message
-                            progress.dismiss()
-                            wrongPasswordDialog()
-                            clearFields()
-                        } })
+            //observe the login response
+            subscribeLoginResponse(progress)
+            subscribeAuthenticationState()
         }
+    }
+    private fun subscribeLoginResponse(progress:MaterialDialog){
+        loginViewModel.loginResponse?.observe(this, Observer {res->
+            if(res.isSuccessful){
+                //save shared pref
+                //TODO encrypt password before saving it to shared pref
+                SharedPrefUtil.savePreference(sharedPref,res.body()!!.token,res.body()!!.username,res.body()!!.expirationDate,res.body()!!.issuedDate,readFields().password,true)
+                //set authentication state
+                loginViewModel.acceptAuthentication()
+                //show success message
+                progress.dismiss()
+                successLogin()
+                clearFields()
+            }
+            else{
+                //refuse authentication
+                loginViewModel.refuseAuthentication()
+                //show error message
+                progress.dismiss()
+                wrongPasswordDialog()
+                clearFields()
+            } })
+    }
+    private fun subscribeAuthenticationState(){
+        loginViewModel.authenticationState.observe(viewLifecycleOwner, Observer { authenticationState ->
+            when (authenticationState) {
+                AuthenticationState.AUTHENTICATED -> findNavController().popBackStack()
+            }
+        })
     }
     private fun readFields():AuthBody {
         return AuthBody(

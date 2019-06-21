@@ -65,12 +65,22 @@
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
                 android:paddingBottom="8dp"
+                android:scrollbars="vertical"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
             >
+                <com.nicolettilu.hiddensearchwithrecyclerview.HiddenSearchWithRecyclerView
+                        android:id="@+id/hidden_search_with_recycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:scrollToBottomBeforeHide="false"
+                        app:scrollToTopBeforeShow="false"
+                        app:filterWhileTyping="true"
+                        app:visibleAtInit="true"
+                        app:hideAtScroll="true">
 
                 <androidx.recyclerview.widget.RecyclerView
                         android:layout_marginTop="8dp"
@@ -84,6 +94,7 @@
                         app:layout_constraintEnd_toEndOf="parent">
 
                 </androidx.recyclerview.widget.RecyclerView>
+                </com.nicolettilu.hiddensearchwithrecyclerview.HiddenSearchWithRecyclerView>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

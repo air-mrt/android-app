@@ -24,18 +24,5 @@ class DashboardViewModel(private val userRepository: UserRepository): ViewModel(
          viewModelScope.launch(Dispatchers.IO) {
              _userInfoResponse.postValue(userRepository.getLoggedInUserInfo(token,username))
          }
-    private  val _loginResponse = MutableLiveData<Response<LoginResponse>>()
-    val loginResponse: LiveData<Response<LoginResponse>>
-        get() = _loginResponse
-    fun login(authBody: AuthBody) =
-        viewModelScope.launch (Dispatchers.IO){
-            try{
-                _loginResponse.postValue(userRepository.login(authBody))
-            }
-
-            catch (e: ConnectException){
-                this.coroutineContext.cancel()
-            }
-        }
 
 }

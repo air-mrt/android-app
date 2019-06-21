@@ -1,5 +1,6 @@
 package com.android.airmart.utilities
 
+import android.content.Context
 import android.content.SharedPreferences
 import androidx.annotation.BoolRes
 import com.android.airmart.data.api.model.AuthBody
@@ -19,6 +20,9 @@ object SharedPrefUtil {
             putBoolean(ISLOGGEDIN_KEY,isLoggedIn)
             commit()
         }
+    }
+    fun getSharedPref(context: Context):SharedPreferences{
+        return context.getSharedPreferences(SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE)
     }
     fun updatePreference(sharedPref: SharedPreferences,token:String,expirationDate:Date,issuedDate:Date){
         with(sharedPref.edit()){

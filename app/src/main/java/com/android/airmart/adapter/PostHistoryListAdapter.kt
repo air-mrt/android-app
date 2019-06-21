@@ -4,6 +4,7 @@ package com.android.airmart.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +14,8 @@ import com.android.airmart.R
 import com.android.airmart.data.entity.Product
 import com.android.airmart.databinding.RecyclerPostHistoryItemBinding
 import com.android.airmart.ui.fragments.user.PostHistoryFragment
+import com.android.airmart.ui.fragments.user.PostHistoryFragmentDirections
+import com.android.airmart.ui.fragments.user.PostProductFragmentDirections
 
 
 class PostHistoryListAdapter(private val postHistoryFragment: PostHistoryFragment): ListAdapter<Product,PostHistoryListAdapter.ViewHolder>(PostHistoryDiffCallback()){
@@ -49,7 +52,8 @@ class PostHistoryListAdapter(private val postHistoryFragment: PostHistoryFragmen
     }
     private fun onEditClickListener(productId: Long): View.OnClickListener {
         return View.OnClickListener {
-            //TODO implement function
+            val directions = PostHistoryFragmentDirections.actionPostHistoryFragmentToEditProductFragment(productId)
+            it.findNavController().navigate(directions)
         }
     }
 

@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
@@ -17,10 +18,12 @@ import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 
 import com.android.airmart.R
+import com.android.airmart.data.api.model.AuthBody
 import com.android.airmart.data.entity.User
 import com.android.airmart.databinding.FragmentDashboardBinding
 import com.android.airmart.utilities.*
 import com.android.airmart.viewmodel.DashboardViewModel
+import com.android.airmart.viewmodel.LoginViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 
@@ -29,6 +32,9 @@ class DashboardFragment : Fragment() {
     private val dashboardViewModel: DashboardViewModel by viewModels {
         InjectorUtils.provideDashboardViewModelFactory(requireContext())
     }
+    private val loginViewModel: LoginViewModel by activityViewModels {
+        InjectorUtils.provideLoginViewModelFactory(requireContext())
+    }
     lateinit var sharedPref: SharedPreferences
     lateinit var nameTextView:TextView
     lateinit var usernameTextView:TextView
@@ -36,45 +42,20 @@ class DashboardFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        //init layout components
         sharedPref = requireActivity().getSharedPreferences(SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE)
-        if (!SharedPrefUtil.isLoggedIn(sharedPref)){
-            findNavController().navigate(R.id.loginFragment)
+        nameTextView = name_textView
+        usernameTextView = username_textView
+        phoneTextView = phone_textView
         }
-        else{
-            nameTextView = name_textView
-            usernameTextView = username_textView
-            phoneTextView = phone_textView
-            //before getting userInfo check if token is valid
-            if (!SharedPrefUtil.isTokenExpired(sharedPref)){
-                dashboardViewModel.getUserInfo(SharedPrefUtil.getToken(sharedPref), SharedPrefUtil.getUsername(sharedPref))
-
-            }
-            else{
-                val job = dashboardViewModel.login(SharedPrefUtil.getSavedLoginCredentials(sharedPref))
-                val progress= showProgressBar()
-                if(job.isActive){
-                    progress.show()
-                }
-                job.invokeOnCompletion {
-                    progress.dismiss()
-                    if (job.isCancelled) {
-                        errDialog()
-                    }
-
-                }
-            }
-
-        }
-
-
-        }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        //Do bindings
         val binding = DataBindingUtil.inflate<FragmentDashboardBinding>(
             inflater, R.layout.fragment_dashboard, container, false).apply{
+            lifecycleOwner = this@DashboardFragment
             newProductClickListener = View.OnClickListener {
                 val direction =
                     DashboardFragmentDirections.actionDashboardFragmentToPostProductFragment()
@@ -100,21 +81,49 @@ class DashboardFragment : Fragment() {
                     .onNegative(MaterialDialog.SingleButtonCallback {
                             dialog, which ->
                         SharedPrefUtil.clearPreference(sharedPref)
-                        //TODO navigate to home screen
+                        //set authentication state
+                        loginViewModel.refuseAuthentication()
+                        //TODO change this to the real homepage
+                        it.findNavController().navigate(R.id.displayProductPostsFragment)
+
                     })
                     .neutralText("Cancel")
                     .show()
             }
             executePendingBindings()
         }
-        dashboardViewModel.userInfoResponse?.observe(this, Observer<User> { res->
-            if (res!=null){
-                nameTextView.text = res.name
-                usernameTextView.text = """@${res.username}"""
-                phoneTextView.text = res.phone
+        //check if user is authenticated
+        subscribeAuthenticationState()
+        //observe login response
+        subscribeLoginResponse()
+        // observe user info response
+        subscribeUserInfoResponse()
+        return binding.root
+    }
+    private fun subscribeAuthenticationState(){
+        loginViewModel.authenticationState.observe(viewLifecycleOwner, Observer { authenticationState ->
+            when (authenticationState) {
+                AuthenticationState.UNAUTHENTICATED -> findNavController().navigate(R.id.loginFragment)
+                AuthenticationState.EXPIRED_TOKEN -> generateToken(SharedPrefUtil.getSavedLoginCredentials(sharedPref))
+               AuthenticationState.AUTHENTICATED -> dashboardViewModel.getUserInfo(SharedPrefUtil.getToken(sharedPref), SharedPrefUtil.getUsername(sharedPref))
             }
         })
-        dashboardViewModel.loginResponse.observe(this,Observer{res->
+    }
+    private fun generateToken(authBody: AuthBody){
+        val job = loginViewModel.login(authBody)
+        val progress= showProgressBar()
+        if(job.isActive){
+            progress.show()
+        }
+        job.invokeOnCompletion {
+            progress.dismiss()
+            if (job.isCancelled) {
+                errDialog()
+            }
+        }
+    }
+    private fun subscribeLoginResponse(){
+        loginViewModel.loginResponse.observe(this,Observer{res->
             if(res.isSuccessful){
                 //save shared pref
                 //TODO encrypt password before saving it to shared pref
@@ -123,9 +132,17 @@ class DashboardFragment : Fragment() {
             }
         })
 
-        return binding.root
     }
-    fun showProgressBar(): MaterialDialog {
+    private fun subscribeUserInfoResponse(){
+        dashboardViewModel.userInfoResponse?.observe(this, Observer<User> { res->
+            if (res!=null){
+                nameTextView.text = res.name
+                usernameTextView.text = """@${res.username}"""
+                phoneTextView.text = res.phone
+            }
+        })
+    }
+    private fun showProgressBar(): MaterialDialog {
         return MaterialDialog
             .Builder(requireContext())
             .title("Generating Token")
@@ -134,7 +151,7 @@ class DashboardFragment : Fragment() {
             .build()
     }
     @Suppress("DEPRECATION")
-    fun errDialog() {
+    private fun errDialog() {
         val snackBar:Snackbar = Snackbar.make(view!!,"No Internet Connection",Snackbar.LENGTH_LONG)
         val sbView:View = snackBar.view
         if (Build.VERSION.SDK_INT >= 23){
