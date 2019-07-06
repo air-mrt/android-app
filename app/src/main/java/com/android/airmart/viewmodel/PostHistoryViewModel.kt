@@ -43,7 +43,6 @@ class PostHistoryViewModel (private val productRepository: ProductRepository, pr
         catch (e:ConnectException){
             this.coroutineContext.cancel()
         }
-
-
 }
+    fun searchProduct(username:String, query:String) = productRepository.searchProductByUsername(username,query)
 }

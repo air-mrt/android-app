@@ -46,6 +46,9 @@ class PostHistoryFragment : Fragment() {
             adapter = PostHistoryListAdapter(this@PostHistoryFragment)
             lifecycleOwner = this@PostHistoryFragment
             recyclerView.adapter = adapter
+            searchListener = View.OnClickListener {
+
+            }
             sharedPref = requireActivity().getSharedPreferences(SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE)
             if (!SharedPrefUtil.isLoggedIn(sharedPref)){
                 findNavController().navigate(R.id.loginFragment)

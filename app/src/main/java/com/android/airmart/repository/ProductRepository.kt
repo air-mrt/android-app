@@ -60,4 +60,5 @@ class ProductRepository constructor(private val productDao: ProductDao, private 
         withContext(Dispatchers.IO){
             productApiService.deleteProductById(id,token).await()
         }
+    fun searchProductByUsername(username:String, query:String) :List<Product> = productDao.searchProductsByUsername(username, query)
 }

@@ -22,4 +22,6 @@ interface ProductDao{
     fun getProductById(productId: Long): Product
     @Query("SELECT * FROM product WHERE id = :productId LIMIT 1")
     fun getProductByIdRoom(productId: Long): LiveData<Product>
+    @Query("SELECT * FROM airmart.product WHERE  username= :username AND title like :query OR description like :query")
+    fun searchProductsByUsername(username:String, query: String): List<Product>
 }

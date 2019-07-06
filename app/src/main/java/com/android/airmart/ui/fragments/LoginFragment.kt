@@ -72,20 +72,18 @@ class LoginFragment : Fragment() {
                     }
                 }
             //observe the login response
-            subscribeLoginResponse(progress)
+            subscribeLoginResponse()
             subscribeAuthenticationState()
         }
     }
-    private fun subscribeLoginResponse(progress:MaterialDialog){
-        loginViewModel.loginResponse?.observe(this, Observer {res->
+    private fun subscribeLoginResponse(){
+        loginViewModel.loginResponse.observe(this, Observer {res->
             if(res.isSuccessful){
                 //save shared pref
                 //TODO encrypt password before saving it to shared pref
                 SharedPrefUtil.savePreference(sharedPref,res.body()!!.token,res.body()!!.username,res.body()!!.expirationDate,res.body()!!.issuedDate,readFields().password,true)
                 //set authentication state
                 loginViewModel.acceptAuthentication()
-                //show success message
-                progress.dismiss()
                 successLogin()
                 clearFields()
             }
@@ -93,7 +91,6 @@ class LoginFragment : Fragment() {
                 //refuse authentication
                 loginViewModel.refuseAuthentication()
                 //show error message
-                progress.dismiss()
                 wrongPasswordDialog()
                 clearFields()
             } })

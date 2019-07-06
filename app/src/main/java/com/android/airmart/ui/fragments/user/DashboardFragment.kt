@@ -4,11 +4,13 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -25,11 +27,12 @@ import com.android.airmart.utilities.*
 import com.android.airmart.viewmodel.DashboardViewModel
 import com.android.airmart.viewmodel.LoginViewModel
 import com.google.android.material.snackbar.Snackbar
+import com.muddzdev.styleabletoast.StyleableToast
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 
 
 class DashboardFragment : Fragment() {
-    private val dashboardViewModel: DashboardViewModel by viewModels {
+    private val dashboardViewModel: DashboardViewModel by activityViewModels {
         InjectorUtils.provideDashboardViewModelFactory(requireContext())
     }
     private val loginViewModel: LoginViewModel by activityViewModels {
@@ -47,6 +50,12 @@ class DashboardFragment : Fragment() {
         nameTextView = name_textView
         usernameTextView = username_textView
         phoneTextView = phone_textView
+        //observe login response
+        subscribeLoginResponse()
+        // observe user info response
+        subscribeUserInfoResponse()
+        //check if user is authenticated
+        subscribeAuthenticationState()
         }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -90,16 +99,14 @@ class DashboardFragment : Fragment() {
                     .neutralText("Cancel")
                     .show()
             }
+
             executePendingBindings()
         }
-        //check if user is authenticated
-        subscribeAuthenticationState()
-        //observe login response
-        subscribeLoginResponse()
-        // observe user info response
-        subscribeUserInfoResponse()
+
         return binding.root
     }
+
+
     private fun subscribeAuthenticationState(){
         loginViewModel.authenticationState.observe(viewLifecycleOwner, Observer { authenticationState ->
             when (authenticationState) {
@@ -107,6 +114,12 @@ class DashboardFragment : Fragment() {
                 AuthenticationState.EXPIRED_TOKEN -> generateToken(SharedPrefUtil.getSavedLoginCredentials(sharedPref))
                AuthenticationState.AUTHENTICATED -> dashboardViewModel.getUserInfo(SharedPrefUtil.getToken(sharedPref), SharedPrefUtil.getUsername(sharedPref))
             }
+            StyleableToast.makeText(
+                requireContext(),
+                authenticationState.name,
+                Toast.LENGTH_SHORT,
+                R.style.mytoast
+            ).show()
         })
     }
     private fun generateToken(authBody: AuthBody){
@@ -118,8 +131,20 @@ class DashboardFragment : Fragment() {
         job.invokeOnCompletion {
             progress.dismiss()
             if (job.isCancelled) {
-                errDialog()
+                if (Looper.myLooper()==null){
+                    Looper.prepare()
+                    errDialog()
+                }
+                else{
+                    errDialog()
+                }
+
             }
+        }
+    }
+    private fun checkToken(loginViewModel: LoginViewModel, sharedPreferences: SharedPreferences){
+        if(SharedPrefUtil.isTokenExpired(sharedPreferences)){
+            loginViewModel.expiredAuthentication()
         }
     }
     private fun subscribeLoginResponse(){
@@ -128,6 +153,8 @@ class DashboardFragment : Fragment() {
                 //save shared pref
                 //TODO encrypt password before saving it to shared pref
                 SharedPrefUtil.updatePreference(sharedPref,res.body()!!.token,res.body()!!.expirationDate,res.body()!!.issuedDate)
+                //set authentication state
+                loginViewModel.acceptAuthentication()
                 dashboardViewModel.getUserInfo(SharedPrefUtil.getToken(sharedPref), SharedPrefUtil.getUsername(sharedPref))
             }
         })
@@ -135,11 +162,12 @@ class DashboardFragment : Fragment() {
     }
     private fun subscribeUserInfoResponse(){
         dashboardViewModel.userInfoResponse?.observe(this, Observer<User> { res->
-            if (res!=null){
+            if(res!=null){
                 nameTextView.text = res.name
                 usernameTextView.text = """@${res.username}"""
                 phoneTextView.text = res.phone
             }
+
         })
     }
     private fun showProgressBar(): MaterialDialog {

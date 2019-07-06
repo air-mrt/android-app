@@ -53,6 +53,9 @@ class LoginViewModel(private val userRepository: UserRepository, context: Contex
     fun acceptAuthentication(){
         authenticationState.value = AuthenticationState.AUTHENTICATED
     }
+    fun expiredAuthentication(){
+        authenticationState.value = AuthenticationState.EXPIRED_TOKEN
+    }
 
 
     }
