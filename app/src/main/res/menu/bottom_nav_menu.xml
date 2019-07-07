@@ -5,19 +5,18 @@
         android:id="@+id/displayProductPostsFragment"
         android:icon="@drawable/ic_home_black_24dp"
         android:title="@string/title_home" />
-
-    <item
-        android:id="@+id/contactInfoFragment"
-        android:icon="@drawable/ic_search_black_24dp"
-        android:title="@string/title_search" />
-
     <item
         android:id="@+id/dashboardFragment"
         android:icon="@drawable/ic_dashboard_black_24dp"
         android:title="@string/dashboard" />
     <item
+            android:id="@+id/contactInfoFragment"
+            android:icon="@drawable/ic_chat_black_24dp"
+            android:title="Chats" />
+    <item
+
             android:id="@+id/loginFragment"
-            android:icon="@drawable/ic_profile_black_24dp"
-            android:title="@string/title_profile" />
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="Settings" />
 
 </menu>

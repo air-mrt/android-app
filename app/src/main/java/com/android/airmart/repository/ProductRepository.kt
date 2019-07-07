@@ -11,6 +11,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
 import java.net.ConnectException
+import java.util.ArrayList
 import javax.inject.Singleton
 
 @Singleton
@@ -24,6 +25,10 @@ class ProductRepository constructor(private val productDao: ProductDao, private 
     suspend fun getAllProductsByUserAPI(username:String): Response<List<ProductResponse>> =
         withContext(Dispatchers.IO){
             productApiService.getAllProducts(username).await()
+        }
+    suspend fun searchResultAPI(keyword:String): Response<List<ProductResponse>> =
+        withContext(Dispatchers.IO){
+            productApiService.searchProduct(keyword).await()
         }
     suspend fun allProductsByUser(username:String):List<Product> =
         withContext(Dispatchers.IO){
@@ -44,6 +49,28 @@ class ProductRepository constructor(private val productDao: ProductDao, private 
             }
             return@withContext productDao.getAllProductsByUser(username)
         }
+
+
+    suspend fun searchResult(keyword:String):List<Product>? =
+        withContext(Dispatchers.IO){
+            var productList = ArrayList<Product>()
+            try{
+                var products = searchResultAPI(keyword).body()
+                if(products != null){
+                    for (res in products){
+                        var product = Product(res._id,res.username,res.title,res.price,res.description,res.pictureUrl,res.createdAt)
+                        productDao.insertProduct(product)
+                        productList.add(product)
+                    }
+                    return@withContext productList
+                }
+
+            }
+            catch (e:ConnectException){
+                return@withContext null
+            }
+            return@withContext null
+        }
     suspend fun deleteProductById(id:Long,token:String)=
         withContext(Dispatchers.IO){
             deleteProductByIdAPI(id,token)
@@ -60,5 +87,4 @@ class ProductRepository constructor(private val productDao: ProductDao, private 
         withContext(Dispatchers.IO){
             productApiService.deleteProductById(id,token).await()
         }
-    fun searchProductByUsername(username:String, query:String) :List<Product> = productDao.searchProductsByUsername(username, query)
 }

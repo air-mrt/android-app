@@ -65,6 +65,9 @@ class DashboardFragment : Fragment() {
         val binding = DataBindingUtil.inflate<FragmentDashboardBinding>(
             inflater, R.layout.fragment_dashboard, container, false).apply{
             lifecycleOwner = this@DashboardFragment
+            if (!SharedPrefUtil.isLoggedIn(sharedPref)){
+                findNavController().navigate(R.id.loginFragment)
+            }
             newProductClickListener = View.OnClickListener {
                 val direction =
                     DashboardFragmentDirections.actionDashboardFragmentToPostProductFragment()
@@ -98,6 +101,8 @@ class DashboardFragment : Fragment() {
                     })
                     .neutralText("Cancel")
                     .show()
+
+
             }
 
             executePendingBindings()

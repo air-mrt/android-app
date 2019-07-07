@@ -10,6 +10,8 @@
                 app:destination="@id/postDetailFragment"
                 app:enterAnim="@anim/slide_in_right" app:exitAnim="@anim/slide_out_left"
                 app:popEnterAnim="@anim/slide_out_right" app:popExitAnim="@anim/slide_in_left"/>
+        <action android:id="@+id/action_displayProductPostsFragment_to_searchResultFragment"
+                app:destination="@id/searchResultFragment"/>
     </fragment>
     <fragment android:id="@+id/postDetailFragment" android:name="com.android.airmart.ui.fragments.PostDetailFragment"
               android:label="Comments">
@@ -53,6 +55,8 @@
         <argument android:name="productId" app:argType="long"/>
     </fragment>
     <fragment android:id="@+id/searchResultFragment"
-              android:name="com.android.airmart.ui.fragments.SearchResultFragment" android:label="fragment_search"
-              tools:layout="@layout/fragment_search"/>
+              android:name="com.android.airmart.ui.fragments.SearchResultFragment"
+              android:label="SearchResultFragment">
+        <argument android:name="query" app:argType="string"/>
+    </fragment>
 </navigation>
