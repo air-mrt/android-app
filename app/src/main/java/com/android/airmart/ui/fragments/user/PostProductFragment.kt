@@ -82,7 +82,7 @@ class PostProductFragment : Fragment() {
                     val file = File(mImageCaptureUri!!.path)
                     val image = MultipartBody.Part.createFormData(
                         "image",
-                        file.name + "" + extension,
+                        file.name + "." + extension,
                         RequestBody.create(MediaType.parse("image/*"), fileBytes)
                     )
 
@@ -178,15 +178,15 @@ class PostProductFragment : Fragment() {
         var validationState = true
         when {
             EditTextValidator.isEmpty(titleEditText) -> {
-                titleEditText.setError("Title is Required")
+                titleEditText.error = "Title is Required"
                 validationState = false
             }
             EditTextValidator.isEmpty(priceEditText) -> {
-                priceEditText.setError("Price is Required")
+                priceEditText.error = "Price is Required"
                 validationState = false
             }
             EditTextValidator.isEmpty(descriptionEditText) -> {
-                descriptionEditText.setError("Description is Required")
+                descriptionEditText.error = "Description is Required"
                 validationState = false
             }
         }
@@ -215,7 +215,7 @@ class PostProductFragment : Fragment() {
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK)
                 mImageCaptureUri = data!!.data
-            imageView.setImageURI(mImageCaptureUri);
+            imageView.setImageURI(mImageCaptureUri)
 
         }
     }

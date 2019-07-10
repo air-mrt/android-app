@@ -32,6 +32,12 @@ interface ProductApiService {
                     @Part("productJson") productJson: RequestBody,
                     @Header("Authorization") token:String): Deferred<Response<ProductResponse>>
 
+    @Multipart
+    @PATCH("products/auth/{id}")
+    fun editProduct(@Path("id")id:Long,@Part file: MultipartBody.Part?,
+                    @Part("productJson") productJson: RequestBody,
+                    @Header("Authorization") token:String): Deferred<Response<ProductResponse>>
+
     companion object {
         private val baseUrl = LOCALHOST_BASE_URL
         fun getInstance(): ProductApiService {

@@ -44,5 +44,4 @@ class PostHistoryViewModel (private val productRepository: ProductRepository, pr
             this.coroutineContext.cancel()
         }
 }
-    fun searchProduct(username:String, query:String) = productRepository.searchProductByUsername(username,query)
 }

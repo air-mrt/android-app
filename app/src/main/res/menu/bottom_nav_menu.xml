@@ -5,15 +5,7 @@
         android:id="@+id/displayProductPostsFragment"
         android:icon="@drawable/ic_home_black_24dp"
         android:title="@string/title_home" />
-<<<<<<< HEAD
-=======
 
-    <item
-        android:id="@+id/homeFragment"
-        android:icon="@drawable/ic_search_black_24dp"
-        android:title="@string/title_search" />
-
->>>>>>> e074a8518c19de56e00eeb67651c3b7b90145a49
     <item
         android:id="@+id/dashboardFragment"
         android:icon="@drawable/ic_dashboard_black_24dp"

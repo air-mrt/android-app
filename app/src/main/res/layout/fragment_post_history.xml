@@ -4,7 +4,6 @@
         <variable
                 name="searchListener"
                 type="android.view.View.OnClickListener"/>
-
     </data>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
@@ -74,18 +73,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
             >
-                <com.nicolettilu.hiddensearchwithrecyclerview.HiddenSearchWithRecyclerView
-                        android:id="@+id/hidden_search_with_recycler"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:scrollToTopBeforeShow="true"
-                        app:filterWhileTyping="true"
-                        app:hideAtScroll="true"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:onClick="@{searchListener}"
-                        app:layout_constraintEnd_toEndOf="parent">
 
                 <androidx.recyclerview.widget.RecyclerView
                         android:layout_marginTop="8dp"
@@ -96,7 +83,6 @@
                         >
 
                 </androidx.recyclerview.widget.RecyclerView>
-                </com.nicolettilu.hiddensearchwithrecyclerview.HiddenSearchWithRecyclerView>
 
 
 

@@ -56,6 +56,10 @@ class DashboardFragment : Fragment() {
         subscribeUserInfoResponse()
         //check if user is authenticated
         subscribeAuthenticationState()
+
+        if (!SharedPrefUtil.isLoggedIn(sharedPref)){
+            findNavController().navigate(R.id.loginFragment)
+        }
         }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,9 +69,6 @@ class DashboardFragment : Fragment() {
         val binding = DataBindingUtil.inflate<FragmentDashboardBinding>(
             inflater, R.layout.fragment_dashboard, container, false).apply{
             lifecycleOwner = this@DashboardFragment
-            if (!SharedPrefUtil.isLoggedIn(sharedPref)){
-                findNavController().navigate(R.id.loginFragment)
-            }
             newProductClickListener = View.OnClickListener {
                 val direction =
                     DashboardFragmentDirections.actionDashboardFragmentToPostProductFragment()

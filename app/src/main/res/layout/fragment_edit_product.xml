@@ -6,6 +6,9 @@
                 name="updateProductClickListener"
                 type="android.view.View.OnClickListener"/>
         <variable
+                name="chooseImageClickListener"
+                type="android.view.View.OnClickListener"/>
+        <variable
                 name="editProductviewModel"
                 type="com.android.airmart.viewmodel.EditProductViewModel" />
 
@@ -116,19 +119,20 @@
                     android:layout_marginStart="24dp"
                     app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="16dp"
                     app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView" android:textAlignment="center"/>
+                    app:layout_constraintTop_toBottomOf="@+id/imageViewEdit" android:textAlignment="center"/>
             <com.google.android.material.button.MaterialButton
 
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
                     app:icon="@drawable/ic_add_a_photo_black_24dp"
                     android:text="Update image"
+                    android:onClick="@{chooseImageClickListener}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/image_butt"
                     tools:layout_conversion_absoluteHeight="48dp"
                     tools:layout_conversion_absoluteWidth="167dp" app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginStart="8dp"
-                    app:layout_constraintEnd_toStartOf="@+id/imageView"
+                    app:layout_constraintEnd_toStartOf="@+id/imageViewEdit"
                     android:layout_marginEnd="8dp" android:layout_marginTop="8dp"
                     app:layout_constraintTop_toBottomOf="@+id/description_editTextLayout"
                     android:layout_marginBottom="90dp"
@@ -137,7 +141,7 @@
                     android:layout_width="130dp"
                     android:layout_height="130dp"
                     app:imageFromUrl="@{editProductviewModel.product.pictureUrl}"
-                    android:id="@+id/imageView"
+                    android:id="@+id/imageViewEdit"
                     android:layout_marginEnd="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/description_editTextLayout" android:layout_marginTop="8dp"

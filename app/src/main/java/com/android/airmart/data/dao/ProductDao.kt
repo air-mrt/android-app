@@ -6,11 +6,11 @@ import com.android.airmart.data.entity.Product
 
 @Dao
 interface ProductDao{
-    @Query("SELECT * from product ORDER BY id")
+    @Query("SELECT * from product ORDER BY id DESC")
     fun getAllProducts(): LiveData<List<Product>>
     @Query("SELECT * FROM product WHERE title = :title LIMIT 1")
     fun getProductByTitle(title:String):LiveData<Product>
-    @Query("SELECT * FROM product WHERE username = :username ORDER BY createdAt")
+    @Query("SELECT * FROM product WHERE username = :username ORDER BY id DESC")
     fun getAllProductsByUser(username:String):List<Product>
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertProduct(product : Product):Long

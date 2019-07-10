@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 
 import com.android.airmart.adapter.ProductPostListAdapter
 import com.android.airmart.databinding.FragmentProductListBinding
@@ -25,6 +26,30 @@ class ProductListFragment : Fragment() {
     private val productListViewModel: ProductListViewModel by viewModels {
         InjectorUtils.provideProductListViewModelFactory(requireContext())
     }
+    lateinit var  mSearchView : FloatingSearchView
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        mSearchView = floating_search_view
+        mSearchView.setOnQueryChangeListener { oldQuery, newQuery ->
+            if (oldQuery != "" && newQuery == "") {
+                mSearchView.clearSuggestions()
+            } else {
+                mSearchView.showProgress()
+            }
+        }
+        mSearchView.setOnSearchListener(object : FloatingSearchView.OnSearchListener {
+            override fun onSearchAction(currentQuery: String) {
+                findNavController().navigate(ProductListFragmentDirections.actionDisplayProductPostsFragmentToSearchResultFragment(
+                    "title:$currentQuery"
+                ))
+
+            }
+            override fun onSuggestionClicked(searchSuggestion: SearchSuggestion) {
+                findNavController().navigate(ProductListFragmentDirections.actionDisplayProductPostsFragmentToSearchResultFragment("title:${searchSuggestion.body}"))
+            }
+        }
+        )
+    }
     override fun onCreateView(
 
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,23 +58,6 @@ class ProductListFragment : Fragment() {
         val binding = FragmentProductListBinding.inflate(inflater, container, false)
         val adapter = ProductPostListAdapter()
         binding.recyclerView.adapter = adapter
-        val mSearchView : FloatingSearchView = floating_search_view
-        mSearchView.setOnQueryChangeListener { oldQuery, newQuery ->
-            if (oldQuery != "" && newQuery == "") {
-                mSearchView.clearSuggestions()
-            } else {
-                mSearchView.showProgress()
-            }
-            }
-        mSearchView.setOnSearchListener(object : FloatingSearchView.OnSearchListener {
-            override fun onSearchAction(currentQuery: String?) {
-                //TODO take query and pass it on two search results
-            }
-            override fun onSuggestionClicked(searchSuggestion: SearchSuggestion) {
-                //TODO take query and pass it on two search results
-            }
-        }
-        )
 
         subscribeUi(adapter)
         return binding.root

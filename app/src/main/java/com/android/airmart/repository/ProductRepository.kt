@@ -83,6 +83,11 @@ class ProductRepository constructor(private val productDao: ProductDao, private 
             withContext(Dispatchers.IO){
                 productApiService.postProduct(file, productJson, token).await()
             }
+    @Throws(ConnectException::class)
+    suspend fun editProductAPI (id:Long,file: MultipartBody.Part?,productJson: RequestBody,token:String): Response<ProductResponse> =
+        withContext(Dispatchers.IO){
+            productApiService.editProduct(id,file, productJson, token).await()
+        }
     suspend fun deleteProductByIdAPI(id:Long, token :String):Response<Void> =
         withContext(Dispatchers.IO){
             productApiService.deleteProductById(id,token).await()
