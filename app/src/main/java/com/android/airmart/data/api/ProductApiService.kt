@@ -31,6 +31,9 @@ interface ProductApiService {
     fun postProduct(@Part file: MultipartBody.Part?,
                     @Part("productJson") productJson: RequestBody,
                     @Header("Authorization") token:String): Deferred<Response<ProductResponse>>
+    @POST("products/interested/{id}")
+    fun interested(@Path("id") id:Long,
+                    @Header("Authorization") token:String): Deferred<Response<ProductResponse>>
 
     @Multipart
     @PATCH("products/auth/{id}")

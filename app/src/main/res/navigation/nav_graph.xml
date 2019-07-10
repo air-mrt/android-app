@@ -64,6 +64,8 @@
               android:name="com.android.airmart.ui.fragments.SearchResultFragment"
               android:label="Search Results">
         <argument android:name="query" app:argType="string"/>
+        <action android:id="@+id/action_searchResultFragment_to_postDetailFragment"
+                app:destination="@id/postDetailFragment"/>
     </fragment>
 
     <fragment android:id="@+id/homeFragment" android:name="com.android.airmart.ui.fragments.HomeFragment"

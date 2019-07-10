@@ -14,7 +14,7 @@ data class Product(
     val price:String,
     val description:String,
     val pictureUrl:String,
-    val createdAt: String
-//    val interested: Set<String>
+    val createdAt: String,
+    var interested: Int
 
 ):Serializable

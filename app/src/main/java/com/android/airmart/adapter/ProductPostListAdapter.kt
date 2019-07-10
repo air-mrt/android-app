@@ -12,11 +12,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.airmart.R
 import com.android.airmart.data.entity.Product
 import com.android.airmart.databinding.RecyclerProductPostItemBinding
+import com.android.airmart.ui.fragments.ProductListFragment
 import com.android.airmart.ui.fragments.ProductListFragmentDirections
 import com.android.airmart.ui.modals.ContactInfoFragment
 import kotlinx.android.synthetic.main.recycler_product_post_item.view.*
 
-class ProductPostListAdapter: ListAdapter<Product,ProductPostListAdapter.ViewHolder>(ProductDiffCallback()){
+class ProductPostListAdapter(private val productListFragment: ProductListFragment): ListAdapter<Product,ProductPostListAdapter.ViewHolder>(ProductDiffCallback()){
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val product = getItem(position)
@@ -40,14 +41,13 @@ class ProductPostListAdapter: ListAdapter<Product,ProductPostListAdapter.ViewHol
     }
     private fun onContactClickListener(productId: Long): View.OnClickListener {
         return View.OnClickListener {
-           val contactInfoFragment = ContactInfoFragment()
 
         }
     }
     private fun onInterestedClickListener(productId: Long): View.OnClickListener {
         return View.OnClickListener {
-            val direction = ProductListFragmentDirections.actionDisplayProductPostsFragmentToPostDetailFragment(productId)
-            it.findNavController().navigate(direction)
+            productListFragment.onInterested(productId)
+
         }
     }
 

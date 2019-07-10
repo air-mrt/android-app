@@ -36,8 +36,7 @@ class ProductRepository constructor(private val productDao: ProductDao, private 
                 var productsByUser= getAllProductsByUserAPI(username).body()
                 if(productsByUser != null){
                     for (res in productsByUser){
-                        //TODO add way to incoporate interested to the db
-                        var product = Product(res._id,res.username,res.title,res.price,res.description,res.pictureUrl,res.createdAt)
+                        var product = Product(res._id,res.username,res.title,res.price,res.description,res.pictureUrl,res.createdAt, res.interested.size)
                         productDao.insertProduct(product)
                     }
                     return@withContext productDao.getAllProductsByUser(username)
@@ -58,7 +57,7 @@ class ProductRepository constructor(private val productDao: ProductDao, private 
                 var products = searchResultAPI(keyword).body()
                 if(products != null){
                     for (res in products){
-                        var product = Product(res._id,res.username,res.title,res.price,res.description,res.pictureUrl,res.createdAt)
+                        var product = Product(res._id,res.username,res.title,res.price,res.description,res.pictureUrl,res.createdAt, res.interested.size)
                         productDao.insertProduct(product)
                         productList.add(product)
                     }
@@ -78,6 +77,15 @@ class ProductRepository constructor(private val productDao: ProductDao, private 
             return@withContext true
         }
 
+    suspend fun interested(id:Long,token:String)=
+        withContext(Dispatchers.IO){
+            interestedAPI(id,token)
+            var product = productDao.getProductById(id)
+            product.interested +=1
+            productDao.updateProduct(product)
+            return@withContext true
+        }
+
     @Throws(ConnectException::class)
     suspend fun postProductAPI (file: MultipartBody.Part?,productJson: RequestBody,token:String): Response<ProductResponse> =
             withContext(Dispatchers.IO){
@@ -87,6 +95,10 @@ class ProductRepository constructor(private val productDao: ProductDao, private 
     suspend fun editProductAPI (id:Long,file: MultipartBody.Part?,productJson: RequestBody,token:String): Response<ProductResponse> =
         withContext(Dispatchers.IO){
             productApiService.editProduct(id,file, productJson, token).await()
+        }
+    suspend fun interestedAPI (id:Long,token:String): Response<ProductResponse> =
+        withContext(Dispatchers.IO){
+            productApiService.interested(id,token).await()
         }
     suspend fun deleteProductByIdAPI(id:Long, token :String):Response<Void> =
         withContext(Dispatchers.IO){

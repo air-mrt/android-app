@@ -21,9 +21,7 @@ class PostHistoryViewModel (private val productRepository: ProductRepository, pr
     val allProductResponse: LiveData<List<Product>>
         get() = _allProductResponse
 
-    private  val _deleteResponse = MutableLiveData<Boolean>()
-    val deleteResponse: LiveData<Boolean>
-        get() = _deleteResponse
+
     private  val _userInfoResponse = MutableLiveData<User>()
     val userInfoResponse: LiveData<User>?
         get() = _userInfoResponse
@@ -36,6 +34,10 @@ class PostHistoryViewModel (private val productRepository: ProductRepository, pr
     fun getAllProductsByUsername(username:String) = viewModelScope.launch{
         _allProductResponse.postValue(productRepository.allProductsByUser(username))
     }
+
+    private  val _deleteResponse = MutableLiveData<Boolean>()
+    val deleteResponse: LiveData<Boolean>
+        get() = _deleteResponse
     fun deletePostById(productId:Long,token:String) = viewModelScope.launch{
         try {
             _deleteResponse.postValue(productRepository.deleteProductById(productId,token))

@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 
 import com.android.airmart.adapter.ProductPostListAdapter
+import com.android.airmart.adapter.SearchResultListAdapter
 import com.android.airmart.databinding.FragmentSearchResultBinding
 import com.android.airmart.utilities.InjectorUtils
 import com.android.airmart.viewmodel.ProductListViewModel
@@ -55,12 +56,12 @@ class SearchResultFragment : Fragment() {
     ): View? {
         val binding = FragmentSearchResultBinding.inflate(inflater, container, false)
         productListViewModel.search(args.query)
-        val adapter = ProductPostListAdapter()
+        val adapter = SearchResultListAdapter()
         binding.recyclerView.adapter = adapter
         subscribeUi(adapter)
         return binding.root
     }
-    private fun subscribeUi(adapter: ProductPostListAdapter) {
+    private fun subscribeUi(adapter: SearchResultListAdapter) {
         productListViewModel.searchResultResponse.observe(viewLifecycleOwner, Observer { products ->
             if (products != null) adapter.submitList(products)
             else{

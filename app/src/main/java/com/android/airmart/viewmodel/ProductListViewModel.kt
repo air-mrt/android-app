@@ -8,7 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.android.airmart.data.entity.Product
 import com.android.airmart.repository.ProductRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import java.net.ConnectException
 
 class ProductListViewModel (private val productRepository: ProductRepository) : ViewModel(){
     val allProducts: LiveData<List<Product>>
@@ -23,6 +25,18 @@ class ProductListViewModel (private val productRepository: ProductRepository) : 
 
     fun search(keyword:String) = viewModelScope.launch{
         _searchResultResponse.postValue(productRepository.searchResult(keyword))
+    }
+
+    private  val _interestedResponse = MutableLiveData<Boolean>()
+    val interestedResponse: LiveData<Boolean>
+        get() = _interestedResponse
+    fun interested(productId:Long,token:String) = viewModelScope.launch{
+        try {
+            _interestedResponse.postValue(productRepository.interested(productId,token))
+        }
+        catch (e: ConnectException){
+            this.coroutineContext.cancel()
+        }
     }
 
 
