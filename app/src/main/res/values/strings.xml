@@ -93,4 +93,5 @@
     <string description="A description of an action that a user of an accessibility service can perform to move the card to the center of the screen. [CHAR LIMIT=25]"
             name="cat_card_action_move_center">Move to center
     </string>
+    <string name="hint_enter_message">Enter a message</string>
 </resources>

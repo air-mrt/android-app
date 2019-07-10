@@ -72,4 +72,13 @@
               android:label="fragment_home" tools:layout="@layout/fragment_home">
         <action android:id="@+id/action_homeFragment_to_loginFragment" app:destination="@id/loginFragment"/>
     </fragment>
+    <fragment android:id="@+id/chatDialogFragment"
+              android:name="com.android.airmart.ui.fragments.user.chat.ChatDialogFragment"
+              android:label="Chats">
+        <action android:id="@+id/action_chatDialogFragment_to_chatMessageFragment"
+                app:destination="@id/chatMessageFragment"/>
+    </fragment>
+    <fragment android:id="@+id/chatMessageFragment"
+              android:name="com.android.airmart.ui.fragments.user.chat.ChatMessageFragment"
+              android:label="Message"/>
 </navigation>

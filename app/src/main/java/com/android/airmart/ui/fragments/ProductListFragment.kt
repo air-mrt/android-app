@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -23,6 +24,7 @@ import com.android.airmart.utilities.SharedPrefUtil
 import com.android.airmart.viewmodel.ProductListViewModel
 import com.arlib.floatingsearchview.FloatingSearchView
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion
+import com.muddzdev.styleabletoast.StyleableToast
 import kotlinx.android.synthetic.main.fragment_product_list.*
 
 
@@ -103,7 +105,7 @@ class ProductListFragment : Fragment() {
     fun showProgressBar(): MaterialDialog {
         return MaterialDialog
             .Builder(requireContext())
-            .title("Deleting Post")
+            .title("Connecting to server")
             .content("please wait..")
             .progress(true, 0)
             .build()
