@@ -54,9 +54,14 @@
               android:label="EditProductFragment">
         <argument android:name="productId" app:argType="long"/>
     </fragment>
+
     <fragment android:id="@+id/searchResultFragment"
               android:name="com.android.airmart.ui.fragments.SearchResultFragment"
               android:label="SearchResultFragment">
         <argument android:name="query" app:argType="string"/>
+
+    <fragment android:id="@+id/homeFragment" android:name="com.android.airmart.ui.fragments.HomeFragment"
+              android:label="fragment_home" tools:layout="@layout/fragment_home">
+        <action android:id="@+id/action_homeFragment_to_loginFragment" app:destination="@id/loginFragment"/>
     </fragment>
 </navigation>

@@ -12,7 +12,7 @@ import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
-object PasswordUtil {
+object  PasswordUtil {
     lateinit var secretKey: SecretKey
     lateinit var initializationVector:ByteArray
 fun encrypt(strToEncrypt: String): String {
