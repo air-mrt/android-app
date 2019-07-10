@@ -2,14 +2,18 @@ package com.android.airmart.data
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
+import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.platform.app.InstrumentationRegistry
 import com.android.airmart.data.dao.CommentDao
 import com.android.airmart.data.dao.UserDao
+import com.android.airmart.data.entity.User
 import com.android.airmart.utilities.testComments
 import com.android.airmart.utilities.testUser
+import org.hamcrest.CoreMatchers.equalTo
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
+import org.junit.Test
 
 class UserDaoTest {
     private lateinit var database:AppDatabase
@@ -30,5 +34,17 @@ class UserDaoTest {
     fun closeDatabase(){
         database.close()
     }
+    @Test
+    fun testInsertuser(){
+        userDao.insertUser(testUser[1])
+        assertThat(userDao.getAllUsers().value?.size,equalTo(2))
+    }
+    @Test
+    fun testDeleteUser(){
+        userDao.deleteUser(testUser[0])
+        assertThat(userDao.getAllUsers().value?.size, equalTo(0))
+    }
+
+
 
 }
