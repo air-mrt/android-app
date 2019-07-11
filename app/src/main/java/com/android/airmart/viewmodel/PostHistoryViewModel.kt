@@ -31,8 +31,8 @@ class PostHistoryViewModel (private val productRepository: ProductRepository, pr
             _userInfoResponse.postValue(userRepository.getLoggedInUserInfo(token,username))
         }
 
-    fun getAllProductsByUsername(username:String) = viewModelScope.launch{
-        _allProductResponse.postValue(productRepository.allProductsByUser(username))
+    fun getAllProductsByUsername(username:String,token:String) = viewModelScope.launch{
+        _allProductResponse.postValue(productRepository.allProductsByUser(token,username))
     }
 
     private  val _deleteResponse = MutableLiveData<Boolean>()
@@ -46,4 +46,23 @@ class PostHistoryViewModel (private val productRepository: ProductRepository, pr
             this.coroutineContext.cancel()
         }
 }
+    private  val _uninterestedResponse = MutableLiveData<Boolean>()
+    val uninterestedResponse: LiveData<Boolean>
+        get() = _uninterestedResponse
+    fun uninterested(productId:Long,token:String) = viewModelScope.launch{
+        try {
+            _uninterestedResponse.postValue(productRepository.uninterested(productId,token))
+        }
+        catch (e: ConnectException){
+            this.coroutineContext.cancel()
+        }
+    }
+
+    private  val _interestedProductResponse = MutableLiveData<List<Product>>()
+    val interestedProductResponse: LiveData<List<Product>>
+        get() = _interestedProductResponse
+
+    fun getInterestedProductsByUsername(username:String) = viewModelScope.launch{
+        _interestedProductResponse.postValue(productRepository.allInterestedProductsByUser(username))
+    }
 }

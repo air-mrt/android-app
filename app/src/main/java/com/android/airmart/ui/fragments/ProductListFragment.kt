@@ -21,6 +21,7 @@ import com.android.airmart.databinding.FragmentProductListBinding
 import com.android.airmart.utilities.InjectorUtils
 import com.android.airmart.utilities.SHARED_PREFERENCE_FILE
 import com.android.airmart.utilities.SharedPrefUtil
+import com.android.airmart.viewmodel.ChatViewModel
 import com.android.airmart.viewmodel.ProductListViewModel
 import com.arlib.floatingsearchview.FloatingSearchView
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion
@@ -33,6 +34,9 @@ class ProductListFragment : Fragment() {
 
     private val productListViewModel: ProductListViewModel by viewModels {
         InjectorUtils.provideProductListViewModelFactory(requireContext())
+    }
+    private val chatViewModel: ChatViewModel by viewModels {
+        InjectorUtils.provideChatViewModelFactory(requireContext())
     }
     lateinit var sharedPref: SharedPreferences
     lateinit var  mSearchView : FloatingSearchView
@@ -70,12 +74,19 @@ class ProductListFragment : Fragment() {
         binding.recyclerView.adapter = adapter
 
         subscribeUi(adapter)
+        subscribeDialogResponse()
         return binding.root
     }
 
     private fun subscribeUi(adapter: ProductPostListAdapter) {
         productListViewModel.allProducts.observe(viewLifecycleOwner, Observer { products ->
             if (products != null) adapter.submitList(products)
+        })
+
+    }
+    private fun subscribeDialogResponse() {
+        chatViewModel.newDialogResponse?.observe(viewLifecycleOwner, Observer { products ->
+            if (true)  findNavController().navigate(R.id.chatDialogFragment)
         })
 
     }
@@ -97,6 +108,27 @@ class ProductListFragment : Fragment() {
                     showErrorDialog().show()
                 }
             }
+        }
+
+    }
+    fun onContact(username: String){
+        if (!SharedPrefUtil.isLoggedIn(sharedPref)){
+            findNavController().navigate(R.id.loginFragment)
+        }
+        else{
+            val token= SharedPrefUtil.getToken(sharedPref)
+            val job = chatViewModel.createNewDialog(username,token)
+            val progress = showProgressBar()
+            if(job.isActive){
+                progress.show()
+            }
+            job.invokeOnCompletion {
+                progress.dismiss()
+                if (job.isCancelled){
+                    showErrorDialog().show()
+                }
+            }
+
         }
 
     }

@@ -50,7 +50,7 @@ class PostHistoryFragment : Fragment() {
             if (!SharedPrefUtil.isLoggedIn(sharedPref)){
                 findNavController().navigate(R.id.loginFragment)
             }
-            postHistoryViewModel.getAllProductsByUsername(SharedPrefUtil.getUsername(sharedPref))
+            postHistoryViewModel.getAllProductsByUsername(SharedPrefUtil.getUsername(sharedPref),SharedPrefUtil.getToken(sharedPref))
             postHistoryViewModel.getUserInfo(SharedPrefUtil.getToken(sharedPref),SharedPrefUtil.getUsername(sharedPref))
             executePendingBindings()
         }
@@ -77,7 +77,7 @@ class PostHistoryFragment : Fragment() {
          }
         job.invokeOnCompletion {
             progress.dismiss()
-            postHistoryViewModel.getAllProductsByUsername(SharedPrefUtil.getUsername(sharedPref))
+            postHistoryViewModel.getAllProductsByUsername(SharedPrefUtil.getUsername(sharedPref),SharedPrefUtil.getToken(sharedPref))
             postHistoryViewModel.getUserInfo(SharedPrefUtil.getToken(sharedPref),SharedPrefUtil.getUsername(sharedPref))
                  if (job.isCancelled){
                     showErrorDialog().show()

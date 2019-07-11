@@ -9,6 +9,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.materialdialogs.MaterialDialog
 import com.android.airmart.R
 import com.android.airmart.data.entity.Product
 import com.android.airmart.databinding.RecyclerProductPostItemBinding
@@ -22,7 +23,7 @@ class ProductPostListAdapter(private val productListFragment: ProductListFragmen
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val product = getItem(position)
         holder.apply {
-            bind(onCommentClickListener(product.id),onContactClickListener(product.id),onInterestedClickListener(product.id),product)
+            bind(onCommentClickListener(product.id),onContactClickListener(product.username),onInterestedClickListener(product.id),product)
             itemView.tag = product
         }
     }
@@ -39,8 +40,21 @@ class ProductPostListAdapter(private val productListFragment: ProductListFragmen
             it.findNavController().navigate(direction)
         }
     }
-    private fun onContactClickListener(productId: Long): View.OnClickListener {
+    private fun onContactClickListener(productUsername: String): View.OnClickListener {
         return View.OnClickListener {
+            MaterialDialog
+                .Builder(it.context)
+                .title("Start a Conversation")
+                .content("Do You want to chat with user?")
+                .negativeText("Yes")
+                .negativeColorRes(R.color.Success)
+                .onNegative(MaterialDialog.SingleButtonCallback {
+                        dialog, which ->
+                    productListFragment.onContact(productUsername)
+                })
+                .neutralText("Cancel")
+                .show()
+
 
         }
     }

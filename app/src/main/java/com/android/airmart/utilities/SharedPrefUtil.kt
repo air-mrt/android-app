@@ -10,6 +10,7 @@ import java.util.*
 
 object SharedPrefUtil {
     fun savePreference(sharedPref: SharedPreferences,token:String,username:String,expirationDate:Date,issuedDate:Date,password:String,isLoggedIn:Boolean){
+        clearPreference(sharedPref)
         with(sharedPref.edit()){
             putString(TOKEN_KEY,token)
             putString(USERNAME_KEY,username)

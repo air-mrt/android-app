@@ -26,20 +26,26 @@ class ProductRepository constructor(private val productDao: ProductDao, private 
         withContext(Dispatchers.IO){
             productApiService.getAllProducts(username).await()
         }
+    suspend fun getAllInterestedProductsAPI(username:String): Response<List<ProductResponse>> =
+        withContext(Dispatchers.IO){
+            productApiService.getAllInterestedProducts(username).await()
+        }
     suspend fun searchResultAPI(keyword:String): Response<List<ProductResponse>> =
         withContext(Dispatchers.IO){
             productApiService.searchProduct(keyword).await()
         }
-    suspend fun allProductsByUser(username:String):List<Product> =
+    suspend fun allProductsByUser(token:String, username:String):List<Product> =
         withContext(Dispatchers.IO){
             try{
-                var productsByUser= getAllProductsByUserAPI(username).body()
+                var usernameFromToken = ""
+                var productsByUser= getAllProductsByUserAPI(token).body()
                 if(productsByUser != null){
                     for (res in productsByUser){
+                       usernameFromToken = res.username
                         var product = Product(res._id,res.username,res.title,res.price,res.description,res.pictureUrl,res.createdAt, res.interested.size)
                         productDao.insertProduct(product)
                     }
-                    return@withContext productDao.getAllProductsByUser(username)
+                    return@withContext productDao.getAllProductsByUser(usernameFromToken)
                 }
 
             }
@@ -47,6 +53,27 @@ class ProductRepository constructor(private val productDao: ProductDao, private 
                 return@withContext productDao.getAllProductsByUser(username)
             }
             return@withContext productDao.getAllProductsByUser(username)
+        }
+
+    suspend fun allInterestedProductsByUser(username:String):List<Product>? =
+        withContext(Dispatchers.IO){
+            var productList = ArrayList<Product>()
+            try{
+                var productsInterestedByUser= getAllInterestedProductsAPI(username).body()
+                if(productsInterestedByUser != null){
+                    for (res in productsInterestedByUser){
+                        // TODO add to a special room table
+                        var product = Product(res._id,res.username,res.title,res.price,res.description,res.pictureUrl,res.createdAt, res.interested.size)
+                        productList.add(product)
+                    }
+                    return@withContext return@withContext productList
+                }
+
+            }
+            catch (e:ConnectException){
+                return@withContext null
+            }
+            return@withContext null
         }
 
 
@@ -85,6 +112,13 @@ class ProductRepository constructor(private val productDao: ProductDao, private 
             productDao.updateProduct(product)
             return@withContext true
         }
+    suspend fun uninterested(id:Long,token:String)=
+        withContext(Dispatchers.IO){
+            uninterestedAPI(id,token)
+            var product = productDao.getProductById(id)
+            productDao.updateProduct(product)
+            return@withContext true
+        }
 
     @Throws(ConnectException::class)
     suspend fun postProductAPI (file: MultipartBody.Part?,productJson: RequestBody,token:String): Response<ProductResponse> =
@@ -99,6 +133,10 @@ class ProductRepository constructor(private val productDao: ProductDao, private 
     suspend fun interestedAPI (id:Long,token:String): Response<ProductResponse> =
         withContext(Dispatchers.IO){
             productApiService.interested(id,token).await()
+        }
+    suspend fun uninterestedAPI (id:Long,token:String): Response<ProductResponse> =
+        withContext(Dispatchers.IO){
+            productApiService.uninterested(id,token).await()
         }
     suspend fun deleteProductByIdAPI(id:Long, token :String):Response<Void> =
         withContext(Dispatchers.IO){
