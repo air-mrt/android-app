@@ -40,9 +40,9 @@ class InterestedProductListAdapter(private val interestedProductsFragment: Inter
         return View.OnClickListener {
             MaterialDialog
                 .Builder(it.context)
-                .title("Delete Post")
-                .content("Are you sure you want to delete post permanently ?")
-                .negativeText("Delete")
+                .title("Remove Post")
+                .content("Are you sure you want to remove post from interest list ?")
+                .negativeText("Remove")
                 .negativeColorRes(R.color.Danger)
                 .onNegative(MaterialDialog.SingleButtonCallback {
                         dialog, which ->

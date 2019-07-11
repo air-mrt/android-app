@@ -18,8 +18,10 @@ package com.android.airmart.utilities
 
 import android.content.Context
 import com.android.airmart.data.AppDatabase
+import com.android.airmart.data.api.ChatApiService
 import com.android.airmart.data.api.ProductApiService
 import com.android.airmart.data.api.UserApiService
+import com.android.airmart.repository.ChatRepository
 import com.android.airmart.repository.CommentRepository
 import com.android.airmart.repository.ProductRepository
 import com.android.airmart.repository.UserRepository
@@ -35,6 +37,9 @@ object InjectorUtils {
     private fun getProductRepository(context: Context): ProductRepository {
         return ProductRepository(
                 AppDatabase.getInstance(context.applicationContext).productDao(), ProductApiService.getInstance())
+    }
+    private fun getChatRepository(context: Context): ChatRepository {
+        return ChatRepository(ChatApiService.getInstance())
     }
     private fun getCommentRepository(context: Context): CommentRepository {
         return CommentRepository(
@@ -74,6 +79,10 @@ object InjectorUtils {
     fun provideDashboardViewModelFactory(context: Context): DashboardViewModelFactory {
         val repository = getUserRepository(context)
         return DashboardViewModelFactory(repository)
+    }
+    fun provideChatViewModelFactory(context: Context): ChatViewModelFactory {
+        val repository = getChatRepository(context)
+        return ChatViewModelFactory(repository)
     }
     fun provideGson(): Gson {
         return GsonBuilder().create()

@@ -31,8 +31,8 @@ class PostHistoryViewModel (private val productRepository: ProductRepository, pr
             _userInfoResponse.postValue(userRepository.getLoggedInUserInfo(token,username))
         }
 
-    fun getAllProductsByUsername(username:String) = viewModelScope.launch{
-        _allProductResponse.postValue(productRepository.allProductsByUser(username))
+    fun getAllProductsByUsername(username:String,token:String) = viewModelScope.launch{
+        _allProductResponse.postValue(productRepository.allProductsByUser(token,username))
     }
 
     private  val _deleteResponse = MutableLiveData<Boolean>()

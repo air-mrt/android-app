@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -23,9 +24,11 @@ import com.android.airmart.databinding.FragmentLoginBinding
 import com.android.airmart.utilities.*
 import com.android.airmart.viewmodel.LoginViewModel
 import com.google.android.material.snackbar.Snackbar
+import com.muddzdev.styleabletoast.StyleableToast
 import kotlinx.android.synthetic.main.fragment_login.*
 
 class LoginFragment : Fragment() {
+    private var count = 0
     private val loginViewModel: LoginViewModel by activityViewModels {
         InjectorUtils.provideLoginViewModelFactory(requireContext())
     }
@@ -78,13 +81,19 @@ class LoginFragment : Fragment() {
     }
     private fun subscribeLoginResponse(){
         loginViewModel.loginResponse.observe(this, Observer {res->
-            if(res.isSuccessful){
+            if(res.isSuccessful && count == 0){
                 //save shared pref
                 //TODO encrypt password before saving it to shared pref
                 SharedPrefUtil.savePreference(sharedPref,res.body()!!.token,res.body()!!.username,res.body()!!.expirationDate,res.body()!!.issuedDate,readFields().password,true)
                 //set authentication state
                 loginViewModel.acceptAuthentication()
                 successLogin()
+                StyleableToast.makeText(
+                    requireContext(),
+                    SharedPrefUtil.getUsername(sharedPref),
+                    Toast.LENGTH_SHORT,
+                    R.style.mytoast
+                ).show()
                 clearFields()
             }
             else{

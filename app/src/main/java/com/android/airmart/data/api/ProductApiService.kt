@@ -14,15 +14,14 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import java.util.concurrent.TimeUnit
-
 interface ProductApiService {
     @GET("products/{id}")
     fun getProductById(@Path("id") id: Long): Deferred<Response<ProductResponse>>
 
-    @GET("products")
-    fun getAllProducts(@Query("username")username:String = "null"): Deferred<Response<List<ProductResponse>>>
+    @GET("products/user")
+    fun getAllProducts(@Header("Authorization") token:String): Deferred<Response<List<ProductResponse>>>
     @GET("products/interested")
-    fun getAllInterestedProducts(@Query("username")username:String): Deferred<Response<List<ProductResponse>>>
+    fun getAllInterestedProducts(@Header("Authorization") token:String): Deferred<Response<List<ProductResponse>>>
     @GET("products/search")
     fun searchProduct(@Query("keyword")keyword:String): Deferred<Response<List<ProductResponse>>>
     @DELETE("products/auth/{id}")

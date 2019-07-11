@@ -82,8 +82,10 @@
     </fragment>
     <fragment android:id="@+id/chatMessageFragment"
               android:name="com.android.airmart.ui.fragments.user.chat.ChatMessageFragment"
-              android:label="Message"/>
+              android:label="Message">
+        <argument android:name="chatId" app:argType="long"/>
+    </fragment>
     <fragment android:id="@+id/interestedProductsFragment"
               android:name="com.android.airmart.ui.fragments.user.InterestedProductsFragment"
-              android:label="InterestedProductsFragment"/>
+              android:label="Interest List"/>
 </navigation>

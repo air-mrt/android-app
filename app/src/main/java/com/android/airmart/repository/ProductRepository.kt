@@ -34,16 +34,18 @@ class ProductRepository constructor(private val productDao: ProductDao, private 
         withContext(Dispatchers.IO){
             productApiService.searchProduct(keyword).await()
         }
-    suspend fun allProductsByUser(username:String):List<Product> =
+    suspend fun allProductsByUser(token:String, username:String):List<Product> =
         withContext(Dispatchers.IO){
             try{
-                var productsByUser= getAllProductsByUserAPI(username).body()
+                var usernameFromToken = ""
+                var productsByUser= getAllProductsByUserAPI(token).body()
                 if(productsByUser != null){
                     for (res in productsByUser){
+                       usernameFromToken = res.username
                         var product = Product(res._id,res.username,res.title,res.price,res.description,res.pictureUrl,res.createdAt, res.interested.size)
                         productDao.insertProduct(product)
                     }
-                    return@withContext productDao.getAllProductsByUser(username)
+                    return@withContext productDao.getAllProductsByUser(usernameFromToken)
                 }
 
             }
@@ -114,7 +116,6 @@ class ProductRepository constructor(private val productDao: ProductDao, private 
         withContext(Dispatchers.IO){
             uninterestedAPI(id,token)
             var product = productDao.getProductById(id)
-            product.interested -=1
             productDao.updateProduct(product)
             return@withContext true
         }

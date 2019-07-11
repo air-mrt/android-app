@@ -43,7 +43,7 @@ class InterestedProductsFragment : Fragment() {
             if (!SharedPrefUtil.isLoggedIn(sharedPref)){
                 findNavController().navigate(R.id.loginFragment)
             }
-            postHistoryViewModel.getInterestedProductsByUsername(SharedPrefUtil.getUsername(sharedPref))
+            postHistoryViewModel.getInterestedProductsByUsername(SharedPrefUtil.getToken(sharedPref))
         }
         subscribeUi(adapter)
         return binding.root
@@ -61,7 +61,7 @@ class InterestedProductsFragment : Fragment() {
         }
         job.invokeOnCompletion {
             progress.dismiss()
-            postHistoryViewModel.getInterestedProductsByUsername(SharedPrefUtil.getUsername(sharedPref))
+            postHistoryViewModel.getInterestedProductsByUsername(SharedPrefUtil.getToken(sharedPref))
             if (job.isCancelled){
                 showErrorDialog().show()
             }
@@ -70,7 +70,7 @@ class InterestedProductsFragment : Fragment() {
     fun showProgressBar(): MaterialDialog {
         return MaterialDialog
             .Builder(requireContext())
-            .title("Deleting Post")
+            .title("Removing Post")
             .content("please wait..")
             .progress(true, 0)
             .build()
