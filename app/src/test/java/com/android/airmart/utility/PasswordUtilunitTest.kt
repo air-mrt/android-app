@@ -1,10 +1,10 @@
-package com.android.airmart
+package com.android.airmart.utility
 
 import com.android.airmart.utilities.PasswordUtil
 import org.junit.Before
 import org.junit.Test
 
-class PasswordUtilUnitTest {
+class PasswordUtilunitTest {
     private lateinit var passwordUtil: PasswordUtil
 
     @Before
@@ -13,7 +13,7 @@ class PasswordUtilUnitTest {
     }
 
     @Test
-    fun encryptPassword(){
+    fun encryptPasswordw(){
         val password = "banana"
         val result = passwordUtil.encrypt(password)
         assert(result != password)

@@ -13,7 +13,9 @@ android {
     compileSdkVersion 28
     dataBinding {
         enabled = true
+
     }
+
     defaultConfig {
         applicationId "com.android.airmart"
         minSdkVersion 19

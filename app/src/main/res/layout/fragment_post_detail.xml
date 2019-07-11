@@ -222,7 +222,7 @@
             android:layout_marginRight="@dimen/cat_card_single_spacing"
 
 
-    />
+            android:id="@+id/addbutton"/>
 </LinearLayout>
 
 
