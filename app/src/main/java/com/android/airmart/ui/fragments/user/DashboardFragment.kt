@@ -79,6 +79,11 @@ class DashboardFragment : Fragment() {
                     DashboardFragmentDirections.actionDashboardFragmentToPostHistoryFragment()
                 it.findNavController().navigate(direction)
             }
+            productInterestedClickListener = View.OnClickListener {
+                val direction =
+                    DashboardFragmentDirections.actionDashboardFragmentToInterestedProductsFragment()
+                it.findNavController().navigate(direction)
+            }
             editProfileClickListener = View.OnClickListener {
                 val directions =
                     DashboardFragmentDirections.actionDashboardFragmentToEditProfileFragment()

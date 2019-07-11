@@ -21,6 +21,8 @@ interface ProductApiService {
 
     @GET("products")
     fun getAllProducts(@Query("username")username:String = "null"): Deferred<Response<List<ProductResponse>>>
+    @GET("products/interested")
+    fun getAllInterestedProducts(@Query("username")username:String): Deferred<Response<List<ProductResponse>>>
     @GET("products/search")
     fun searchProduct(@Query("keyword")keyword:String): Deferred<Response<List<ProductResponse>>>
     @DELETE("products/auth/{id}")
@@ -34,6 +36,9 @@ interface ProductApiService {
     @POST("products/interested/{id}")
     fun interested(@Path("id") id:Long,
                     @Header("Authorization") token:String): Deferred<Response<ProductResponse>>
+    @POST("products/uninterested/{id}")
+    fun uninterested(@Path("id") id:Long,
+                   @Header("Authorization") token:String): Deferred<Response<ProductResponse>>
 
     @Multipart
     @PATCH("products/auth/{id}")

@@ -36,6 +36,8 @@
                 app:destination="@id/editProfileFragment" app:enterAnim="@anim/slide_in_right"
                 app:exitAnim="@anim/slide_out_left" app:popEnterAnim="@anim/slide_out_right"
                 app:popExitAnim="@anim/slide_in_left"/>
+        <action android:id="@+id/action_dashboardFragment_to_interestedProductsFragment"
+                app:destination="@id/interestedProductsFragment"/>
     </fragment>
     <fragment android:id="@+id/loginFragment" android:name="com.android.airmart.ui.fragments.LoginFragment"
               android:label="Login"/>
@@ -81,4 +83,7 @@
     <fragment android:id="@+id/chatMessageFragment"
               android:name="com.android.airmart.ui.fragments.user.chat.ChatMessageFragment"
               android:label="Message"/>
+    <fragment android:id="@+id/interestedProductsFragment"
+              android:name="com.android.airmart.ui.fragments.user.InterestedProductsFragment"
+              android:label="InterestedProductsFragment"/>
 </navigation>
