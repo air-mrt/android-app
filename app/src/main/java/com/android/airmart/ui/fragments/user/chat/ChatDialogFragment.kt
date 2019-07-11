@@ -47,6 +47,9 @@ class ChatDialogFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         sharedPref = requireActivity().getSharedPreferences(SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE)
         chatViewModel.getallChats(SharedPrefUtil.getToken(sharedPref))
+        if (!SharedPrefUtil.isLoggedIn(sharedPref)){
+            findNavController().navigate(R.id.loginFragment)
+        }
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

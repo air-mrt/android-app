@@ -30,8 +30,8 @@ class ChatViewModel (private val chatRepository: ChatRepository): ViewModel(){
             _messageResponse.postValue(chatRepository.getAllMessagesInChat(chatId,token))
         }
 
-    private val _sendmessageResponse = MutableLiveData<Boolean>()
-    val sendmessageResponse: LiveData<Boolean>?
+    private val _sendmessageResponse = MutableLiveData<ChatMessage>()
+    val sendmessageResponse: LiveData<ChatMessage>?
         get() = _sendmessageResponse
 
     fun sendMessage(chatId:Long,message: String,token:String)  =

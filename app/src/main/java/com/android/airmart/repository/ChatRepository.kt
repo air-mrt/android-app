@@ -29,10 +29,13 @@ class ChatRepository  constructor( private val chatApiService: ChatApiService){
         withContext(Dispatchers.IO){
             chatApiService.newMessage(chatId,message,token).await()
         }
-    suspend fun newMessage(chatId:Long,message:String,token:String)=
+    suspend fun newMessage(chatId:Long,message:String,token:String):ChatMessage?=
         withContext(Dispatchers.IO){
-            createNewMessageAPI(chatId,message,token)
-            return@withContext true
+            val res = createNewMessageAPI(chatId,message,token).body()
+            if (res !=null){
+                return@withContext ChatMessage(res.id,res.chat_id,res.message,res.username,res.avatar,res.postedDate)
+            }
+            return@withContext null
         }
     suspend fun newChat(sendTo:String,token:String)=
         withContext(Dispatchers.IO){

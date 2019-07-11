@@ -57,16 +57,25 @@ class ChatMessageFragment : Fragment() {
 
             messagesList.setAdapter(messageListAdapter)
             input.setInputListener {input->
-                messageListAdapter.addToStart(MessagesFixtures.getTextMessage(input.toString()),true)
+                chatViewModel.sendMessage(args.chatId,input.toString(),SharedPrefUtil.getToken(sharedPref))
                 true
             }
         }
         subscribeUi(messageListAdapter)
+        subscribeSendResponse(messageListAdapter)
         return binding.root
     }
     private fun subscribeUi(adapter: MessagesListAdapter<Message>) {
         chatViewModel.messageResponse?.observe(viewLifecycleOwner, Observer {msg ->
             if (msg != null) adapter.addToEnd(ChatUtil.convertToMessage(msg),true)
+        })
+
+    }
+    private fun subscribeSendResponse(adapter: MessagesListAdapter<Message>) {
+        chatViewModel.sendmessageResponse?.observe(viewLifecycleOwner, Observer {res ->
+           if (res != null){
+                 adapter.addToStart(ChatUtil.convertToMessage(res),true)
+           }
         })
 
     }
