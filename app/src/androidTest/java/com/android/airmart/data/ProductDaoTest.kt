@@ -6,7 +6,7 @@ import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.platform.app.InstrumentationRegistry
 import com.android.airmart.data.dao.ProductDao
 import com.android.airmart.data.entity.Product
-import com.android.airmart.utility.testProducts
+import com.android.airmart.utilities.testProducts
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.After
 import org.junit.Before

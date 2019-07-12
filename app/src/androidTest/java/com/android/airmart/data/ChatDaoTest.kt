@@ -5,7 +5,7 @@ import androidx.room.Room
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.platform.app.InstrumentationRegistry
 import com.android.airmart.data.dao.ChatDao
-import com.android.airmart.utility.testChat
+import com.android.airmart.utilities.testChat
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.After
 import org.junit.Before

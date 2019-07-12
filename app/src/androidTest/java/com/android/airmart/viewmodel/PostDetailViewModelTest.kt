@@ -9,8 +9,8 @@ import com.android.airmart.data.dao.CommentDao
 import com.android.airmart.data.dao.ProductDao
 import com.android.airmart.repository.CommentRepository
 import com.android.airmart.repository.ProductRepository
-import com.android.airmart.utility.testComments
-import com.android.airmart.utility.testProducts
+import com.android.airmart.utilities.testComments
+import com.android.airmart.utilities.testProducts
 import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Before

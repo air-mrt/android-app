@@ -1,49 +1,51 @@
-package com.android.airmart.viewmodel
+package com.android.airmart.EndtoEnd
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
-import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.platform.app.InstrumentationRegistry
 import com.android.airmart.data.AppDatabase
+import com.android.airmart.data.api.ChatApiService
 import com.android.airmart.data.api.ProductApiService
+import com.android.airmart.data.dao.ChatDao
 import com.android.airmart.data.dao.ProductDao
+import com.android.airmart.repository.ChatRepository
 import com.android.airmart.repository.ProductRepository
 import com.android.airmart.utilities.testProducts
-import org.hamcrest.CoreMatchers.equalTo
+import com.android.airmart.viewmodel.ChatViewModel
+import com.android.airmart.viewmodel.EditProductViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class ProductListViewModelTest {
+class ProductviewmodelTest (){
     private lateinit var appDatabase: AppDatabase
-    private lateinit var viewModel: ProductListViewModel
-    private lateinit var productDao: ProductDao
-
+    private lateinit var viewModel: ChatViewModel
+    private lateinit var chatDao: ProductDao
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
-
     @Before
     fun setUp() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         appDatabase = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
-        productDao = appDatabase.productDao()
-        testProducts.forEach{ product->
-            appDatabase.productDao().insertProduct(product)
-        }
+        chatDao = appDatabase.productDao()
 
-        val productRepo = ProductRepository(appDatabase.productDao(), ProductApiService.getInstance())
-        viewModel = ProductListViewModel(productRepo)
+        chatDao = appDatabase.productDao()
+
+        val productrepo = ProductRepository(chatDao,ProductApiService.getInstance())
+        viewModel = EditProductViewModel(productrepo,1L)
     }
-
     @After
     fun tearDown() {
         appDatabase.close()
     }
-
     @Test
-    @Throws(InterruptedException::class)
-    fun testDefaultValues() {
-        assertThat(viewModel.allProducts.value?.size,equalTo(3))
+    fun deleterepoTest(){
+        lateinit var result : Job
+        runBlocking {
+            result = viewModel.sendM(1,"message","token")
+        }
     }
 }
