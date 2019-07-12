@@ -125,12 +125,7 @@ class DashboardFragment : Fragment() {
                 AuthenticationState.EXPIRED_TOKEN -> generateToken(SharedPrefUtil.getSavedLoginCredentials(sharedPref))
                AuthenticationState.AUTHENTICATED -> dashboardViewModel.getUserInfo(SharedPrefUtil.getToken(sharedPref), SharedPrefUtil.getUsername(sharedPref))
             }
-            StyleableToast.makeText(
-                requireContext(),
-                authenticationState.name,
-                Toast.LENGTH_SHORT,
-                R.style.mytoast
-            ).show()
+
         })
     }
     private fun generateToken(authBody: AuthBody){

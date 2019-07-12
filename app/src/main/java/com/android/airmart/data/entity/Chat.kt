@@ -9,6 +9,6 @@ val id:Long,
 val message:String,
 val owner:String,
 val postedDate:String,
-val users:Set<String>,
+val users:List<String>,
 val messages:List<String>
 )

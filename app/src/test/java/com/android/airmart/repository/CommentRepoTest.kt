@@ -1,15 +1,11 @@
 package com.android.airmart.repository
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.room.Room
-import androidx.test.platform.app.InstrumentationRegistry
-import com.android.airmart.data.AppDatabase
-import com.android.airmart.data.dao.CommentDao
+
+
 import com.android.airmart.data.entity.Comment
 import junit.framework.TestCase.assertTrue
-import org.junit.Assert.assertEquals
+import org.junit.Assert.*
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 
 
@@ -20,7 +16,7 @@ class CommentRepoTest(){
     }
     @Test
     fun commentnotnull(){
-        assertTrue(comment.content.isEmpty())
+        assertFalse(comment.content.isEmpty())
 
     }
     @Test
@@ -31,7 +27,7 @@ class CommentRepoTest(){
     fun delecomment(){
         val samplecoment = Comment(1,1,"fsghshghgs","user2","")
         val delete = samplecoment.toString().isEmpty()
-        assertEquals(delete,samplecoment)
+        assertNotEquals(delete,samplecoment)
 
     }
 

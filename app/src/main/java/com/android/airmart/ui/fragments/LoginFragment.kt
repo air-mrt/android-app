@@ -88,12 +88,6 @@ class LoginFragment : Fragment() {
                 //set authentication state
                 loginViewModel.acceptAuthentication()
                 successLogin()
-                StyleableToast.makeText(
-                    requireContext(),
-                    SharedPrefUtil.getUsername(sharedPref),
-                    Toast.LENGTH_SHORT,
-                    R.style.mytoast
-                ).show()
                 clearFields()
             }
             else{

@@ -41,7 +41,7 @@ class ProductDaoTest {
     }
     @Test fun testInsertProduct(){
         productDao.insertProduct(
-            Product(4, "product4", "product desc 4", "100","uri4","user4")
+            Product(4, "product4", "product desc 4", "100","uri4","user4","",1)
         )
         assertThat(productDao.getAllProducts().value?.size,equalTo(4))
     }
