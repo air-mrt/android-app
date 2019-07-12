@@ -7,19 +7,17 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import com.android.airmart.data.dao.ChatDao
-import com.android.airmart.data.dao.CommentDao
-import com.android.airmart.data.dao.ProductDao
-import com.android.airmart.data.dao.UserDao
+import com.android.airmart.data.dao.*
 import com.android.airmart.data.entity.*
 import com.android.airmart.worker.SeedDatabaseWorker
 
-@Database(entities = [Product::class, Comment::class, User::class, ChatEntity::class] , version = 13)
+@Database(entities = [Product::class, Comment::class, User::class, ChatEntity::class,ChatMessageEntity::class] , version = 13)
 abstract class AppDatabase : RoomDatabase(){
     abstract fun productDao(): ProductDao
     abstract fun userDao(): UserDao
     abstract fun commentDao(): CommentDao
     abstract fun chatDao(): ChatDao
+    abstract fun messageDao(): MessageDao
 
 
     //pre-populate database with dummy users...for checking

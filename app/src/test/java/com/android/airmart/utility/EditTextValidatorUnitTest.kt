@@ -17,7 +17,7 @@ class EditTextValidatorUnitTest {
     @Before
     fun createClassInstance(){
         editTextValidator=EditTextValidator
-        editText = editText.findViewById(R.id.title_editText);
+        editText = editText.findViewById(R.id.title_editText)
     }
     @Test
     fun isempty(){
