@@ -13,8 +13,8 @@ class UserrepostoryTest (){
     }
     @Test
     fun insertuserTest() {
-        val result = user.toString()
-        assertFalse(result.toString().isEmpty())
+        val result = user.username
+        assertEquals(result,"user1")
     }
 
 

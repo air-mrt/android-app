@@ -74,6 +74,7 @@ dependencies {
     androidTestImplementation "androidx.work:work-testing:$rootProject.workVersion"
     androidTestImplementation "com.google.truth:truth:$rootProject.truth"
     testImplementation "junit:junit:$rootProject.junitVersion"
+    testImplementation 'com.nhaarman:mockito-kotlin-kt1.1:1.5.0'
 
 
     // Retrofit
@@ -86,6 +87,7 @@ dependencies {
     kapt "com.squareup.moshi:moshi-kotlin-codegen:1.8.0"
     //Logging
     //implementation "com.squareup.okhttp3:logging-interceptor:3.14.2"
+
     //Dagger
 
     implementation 'com.google.dagger:dagger-android:2.20'
