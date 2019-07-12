@@ -6,7 +6,7 @@ import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.platform.app.InstrumentationRegistry
 import com.android.airmart.data.dao.CommentDao
 import com.android.airmart.data.entity.Comment
-import com.android.airmart.utilities.testComments
+import com.android.airmart.utility.testComments
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.After
 import org.junit.Before
@@ -24,7 +24,7 @@ class CommentDaoTest{
         val context  = InstrumentationRegistry.getInstrumentation().targetContext
         database = Room.inMemoryDatabaseBuilder(context,AppDatabase::class.java).build()
         commentDao = database.commentDao()
-        testComments.forEach{comment->
+        testComments.forEach{ comment->
             database.commentDao().insertComment(comment)
         }
     }

@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 
 import androidx.navigation.fragment.navArgs
+import com.android.airmart.BR.productviewModel
 
 import com.android.airmart.R
 import com.android.airmart.adapter.CommentListAdapter

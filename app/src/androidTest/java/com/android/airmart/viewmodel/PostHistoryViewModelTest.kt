@@ -2,7 +2,6 @@ package com.android.airmart.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.platform.app.InstrumentationRegistry
 import com.android.airmart.data.AppDatabase
@@ -12,8 +11,8 @@ import com.android.airmart.data.dao.ProductDao
 import com.android.airmart.data.dao.UserDao
 import com.android.airmart.repository.ProductRepository
 import com.android.airmart.repository.UserRepository
-import com.android.airmart.utilities.testProducts
-import com.android.airmart.utilities.testUser
+import com.android.airmart.utility.testProducts
+import com.android.airmart.utility.testUser
 import org.hamcrest.CoreMatchers
 import org.junit.After
 import org.junit.Before
