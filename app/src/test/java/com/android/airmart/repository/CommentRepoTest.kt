@@ -1,10 +1,5 @@
 package com.android.airmart.repository
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.room.Room
-import androidx.test.platform.app.InstrumentationRegistry
-import com.android.airmart.data.AppDatabase
-import com.android.airmart.data.dao.CommentDao
 import com.android.airmart.data.entity.Comment
 import junit.framework.TestCase.assertTrue
 import org.junit.Assert.assertEquals
