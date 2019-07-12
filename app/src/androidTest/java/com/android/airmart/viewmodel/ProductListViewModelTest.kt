@@ -8,7 +8,7 @@ import com.android.airmart.data.AppDatabase
 import com.android.airmart.data.api.ProductApiService
 import com.android.airmart.data.dao.ProductDao
 import com.android.airmart.repository.ProductRepository
-import com.android.airmart.utilities.testProducts
+import com.android.airmart.utility.testProducts
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.After
 import org.junit.Before

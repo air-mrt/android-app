@@ -4,11 +4,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.platform.app.InstrumentationRegistry
-import com.android.airmart.data.dao.CommentDao
 import com.android.airmart.data.dao.UserDao
-import com.android.airmart.data.entity.User
-import com.android.airmart.utilities.testComments
-import com.android.airmart.utilities.testUser
+import com.android.airmart.utility.testUser
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.After
 import org.junit.Before

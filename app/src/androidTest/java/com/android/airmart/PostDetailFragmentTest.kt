@@ -15,7 +15,6 @@ import com.android.airmart.data.api.ProductApiService
 import com.android.airmart.repository.CommentRepository
 import com.android.airmart.repository.ProductRepository
 import com.android.airmart.ui.MainActivity
-import com.android.airmart.utilities.testProducts
 import com.android.airmart.utilities.testproduct
 import com.android.airmart.viewmodel.PostDetailViewModel
 import org.junit.Assert
@@ -37,7 +36,7 @@ class PostDetailFragmentTest {
     fun jumpToPlantDetailFragment() {
         activityTestRule.activity.apply {
             runOnUiThread {
-                val bundle = Bundle().apply { putString("productId", testproduct.id.toString()) }
+                val bundle = Bundle().apply { putString("", testproduct.id.toString()) }
                 findNavController(R.id.nav_fragment).navigate(R.id.postDetailFragment, bundle)
             }
         }
@@ -54,9 +53,9 @@ class PostDetailFragmentTest {
     fun onaddcommentTest(){
         val text = "ggg"
         onView(withId(R.id.addbutton)).perform(click())
-        postDetailViewModel.addComment(text,"user1")
         Assert.assertEquals(activityTestRule.activity.isFinishing, false)
-        Assert.assertEquals(activityTestRule.activity.isDestroyed, false)
+        postDetailViewModel.addComment(text,"user1")
+
     }
 
 }

@@ -13,10 +13,19 @@ class UserrepostoryTest (){
     }
     @Test
     fun insertuserTest() {
-        val result = user.username
-        assertEquals(result,"user1")
+        val result = testuse.add(user)
+        assert(result)
     }
-
+    @Test
+    fun deletuserTest(){
+        val t = testuse[0]
+        testuse.remove(t)
+        assertEquals(1,testuse.size)
+    }
+   val testuse = arrayListOf<User>(
+       User("","","","","",""),
+       User("","","","","","")
+   )
 
 
 }
