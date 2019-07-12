@@ -1,9 +1,6 @@
 package com.android.airmart.repository
 
-
-
 import com.android.airmart.data.entity.Comment
-import junit.framework.TestCase.assertTrue
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
