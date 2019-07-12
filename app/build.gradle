@@ -75,6 +75,7 @@ dependencies {
     androidTestImplementation "com.google.truth:truth:$rootProject.truth"
     testImplementation "junit:junit:$rootProject.junitVersion"
     testImplementation 'com.nhaarman:mockito-kotlin-kt1.1:1.5.0'
+    debugImplementation 'androidx.fragment:fragment-testing:1.1.0-alpha07'
 
 
     // Retrofit
